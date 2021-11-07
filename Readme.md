@@ -9,11 +9,11 @@ UI Component: NativeBase
 Create new branch from master
 
 ```sh
-git checkout -b <brach_name>
+git checkout -b <branch_name>
 ```
 
 Push new branch
 
 ```sh
-git push --set-upstream origin <brach_name>
+git push --set-upstream origin <branch_name>
 ```
