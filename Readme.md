@@ -2,8 +2,18 @@
 
 The official NativeBase TypeScript template for [Expo](https://docs.expo.io/)
 
+UI Component: NativeBase
+
 ## Usage
 
+Create new branch from master
+
 ```sh
-expo init my-app --template expo-template-native-base-typescript
+git checkout -b <brach_name>
+```
+
+Push new branch
+
+```sh
+git push --set-upstream origin <brach_name>
 ```
