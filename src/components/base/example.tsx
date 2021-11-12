@@ -32,6 +32,13 @@ const Example = ({ navigation }: { navigation: any }) => {
                     >
                         Go to Header
                     </Button>
+                    <Button
+                        onPress={() => {
+                            navigation.navigate("CheckinQRScan");
+                        }}
+                    >
+                        Go to QR
+                    </Button>
                 </>
             </Center>
         </>
