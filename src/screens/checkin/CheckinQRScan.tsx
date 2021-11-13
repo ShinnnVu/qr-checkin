@@ -1,26 +1,34 @@
 import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
+import * as Location from "expo-location";
 import { Button, Text, Box, Center, Heading, VStack } from "native-base";
 import React, { useState, useEffect } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 
 export default function CheckinQRScan({ navigation }: { navigation: any }) {
-    const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+    const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+    const [hasLocationPermission, setHasLocationPermission] = useState<boolean | null>(null);
     const [scanned, setScanned] = useState(false);
 
     const askForCameraPermission = () => (async () => {
         const { status } = await BarCodeScanner.requestPermissionsAsync();
-        setHasPermission(status === 'granted');
+        setHasCameraPermission(status === 'granted');
+    })();
+
+    const askForLocationPermission = () => (async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        setHasLocationPermission(status === "granted");
     })();
 
     useEffect(() => {
         askForCameraPermission();
+        askForLocationPermission();
     }, []);
 
     const handleBarCodeScanned = ({ type, data }: BarCodeEvent) => {
         navigation.navigate("CheckinValidation", { type: type, data: data });
     };
 
-    if (hasPermission === null) {
+    if (hasCameraPermission === null || hasLocationPermission === null) {
         return (
             <Center flex={1} px={3} safeAreaTop>
                 <VStack space={5}>
@@ -34,7 +42,8 @@ export default function CheckinQRScan({ navigation }: { navigation: any }) {
             </Center>
         );
     }
-    if (hasPermission === false) {
+
+    if (hasCameraPermission === false) {
         return (
             <Center flex={1} px={3} safeAreaTop>
                 <VStack space={5}>
@@ -44,6 +53,21 @@ export default function CheckinQRScan({ navigation }: { navigation: any }) {
                     <Box style={styles.qrCodeScannerBox}></Box>
                     <Text textAlign={"center"}>Please provide camera permission to use this feature</Text>
                     <Button onPress={() => askForCameraPermission()}>Allow Camerra Access</Button>
+                </VStack>
+            </Center>
+        );
+    }
+
+    if (hasLocationPermission === false) {
+        return (
+            <Center flex={1} px={3} safeAreaTop>
+                <VStack space={5}>
+                    <Heading textAlign={"center"}>
+                        No Location Permission
+                    </Heading>
+                    <Box style={styles.qrCodeScannerBox}></Box>
+                    <Text textAlign={"center"}>Please provide location permission to use this feature</Text>
+                    <Button onPress={() => askForLocationPermission()}>Allow Location Access</Button>
                 </VStack>
             </Center>
         );
