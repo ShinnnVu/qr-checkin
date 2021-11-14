@@ -2,8 +2,7 @@ import Example from "../components/base/example";
 import Header from "../components/base/header";
 import CheckinQRScan from "../screens/checkin/CheckinQRScan";
 import CheckinValidation from "../screens/checkin/CheckinValidation";
-import CheckinValidationError from "../screens/checkin/CheckinValidationError";
-import CheckinValidationSuccess from "../screens/checkin/CheckinValidationSuccess";
+import CheckoutValidation from "../screens/checkin/CheckoutValidation";
 
 export const navigators = [
     {
@@ -23,12 +22,8 @@ export const navigators = [
         component: CheckinValidation,
     },
     {
-        name: "CheckinValidationSuccess",
-        component: CheckinValidationSuccess,
-    },
-    {
-        name: "CheckinValidationError",
-        component: CheckinValidationError,
+        name: "CheckoutValidation",
+        component: CheckoutValidation,
     },
 ]
 

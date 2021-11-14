@@ -37,7 +37,14 @@ const Example = ({ navigation }: { navigation: any }) => {
                             navigation.navigate("CheckinQRScan");
                         }}
                     >
-                        Go to QR
+                        Checkin
+                    </Button>
+                    <Button
+                        onPress={() => {
+                            navigation.navigate("CheckoutValidation");
+                        }}
+                    >
+                        Checkout
                     </Button>
                 </>
             </Center>

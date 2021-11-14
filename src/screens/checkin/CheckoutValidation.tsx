@@ -3,29 +3,33 @@ import { Button, Center, Heading, HStack, Text, VStack } from "native-base";
 import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import * as Progress from 'react-native-progress'
-import CheckinSuccessSvg from "../../../assets/checkin/validation-success.svg";
-import CheckinFailureSvg from "../../../assets/checkin/validation-failure.svg";
+import CheckoutSuccessSvg from "../../../assets/checkin/checkout-success.svg";
+import ValidationFailureSvg from "../../../assets/checkin/validation-failure.svg";
 
-const CheckinValidation = ({ route, navigation }: { route: any, navigation: any }) => {
-    const { type, data } = route.params;
+const CheckoutValidation = ({ route, navigation }: { route: any, navigation: any }) => {
+    const [isValidating, setIsValidating] = useState(true);
     const [validationSuccessful, setValidationSuccessful] = useState<boolean | null>(null);
     const [failureDetail, setFailureDetail] = useState<string | null>(null);
 
     useEffect(() => {
-        setTimeout(() => {
-            validateCheckinUrl();
-        }, 3000)
-    }, []);
+        if (isValidating) {
+            setTimeout(() => {
+                validateCheckinUrl();
+            }, 3000)
+        }
+    }, [isValidating]);
 
     const validateCheckinUrl = () => {
-        fetch(data)
+        fetch("checkout-link")
             .then(res => res.json())
             .then(data => {
                 setValidationSuccessful(true);
+                setIsValidating(false);
             })
             .catch(error => {
                 setValidationSuccessful(false);
                 setFailureDetail(error.message);
+                setIsValidating(false);
             });
     }
 
@@ -35,30 +39,35 @@ const CheckinValidation = ({ route, navigation }: { route: any, navigation: any 
         })
     }
 
-    if (validationSuccessful == null) {
+    const retry = () => {
+        setValidationSuccessful(null);
+        setFailureDetail(null);
+        setIsValidating(true);
+    }
+
+    if (validationSuccessful === null) {
         return (
             <Center flex={1} safeAreaTop>
                 <VStack alignItems={"center"} space={20}>
-                    <Heading size="xl">Checkin Verification</Heading>
+                    <Heading size="xl">Checkout Verification</Heading>
                     <Progress.CircleSnail size={100} indeterminate={true} thickness={5} direction="counter-clockwise" color={["mediumpurple"]} />
-                    <Text>Please wait while we verify you checkin</Text>
-                    <Text>Link: {data}</Text>
+                    <Text>Please wait while we verify you checkout</Text>
                 </VStack>
             </Center>
         );
     }
 
-    if (validationSuccessful == false) {
+    if (validationSuccessful === false) {
         return (
             <Center flex={1} safeAreaTop>
                 <VStack space={5} alignItems={"center"}>
-                    <CheckinFailureSvg />
-                    <Heading size={"2xl"}>Checkin Failed</Heading>
+                    <ValidationFailureSvg />
+                    <Heading size={"2xl"}>Checkout Failed</Heading>
                     <Text>Oops, something wrong has happened. Please try again</Text>
                     {failureDetail ? <Text>Detail: {failureDetail}</Text> : null}
                     <HStack space={5} marginTop={10}>
                         <Button onPress={() => navigation.navigate("Example")}>Cancel</Button>
-                        <Button onPress={() => navigation.navigate("CheckinQRScan")}>Try Again</Button>
+                        <Button onPress={() => retry()}>Try Again</Button>
                     </HStack>
                 </VStack>
             </Center>
@@ -68,13 +77,13 @@ const CheckinValidation = ({ route, navigation }: { route: any, navigation: any 
     return (
         <Center flex={1} safeAreaTop>
             <VStack space={5}>
-                <CheckinSuccessSvg />
-                <Heading size={"2xl"}>Checkin Successfully</Heading>
-                <Text>Hooray! You have successfully checked in</Text>
+                <CheckoutSuccessSvg />
+                <Heading size={"2xl"}>Checkout Successfully</Heading>
+                <Text>That's all work for today. Great job!</Text>
                 <Button marginTop={10}>Continue</Button>
             </VStack>
         </Center>
     );
 };
 
-export default CheckinValidation;
+export default CheckoutValidation;
