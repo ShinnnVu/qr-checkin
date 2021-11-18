@@ -32,7 +32,7 @@ export default function App() {
                     screenOptions={{
                         headerShown: false,
                     }}
-                    initialRouteName={"WS_TIME"}
+                    initialRouteName={"Login"}
                 >
                     {navigators.map((navigator) => {
                         return (

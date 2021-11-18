@@ -1,4 +1,4 @@
-import Connector, { Method } from "../services/connector";
+import Connector, { Method } from "./connector";
 import { API } from "../constants/apiContants";
 
 class APIServices {
@@ -12,7 +12,6 @@ class APIServices {
             url:  `/${API.ServiceName.api}/${API.MethodName.login}`,
             data,
         })
-
         return result;
     }
 }

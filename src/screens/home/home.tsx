@@ -35,7 +35,7 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
     const [workspace, setWorkspace] = useState([]);
     useEffect(() => {
         const getWorkspace = async () => {
-            const newWorkspace = dummy;
+            const newWorkspace: any = dummy;
             setWorkspace(newWorkspace);
         };
         getWorkspace();

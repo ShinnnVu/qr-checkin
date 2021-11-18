@@ -43,7 +43,7 @@ const WS_Home = ({ navigation }: { navigation: any }) => {
     useEffect(() => {
         const getWorkspace = async () => {
             const admin = true;
-            const myWorkspace = admin ? dummyAdmin : dummyEmployee;
+            const myWorkspace: any = admin ? dummyAdmin : dummyEmployee;
             setYourWorkspace(myWorkspace);
         };
         getWorkspace();
