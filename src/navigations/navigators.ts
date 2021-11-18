@@ -12,6 +12,9 @@ import WS_Time from "../screens/ws/ws_time";
 import CheckinQRScan from "../screens/checkin/CheckinQRScan";
 import CheckinValidation from "../screens/checkin/CheckinValidation";
 import CheckoutValidation from "../screens/checkin/CheckoutValidation";
+import EmployeeInvitation from "../screens/invitation/EmployeeInvitation";
+import ExcelInvitation from "../screens/invitation/ExcelInvitation";
+import InvitationResult from "../screens/invitation/InvitationResult";
 import Login from "../screens/login";
 import Signin from "../screens/signin";
 import WS_Home from "../screens/home/ws_home";
@@ -71,6 +74,18 @@ export const navigators = [
     {
         name: "CheckoutValidation",
         component: CheckoutValidation,
+    },
+    {
+        name: "EmployeeInvitation",
+        component: EmployeeInvitation,
+    },
+    {
+        name: "ExcelInvitation",
+        component: ExcelInvitation,
+    },
+    {
+        name: "InvitationResult",
+        component: InvitationResult,
     },
     {
         name: "WS_HOME",
