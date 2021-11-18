@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Center, Pressable, Container, Box, View, Flex, Image, Text, ScrollView, Input } from "native-base";
-import color from "../constants/colors";
-import { HOUSE, LEFT_CAVRET } from "../constants/icons";
-import translate from "../localize";
-import size from "../constants/sizes";
-import fonts from "../constants/fonts";
-import { ILLUSTRATION } from "../constants/images";
-import Icon_Button from "../components/base/icon_button";
-import Blue_button from "../components/base/blue_button";
+import color from "../../constants/colors";
+import { HOUSE, LEFT_CAVRET } from "../../constants/icons";
+import translate from "../../localize";
+import size from "../../constants/sizes";
+import fonts from "../../constants/fonts";
+import Icon_Button from "../../components/base/icon_button";
+import Blue_button from "../../components/base/blue_button";
+import { Screens } from "../../navigations/model";
 const Workspace_naming = ({ navigation }: { navigation: any }) => {
+    const [name, setName] = useState<string>("");
+    const nameSubmit = () => {
+        const result = true;
+        if (result) {
+            navigation.navigate(Screens.WS_CR_SUCCESS);
+        } else {
+            navigation.navigate(Screens.WS_CR_FAIL);
+        }
+    };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Box px={"10px"} py={"10px"}>
                     <Icon_Button
-                        onPress={() => console.log("hello")}
+                        onPress={() => navigation.goBack()}
                         pColor={color.GRAY_BUTTON_CLICK}
                         upColor={color.GRAY_BUTTON}
                         icon={LEFT_CAVRET}
@@ -34,6 +43,8 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                     </Center>
                     <Center paddingBottom={"60px"}>
                         <Input
+                            value={name}
+                            onChangeText={setName}
                             placeholder={translate("workspace_creation.enter_ws_name")}
                             placeholderTextColor={color.GRAY_MEDIUM}
                             // fontFamily={fonts.PoppinsRegular}
@@ -50,7 +61,7 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                         />
                     </Center>
                     <Blue_button
-                        onPress={() => console.log("hello")}
+                        onPress={() => nameSubmit()}
                         text={translate("workspace_creation.create")}
                         width={"200px"}
                     />

@@ -1,25 +1,25 @@
 import React from "react";
 import { Button, Center, Pressable, Container, Box, View, Flex, Image, Text, ScrollView } from "native-base";
-import color from "../constants/colors";
-import { LEFT_CAVRET } from "../constants/icons";
-import translate from "../localize";
-import size from "../constants/sizes";
-import fonts from "../constants/fonts";
-import { ILLUSTRATION, ILLUSTRATION_2 } from "../constants/images";
-import Icon_Button from "../components/base/icon_button";
-import Blue_button from "../components/base/blue_button";
-import MaskedView from "@react-native-masked-view/masked-view";
+import color from "../../constants/colors";
+import { LEFT_CAVRET } from "../../constants/icons";
+import translate from "../../localize";
+import size from "../../constants/sizes";
+import fonts from "../../constants/fonts";
+import { ILLUSTRATION, ILLUSTRATION_2 } from "../../constants/images";
+import Icon_Button from "../../components/base/icon_button";
+import Blue_button from "../../components/base/blue_button";
+import { Screens } from "../../navigations/model";
 const Workspace_creation_success = ({ navigation }: { navigation: any }) => {
+    const configure = () => {
+        navigation.navigate(Screens.WS_COM_INFO);
+    };
+    const skip = () => {
+        navigation.navigate(Screens.HOME);
+    };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Box px={"10px"} py={"10px"}>
-                    <Icon_Button
-                        onPress={() => console.log("hello")}
-                        pColor={color.GRAY_BUTTON_CLICK}
-                        upColor={color.GRAY_BUTTON}
-                        icon={LEFT_CAVRET}
-                    />
                     <Center py={"40px"}>
                         <Center paddingBottom={"30px"}>
                             <Image source={ILLUSTRATION_2} alt={"Image Error"} />
@@ -36,8 +36,12 @@ const Workspace_creation_success = ({ navigation }: { navigation: any }) => {
                             {translate("workspace_creation.configure_ask")}
                         </Text>
                     </Center>
-                    <Blue_button onPress={() => {}} text={translate("workspace_creation.configure")} width={"156px"} />
-                    <Pressable>
+                    <Blue_button
+                        onPress={() => configure()}
+                        text={translate("workspace_creation.configure")}
+                        width={"156px"}
+                    />
+                    <Pressable onPress={() => skip()}>
                         <Center py={"16px"}>
                             <Text
                                 fontSize={size.font.text.large}

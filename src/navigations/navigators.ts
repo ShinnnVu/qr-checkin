@@ -1,17 +1,18 @@
 import Example from "../components/base/example";
 import Header from "../components/base/header";
-import WS_CR_INT from "../screens/ws_cr_intro";
-import WS_Naming from "../screens/ws_naming";
-import WS_Success from "../screens/ws_cr_success";
-import WS_Fail from "../screens/ws_cr_fail";
-import WS_Com_Info from "../screens/ws_com_info";
-import WS_Checkin_Form from "../screens/ws_checkin_form";
-import WS_LOCATION from "../screens/ws_location";
-import Home from "../screens/home";
-import WS_Time from "../screens/ws_time";
+import WS_CR_INT from "../screens/ws/ws_cr_intro";
+import WS_Naming from "../screens/ws/ws_naming";
+import WS_Success from "../screens/ws/ws_cr_success";
+import WS_Fail from "../screens/ws/ws_cr_fail";
+import WS_Com_Info from "../screens/ws/ws_com_info";
+import WS_Checkin_Form from "../screens/ws/ws_checkin_form";
+import WS_LOCATION from "../screens/ws/ws_location";
+import Home from "../screens/home/home";
+import WS_Time from "../screens/ws/ws_time";
 import CheckinQRScan from "../screens/checkin/CheckinQRScan";
 import CheckinValidation from "../screens/checkin/CheckinValidation";
 import CheckoutValidation from "../screens/checkin/CheckoutValidation";
+import WS_Home from "../screens/home/ws_home";
 export const navigators = [
     {
         name: "Home",
@@ -68,5 +69,9 @@ export const navigators = [
     {
         name: "CheckoutValidation",
         component: CheckoutValidation,
+    },
+    {
+        name: "WS_HOME",
+        component: WS_Home,
     },
 ];

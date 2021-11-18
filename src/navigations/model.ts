@@ -1,0 +1,17 @@
+export enum Screens {
+    HOME = "home",
+    WS_CR_INT = "WS_CR_INT",
+    WS_CR_SUCCESS = "WS_CR_SUCCESS",
+    WS_CR_FAIL = "WS_CR",
+    WS_NAMING = "WS_Naming",
+    WS_COM_INFO = "WS_COM_INFO",
+    WS_CHECKIN_FORM = "WS_CHECKIN_FORM",
+    WS_LOCATION = "WS_LOCATION",
+    WS_TIME = "WS_TIME",
+    EXAMPLE = "Example",
+    HEADER = "Header",
+    CHECKINQRSCAN = "CheckinQRScan",
+    CHECKINVALIDATION = "CheckinValidation",
+    CHECKOUTVALIDATION = "CheckoutValidation",
+    WS_HOME = "WS_HOME",
+}

@@ -5,7 +5,7 @@ import translate from "../localize";
 import size from "../constants/sizes";
 import fonts from "../constants/fonts";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { formatTime } from "../utils/utils";
+import { formatTime } from "../../utils/utils";
 import { cloneDeep } from "lodash";
 import HeaderThree from "../components/header/headerThree";
 
