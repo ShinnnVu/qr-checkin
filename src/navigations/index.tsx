@@ -14,6 +14,7 @@ const config = {
 };
 
 const Stack = createNativeStackNavigator();
+
 export default function App() {
     const [isReady, setIsReady] = useState<boolean>(false);
 
@@ -31,88 +32,13 @@ export default function App() {
                     screenOptions={{
                         headerShown: false,
                     }}
-                    initialRouteName={navigators.ws_time.name}
+                    initialRouteName={"WS_TIME"}
                 >
-                    <Stack.Screen
-                        key={navigators.ws_time.name}
-                        name={navigators.ws_time.name}
-                        component={navigators.ws_time.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.login.name}
-                        name={navigators.login.name}
-                        component={navigators.login.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.signin.name}
-                        name={navigators.signin.name}
-                        component={navigators.signin.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.ws_location.name}
-                        name={navigators.ws_location.name}
-                        component={navigators.ws_location.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.ws_checkin_form.name}
-                        name={navigators.ws_checkin_form.name}
-                        component={navigators.ws_checkin_form.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.ws_com_info.name}
-                        name={navigators.ws_com_info.name}
-                        component={navigators.ws_com_info.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.ws_cr_fail.name}
-                        name={navigators.ws_cr_fail.name}
-                        component={navigators.ws_cr_fail.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.ws_cr_success.name}
-                        name={navigators.ws_cr_success.name}
-                        component={navigators.ws_cr_success.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.ws_naming.name}
-                        name={navigators.ws_naming.name}
-                        component={navigators.ws_naming.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.ws_cr_intro.name}
-                        name={navigators.ws_cr_intro.name}
-                        component={navigators.ws_cr_intro.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.home.name}
-                        name={navigators.home.name}
-                        component={navigators.home.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.example.name}
-                        name={navigators.example.name}
-                        component={navigators.example.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.header.name}
-                        name={navigators.header.name}
-                        component={navigators.header.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.checkin_qr_scan.name}
-                        name={navigators.checkin_qr_scan.name}
-                        component={navigators.checkin_qr_scan.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.checkin_validation.name}
-                        name={navigators.checkin_validation.name}
-                        component={navigators.checkin_validation.component}
-                    />
-                    <Stack.Screen
-                        key={navigators.checkout_validation.name}
-                        name={navigators.checkout_validation.name}
-                        component={navigators.checkout_validation.component}
-                    />
+                    {navigators.map((navigator) => {
+                        return (
+                            <Stack.Screen key={navigator.name} name={navigator.name} component={navigator.component} />
+                        );
+                    })}
                 </Stack.Navigator>
             </NavigationContainer>
         </NativeBaseProvider>

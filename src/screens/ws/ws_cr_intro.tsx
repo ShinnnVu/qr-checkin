@@ -1,13 +1,14 @@
 import React from "react";
 import { Button, Center, Pressable, Container, Box, View, Flex, Image, Text, ScrollView } from "native-base";
-import color from "../constants/colors";
-import { LEFT_CAVRET } from "../constants/icons";
-import translate from "../localize";
-import size from "../constants/sizes";
-import fonts from "../constants/fonts";
-import { ILLUSTRATION } from "../constants/images";
-import Icon_Button from "../components/base/icon_button";
-import Blue_button from "../components/base/blue_button";
+import color from "../../constants/colors";
+import { LEFT_CAVRET } from "../../constants/icons";
+import translate from "../../localize";
+import size from "../../constants/sizes";
+import fonts from "../../constants/fonts";
+import { ILLUSTRATION } from "../../constants/images";
+import Icon_Button from "../../components/base/icon_button";
+import Blue_button from "../../components/base/blue_button";
+import { Screens } from "../../navigations/model";
 const Workspace_creation_intro = ({ navigation }: { navigation: any }) => {
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
@@ -31,7 +32,7 @@ const Workspace_creation_intro = ({ navigation }: { navigation: any }) => {
                         </Text>
                     </Center>
                     <Blue_button
-                        onPress={() => console.log("hello")}
+                        onPress={() => navigation.navigate(Screens.WS_NAMING)}
                         text={translate("workspace_creation.get_started")}
                         width={"200px"}
                     />

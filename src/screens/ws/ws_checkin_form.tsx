@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     Center,
@@ -15,21 +15,46 @@ import {
     VStack,
     Switch,
 } from "native-base";
-import color from "../constants/colors";
-import { LEFT_CAVRET, RIGHT_CAVRET } from "../constants/icons";
-import translate from "../localize";
-import size from "../constants/sizes";
-import fonts from "../constants/fonts";
-import { ILLUSTRATION, LOCATION, QR_CODE } from "../constants/images";
-import Icon_Button from "../components/base/icon_button";
+import color from "../../constants/colors";
+import { LEFT_CAVRET, RIGHT_CAVRET } from "../../constants/icons";
+import translate from "../../localize";
+import size from "../../constants/sizes";
+import fonts from "../../constants/fonts";
+import { ILLUSTRATION, LOCATION, QR_CODE } from "../../constants/images";
+import Icon_Button from "../../components/base/icon_button";
+import { check } from "react-native-permissions";
+import { Screens } from "../../navigations/model";
+
+interface CheckinMode {
+    qrCode: boolean;
+    location: boolean;
+}
+
+const dummyData: CheckinMode = {
+    qrCode: true,
+    location: true,
+};
 const Workspace_checkin_form = ({ navigation }: { navigation: any }) => {
+    const [checkinMode, setCheckinMode] = useState<CheckinMode>(dummyData);
+    const locationToggle = () => {
+        const newCheckinMode = { ...checkinMode, location: !checkinMode.location };
+        setCheckinMode(newCheckinMode);
+    };
+    useEffect(() => {
+        const getMode = async () => {
+            const mode = { qrCode: true, location: false };
+            setCheckinMode(mode);
+        };
+        getMode();
+    }, []);
+
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Box px={"10px"} py={"10px"}>
                     <HStack justifyContent="space-between" alignItems="center">
                         <Icon_Button
-                            onPress={() => console.log("hello")}
+                            onPress={() => navigation.goBack()}
                             pColor={color.GRAY_BUTTON_CLICK}
                             upColor={color.GRAY_BUTTON}
                             icon={LEFT_CAVRET}
@@ -38,7 +63,7 @@ const Workspace_checkin_form = ({ navigation }: { navigation: any }) => {
                             {translate("workspace_creation.checkin_form")}
                         </Text>
                         <Icon_Button
-                            onPress={() => console.log("hello")}
+                            onPress={() => navigation.navigate(Screens.WS_LOCATION)}
                             pColor={color.GRAY_BUTTON_CLICK}
                             upColor={color.GRAY_BUTTON}
                             icon={RIGHT_CAVRET}
@@ -55,7 +80,12 @@ const Workspace_checkin_form = ({ navigation }: { navigation: any }) => {
                                         <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsBold}>
                                             {translate("workspace_creation.qr_code")}
                                         </Text>
-                                        <Switch onTrackColor={color.PURPLE_HEAVY} onThumbColor={color.WHITE} />
+                                        <Switch
+                                            onTrackColor={color.PURPLE_HEAVY}
+                                            onThumbColor={color.WHITE}
+                                            isChecked
+                                            isDisabled
+                                        />
                                     </HStack>
                                     <Box width={"90%"}>
                                         <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsRegular}>
@@ -81,7 +111,12 @@ const Workspace_checkin_form = ({ navigation }: { navigation: any }) => {
                                         <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsBold}>
                                             {translate("workspace_creation.location")}
                                         </Text>
-                                        <Switch onTrackColor={color.PURPLE_HEAVY} onThumbColor={color.WHITE} />
+                                        <Switch
+                                            onTrackColor={color.PURPLE_HEAVY}
+                                            onThumbColor={color.WHITE}
+                                            isChecked={checkinMode.location}
+                                            onToggle={locationToggle}
+                                        />
                                     </HStack>
                                     <Box width={"90%"}>
                                         <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsRegular}>

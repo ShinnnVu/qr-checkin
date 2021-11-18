@@ -1,31 +1,14 @@
 import React from "react";
-import {
-    Button,
-    Center,
-    Pressable,
-    Container,
-    Box,
-    View,
-    Flex,
-    Image,
-    Text,
-    ScrollView,
-    HStack,
-    Input,
-    VStack,
-    Switch,
-    Checkbox,
-} from "native-base";
+import { Pressable, Box, Flex, Text, ScrollView, HStack, Checkbox } from "native-base";
 import color from "../constants/colors";
-import { LEFT_CAVRET, RIGHT_CAVRET } from "../constants/icons";
 import translate from "../localize";
 import size from "../constants/sizes";
 import fonts from "../constants/fonts";
-import { ILLUSTRATION, LOCATION, QR_CODE } from "../constants/images";
-import Icon_Button from "../components/base/icon_button";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { formatTime } from "../utils/utils";
+import { formatTime } from "../../utils/utils";
 import { cloneDeep } from "lodash";
+import HeaderThree from "../components/header/headerThree";
+
 interface Days {
     id: number;
     label: string;
@@ -108,25 +91,15 @@ const WS_Time = ({ navigation }: { navigation: any }) => {
 
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
-            <Box px={"10px"} py={"10px"}>
-                <HStack justifyContent="space-between" alignItems="center">
-                    <Icon_Button
-                        onPress={() => console.log("hello")}
-                        pColor={color.GRAY_BUTTON_CLICK}
-                        upColor={color.GRAY_BUTTON}
-                        icon={LEFT_CAVRET}
-                    />
-                    <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsBold}>
-                        {translate("workspace_creation.time")}
-                    </Text>
-                    <Icon_Button
-                        onPress={() => console.log("hello")}
-                        pColor={color.GRAY_BUTTON_CLICK}
-                        upColor={color.GRAY_BUTTON}
-                        icon={RIGHT_CAVRET}
-                    />
-                </HStack>
-            </Box>
+            <HeaderThree
+                title={"workspace_creation.time"}
+                back={() => {
+                    navigation.navigate("WS_CHECKIN_FORM");
+                }}
+                to={() => {
+                    console.log("Configurate Workspace");
+                }}
+            />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Box w={"90%"} alignSelf="center">
                     <HStack w={"100%"} py={"10px"}>
