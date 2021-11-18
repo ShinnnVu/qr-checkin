@@ -39,6 +39,16 @@ export default function App() {
                         component={navigators.ws_time.component}
                     />
                     <Stack.Screen
+                        key={navigators.login.name}
+                        name={navigators.login.name}
+                        component={navigators.login.component}
+                    />
+                    <Stack.Screen
+                        key={navigators.signin.name}
+                        name={navigators.signin.name}
+                        component={navigators.signin.component}
+                    />
+                    <Stack.Screen
                         key={navigators.ws_location.name}
                         name={navigators.ws_location.name}
                         component={navigators.ws_location.component}

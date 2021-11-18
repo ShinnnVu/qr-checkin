@@ -12,10 +12,20 @@ import WS_Time from "../screens/ws_time";
 import CheckinQRScan from "../screens/checkin/CheckinQRScan";
 import CheckinValidation from "../screens/checkin/CheckinValidation";
 import CheckoutValidation from "../screens/checkin/CheckoutValidation";
+import Login from "../screens/login";
+import Signin from "../screens/signin";
 export const navigators = {
     home: {
         name: "Home",
         component: Home,
+    },
+    signin: {
+        name: "Signin",
+        component: Signin,
+    },
+    login: {
+        name: "Login",
+        component: Login,
     },
     ws_cr_intro: {
         name: "WS_CR_INT",
