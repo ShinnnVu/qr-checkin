@@ -12,67 +12,76 @@ import WS_Time from "../screens/ws/ws_time";
 import CheckinQRScan from "../screens/checkin/CheckinQRScan";
 import CheckinValidation from "../screens/checkin/CheckinValidation";
 import CheckoutValidation from "../screens/checkin/CheckoutValidation";
+import Login from "../screens/login";
+import Signin from "../screens/signin";
 import WS_Home from "../screens/home/ws_home";
-import { Screens } from "./model";
-export const navigators = {
-    home: {
-        name: Screens.HOME,
+export const navigators = [
+    {
+        name: "Home",
         component: Home,
     },
-    ws_cr_intro: {
-        name: Screens.WS_CR_INT,
+    {
+        name: "WS_CR_INT",
         component: WS_CR_INT,
     },
-    ws_cr_success: {
-        name: Screens.WS_CR_SUCCESS,
+    {
+        name: "WS_CR_SUCCESS",
         component: WS_Success,
     },
-    ws_cr_fail: {
-        name: Screens.WS_CR_FAIL,
+    {
+        name: "WS_CR_FAIL",
         component: WS_Fail,
     },
-    ws_naming: {
-        name: Screens.WS_NAMING,
+    {
+        name: "WS_Naming",
         component: WS_Naming,
     },
-    ws_com_info: {
-        name: Screens.WS_COM_INFO,
+    {
+        name: "WS_COM_INFO",
         component: WS_Com_Info,
     },
-    ws_checkin_form: {
-        name: Screens.WS_CHECKIN_FORM,
+    {
+        name: "WS_CHECKIN_FORM",
         component: WS_Checkin_Form,
     },
-    ws_location: {
-        name: Screens.WS_LOCATION,
+    {
+        name: "WS_LOCATION",
         component: WS_LOCATION,
     },
-    ws_time: {
-        name: Screens.WS_TIME,
+    {
+        name: "WS_TIME",
         component: WS_Time,
     },
-    example: {
-        name: Screens.EXAMPLE,
+    {
+        name: "Example",
         component: Example,
     },
-    header: {
-        name: Screens.HEADER,
+    {
+        name: "Header",
         component: Header,
     },
-    checkin_qr_scan: {
-        name: Screens.CHECKINQRSCAN,
+    {
+        name: "CheckinQRScan",
         component: CheckinQRScan,
     },
-    checkin_validation: {
-        name: Screens.CHECKINVALIDATION,
+    {
+        name: "CheckinValidation",
         component: CheckinValidation,
     },
-    checkout_validation: {
-        name: Screens.CHECKOUTVALIDATION,
+    {
+        name: "CheckoutValidation",
         component: CheckoutValidation,
     },
-    ws_home: {
-        name: Screens.WS_HOME,
+    {
+        name: "WS_HOME",
         component: WS_Home,
     },
-};
+    {
+        name: "Signin",
+        component: Signin,
+    },
+    {
+        name: "Login",
+        component: Login,
+    },
+];
