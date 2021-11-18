@@ -7,9 +7,12 @@ import {
     Stack,
     Link,
     Icon,
-    Checkbox
+    Checkbox,
+    VStack,
+    HStack,
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import color from "../constants/colors";
 import translate from "../localize";
 import size from "../constants/sizes";
@@ -22,25 +25,27 @@ const Signin = ({ navigation }: { navigation: any }) => {
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <Center py={"40px"}>
-                    <Box>
-                        <Center>
-                            <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsRegular}>
-                                {"Hey there,"}
-                            </Text>
-                            <Text fontSize={size.font.title.H2} fontFamily={fonts.PoppinsBold}>
-                                {"Create an Account"}
-                            </Text>
-                        </Center>
-                    </Box>
-                    <Stack
+                <VStack
+                    mt="40px"
+                    alignContent="center"
+                    alignSelf="center"
+                    alignItems="center"
+                    space="100px"
+                >
+                    <VStack
+                        space={4}
+                        alignItems="center"
+                        alignSelf="center">
+                        <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsRegular}>
+                            {"Hey there,"}
+                        </Text>
+                        <Text fontSize={size.font.title.H2} fontFamily={fonts.PoppinsBold}>
+                            {"Create an Account"}
+                        </Text>
+                    </VStack>
+                    <VStack
                         mt={3}
                         space={3}
-                        w={{
-                            base: "75%",
-                            md: "25%",
-                        }}
-                        py={"208px"}
                     >
                         <Input
                             placeholder="Phone number"
@@ -53,6 +58,9 @@ const Signin = ({ navigation }: { navigation: any }) => {
                                 />
                             }
                             borderRadius={"14px"}
+                            w={{
+                                base: "80%",
+                            }}
                         />
                         <Input
                             placeholder="Password"
@@ -102,50 +110,59 @@ const Signin = ({ navigation }: { navigation: any }) => {
                                     accessibilityLabel="all"
                                 />
                             </Box>
-                            <Text fontSize={"10px"} fontFamily={fonts.PoppinsLight}>
-                                {"By continuing you accept our Privacy Policy and\nTerm of Use"}
-                            </Text>
+                            <HStack>
+                                <Text fontSize={"10px"} fontFamily={fonts.PoppinsLight} color={color.GRAY_MEDIUM}>
+                                    {"By continuing you accept our Privacy Policy and\nTerm of Use"}
+                                </Text>
+                            </HStack>
                         </View>
-                    </Stack>
-                </Center>
-                <Pressable onPress={() => console.log("Press")}>
-                    <Center
-                        height={"60px"}
-                        width={"315px"}
-                        borderRadius={"99"}
-                        _text={{
-                            fontSize: size.font.text.large,
-                            fontFamily: fonts.PoppinsBold,
-                            color: color.WHITE,
-                        }}
-                        alignSelf="center"
-                        bg={{
-                            linearGradient: {
-                                colors: [color.BLUE_LIGHT, color.BLUE_HEAVY],
-                                start: [0, 0],
-                                end: [1, 0],
-                            },
-                        }}
-                    >
-                        {"Register"}
-                    </Center>
-                </Pressable>
-                <Text
-                    fontFamily={fonts.PoppinsBold}
-                    alignSelf="center"
-                >
-                    {"Already have an account?"}
-                    <Link
-                        fontFamily={fonts.PoppinsBold}
-                        href="#"
-                        _text={{
-                            color: color.PURLE_LIGHT,
-                        }}
-                        isUnderlined={false}
-                    >
-                        {"Login"}
-                    </Link>
-                </Text>
+                    </VStack>
+                    <VStack space="3">
+                        <LinearGradient
+                            colors={[color.BLUE_LIGHT, color.BLUE_HEAVY]}
+                            start={[0, 0]}
+                            end={[1, 0]}
+                            style={{ borderRadius: 99 }}
+                        >
+                            <Button
+                                onPress={() => console.log("Press")}
+                                variant={"unstyle"}
+                                startIcon={<Icon as={MaterialIcons} name="login" size="sm" />}
+                                height={"60px"}
+                                width={"315px"}
+                                borderRadius={"99"}
+                                _text={{
+                                    fontSize: size.font.text.large,
+                                    fontFamily: fonts.PoppinsBold,
+                                    color: color.WHITE,
+                                }}
+                                alignSelf="center"
+                            >
+                                <Text
+                                    fontFamily={fonts.PoppinsRegular}
+                                    style={{ color: "white" }}>Register</Text>
+                            </Button>
+                        </LinearGradient>
+                        <HStack alignSelf="center" space="2">
+                            <Text
+                                fontFamily={fonts.PoppinsRegular}
+                                alignSelf="center"
+                            >
+                                {"Already have an account?"}
+                            </Text>
+                            <Link
+                                fontFamily={fonts.PoppinsBold}
+                                href="#"
+                                _text={{
+                                    color: color.PURLE_LIGHT,
+                                }}
+                                isUnderlined={false}
+                            >
+                                {"Login"}
+                            </Link>
+                        </HStack>
+                    </VStack>
+                </VStack>
             </ScrollView>
         </Flex>
     );
