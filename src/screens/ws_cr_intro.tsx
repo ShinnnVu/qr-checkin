@@ -7,7 +7,8 @@ import size from "../constants/sizes";
 import fonts from "../constants/fonts";
 import { ILLUSTRATION } from "../constants/images";
 import Icon_Button from "../components/base/icon_button";
-const Workspace_naming = ({ navigation }: { navigation: any }) => {
+import Blue_button from "../components/base/blue_button";
+const Workspace_creation_intro = ({ navigation }: { navigation: any }) => {
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -29,32 +30,15 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                             {translate("workspace_creation.create_ws_intro")}
                         </Text>
                     </Center>
-                    <Pressable onPress={() => console.log("Press")}>
-                        <Center
-                            height={"60px"}
-                            width={"200px"}
-                            borderRadius={"99"}
-                            _text={{
-                                fontSize: size.font.text.large,
-                                fontFamily: fonts.PoppinsBold,
-                                color: color.WHITE,
-                            }}
-                            alignSelf="center"
-                            bg={{
-                                linearGradient: {
-                                    colors: [color.BLUE_LIGHT, color.BLUE_HEAVY],
-                                    start: [0, 0],
-                                    end: [1, 0],
-                                },
-                            }}
-                        >
-                            {translate("workspace_creation.get_started")}
-                        </Center>
-                    </Pressable>
+                    <Blue_button
+                        onPress={() => console.log("hello")}
+                        text={translate("workspace_creation.get_started")}
+                        width={"200px"}
+                    />
                 </Box>
             </ScrollView>
         </Flex>
     );
 };
 
-export default Workspace_naming;
+export default Workspace_creation_intro;
