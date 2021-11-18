@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Center, Pressable, Container, Box, View, Flex, Image, Text, ScrollView } from "native-base";
+import { Center, Box, Flex, Image, Text, ScrollView } from "native-base";
 import color from "../../constants/colors";
 import { LEFT_CAVRET } from "../../constants/icons";
 import translate from "../../localize";
@@ -15,7 +15,7 @@ const Workspace_creation_intro = ({ navigation }: { navigation: any }) => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Box px={"10px"} py={"10px"}>
                     <Icon_Button
-                        onPress={() => console.log("hello")}
+                        onPress={() => navigation.navigate(Screens.HOME)}
                         pColor={color.GRAY_BUTTON_CLICK}
                         upColor={color.GRAY_BUTTON}
                         icon={LEFT_CAVRET}

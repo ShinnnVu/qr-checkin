@@ -1,5 +1,5 @@
 export enum Screens {
-    HOME = "home",
+    HOME = "Home",
     WS_CR_INT = "WS_CR_INT",
     WS_CR_SUCCESS = "WS_CR_SUCCESS",
     WS_CR_FAIL = "WS_CR",

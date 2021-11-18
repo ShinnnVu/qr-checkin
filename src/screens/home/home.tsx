@@ -1,48 +1,48 @@
 import React, { useEffect, useState } from "react";
-import {
-    Button,
-    Center,
-    Pressable,
-    Container,
-    Box,
-    View,
-    Flex,
-    Image,
-    Text,
-    ScrollView,
-    HStack,
-    VStack,
-    AddIcon,
-    FlatList,
-} from "native-base";
+import { Center, Pressable, Box, Flex, Image, Text, HStack, VStack, AddIcon, FlatList } from "native-base";
 import color from "../../constants/colors";
-import { LEFT_CAVRET } from "../../constants/icons";
 import translate from "../../localize";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
-import { AVATAR, ILLUSTRATION, USER_PHOTO } from "../../constants/images";
-import Icon_Button from "../../components/base/icon_button";
-import { getDate } from "../../utils/utils";
+import { AVATAR, USER_PHOTO } from "../../constants/images";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-const dummy = [
-    { id: 1, name: "Workspace A" },
-    { id: 2, name: "Workspace B" },
-    { id: 3, name: "Workspace C" },
-];
+import { apiService } from "../../services";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import HeaderOne from "../../components/header/headerOne";
+import { useIsFocused } from "@react-navigation/native";
 
 const Workspace_naming = ({ navigation }: { navigation: any }) => {
-    const [user] = useState<string>("User A");
+    const [user, setUser] = useState<string>("");
     const [workspace, setWorkspace] = useState([]);
+    const isFocused = useIsFocused();
+    const getWorkspace = async () => {
+        try {
+            const user = await AsyncStorage.getItem("@User");
+            if (user) {
+                const username = JSON.parse(user).username;
+                const id = JSON.parse(user).id;
+                setUser(username);
+                const res = await apiService.getWorkspaces({ id: id });
+                const workspaces: any = [...res.data.data.host_workspace, ...res.data.data.par_workspace];
+                setWorkspace(workspaces);
+            }
+        } catch (error: any) {}
+    };
     useEffect(() => {
-        const getWorkspace = async () => {
-            const newWorkspace: any = dummy;
-            setWorkspace(newWorkspace);
-        };
-        getWorkspace();
-    }, []);
+        (async () => {
+            await getWorkspace();
+        })();
+    }, [isFocused]);
     const renderItem = ({ item }: { item: any }) => {
         return (
-            <Pressable onPress={() => {}}>
+            <Pressable
+                onPress={() => {
+                    navigation.navigate("WS_HOME", {
+                        workspace_id: item.id,
+                        workspace_name: item.name,
+                    });
+                }}
+            >
                 <Box bg={color.WHITE} w={"100%"} h={"80px"} borderRadius={"16px"} my={"10px"} shadow={4}>
                     <HStack alignItems="center" flex={1} m={"10px"} justifyContent={"space-between"}>
                         <HStack alignItems="center">
@@ -60,20 +60,14 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <Box px={"10px"} py={"10px"}>
-                <HStack w={"100%"} alignItems="center">
-                    <Image source={USER_PHOTO} alt={"Error"} />
-                    <VStack>
-                        <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsBold} pl={"10px"}>
-                            {user}
-                        </Text>
-                        <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
-                            {getDate()}
-                        </Text>
-                    </VStack>
-                </HStack>
+                <HeaderOne title={user} source={USER_PHOTO} />
                 <Box bg={color.DANGER_01} w={"100%"} h={"86px"} my={"20px"} borderRadius={"20px"}>
                     <HStack alignItems="center" flex={1} m={"10px"}>
-                        <Pressable onPress={() => {}}>
+                        <Pressable
+                            onPress={() => {
+                                navigation.navigate("WS_CR_INT");
+                            }}
+                        >
                             <Center
                                 bg={{
                                     linearGradient: {

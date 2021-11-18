@@ -12,5 +12,6 @@ export const API = {
         configurateWorkspace: "configurate-workspace",
         addParticipant: "add-participant",
         getWorkspace: "get-workspaces",
+        validateCheckin: "validate-checkin",
     }
 }
