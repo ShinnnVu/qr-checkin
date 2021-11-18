@@ -84,6 +84,7 @@ const Workspace_checkin_form = ({ navigation }: { navigation: any }) => {
                                             onTrackColor={color.PURPLE_HEAVY}
                                             onThumbColor={color.WHITE}
                                             isChecked
+                                            isDisabled
                                         />
                                     </HStack>
                                     <Box width={"90%"}>

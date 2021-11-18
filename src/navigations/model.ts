@@ -13,4 +13,5 @@ export enum Screens {
     CHECKINQRSCAN = "CheckinQRScan",
     CHECKINVALIDATION = "CheckinValidation",
     CHECKOUTVALIDATION = "CheckoutValidation",
+    WS_HOME = "WS_HOME",
 }

@@ -31,8 +31,13 @@ export default function App() {
                     screenOptions={{
                         headerShown: false,
                     }}
-                    initialRouteName={navigators.ws_com_info.name}
+                    initialRouteName={navigators.ws_home.name}
                 >
+                    <Stack.Screen
+                        key={navigators.ws_home.name}
+                        name={navigators.ws_home.name}
+                        component={navigators.ws_home.component}
+                    />
                     <Stack.Screen
                         key={navigators.ws_time.name}
                         name={navigators.ws_time.name}

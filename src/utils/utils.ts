@@ -5,4 +5,8 @@ function formatTime(date: Date) {
     return result;
 }
 
-export { formatTime };
+function getDate() {
+    const result = format(new Date(), "eeee, MM/dd/yyyy");
+    return result;
+}
+export { formatTime, getDate };

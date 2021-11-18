@@ -18,6 +18,8 @@ const color = {
     WHITE_SHADOW: "#1D161712",
     TRANSPARENT: "transparent",
     RED_ERROR: "#CC0000",
+    DANGER: "#FF0000",
+    DANGER_01: "#FF00001A",
 };
 
 export default color;
