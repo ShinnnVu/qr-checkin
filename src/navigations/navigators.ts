@@ -12,6 +12,9 @@ import WS_Time from "../screens/ws_time";
 import CheckinQRScan from "../screens/checkin/CheckinQRScan";
 import CheckinValidation from "../screens/checkin/CheckinValidation";
 import CheckoutValidation from "../screens/checkin/CheckoutValidation";
+import EmployeeInvitation from "../screens/invitation/EmployeeInvitation";
+import ExcelInvitation from "../screens/invitation/ExcelInvitation";
+import InvitationResult from "../screens/invitation/InvitationResult";
 export const navigators = {
     home: {
         name: "Home",
@@ -69,4 +72,16 @@ export const navigators = {
         name: "CheckoutValidation",
         component: CheckoutValidation,
     },
+    employee_invitation: {
+        name: "EmployeeInvitation",
+        component: EmployeeInvitation,
+    },
+    excel_invitation: {
+        name: "ExcelInvitation",
+        component: ExcelInvitation,
+    },
+    invitation_result: {
+        name: "InvitationResult",
+        component: InvitationResult,
+    }
 };

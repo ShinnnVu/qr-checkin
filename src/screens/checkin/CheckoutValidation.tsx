@@ -1,7 +1,6 @@
 import * as Location from "expo-location";
 import { Button, Center, Heading, HStack, Text, VStack } from "native-base";
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
 import * as Progress from 'react-native-progress'
 import CheckoutSuccessSvg from "../../../assets/checkin/checkout-success.svg";
 import ValidationFailureSvg from "../../../assets/checkin/validation-failure.svg";

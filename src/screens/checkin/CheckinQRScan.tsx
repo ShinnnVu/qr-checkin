@@ -3,6 +3,7 @@ import * as Location from "expo-location";
 import { Button, Text, Box, Center, Heading, VStack } from "native-base";
 import React, { useState, useEffect } from "react";
 import { Dimensions, StyleSheet } from "react-native";
+import RoundedButton from "../../components/base/RoundedButton";
 
 export default function CheckinQRScan({ navigation }: { navigation: any }) {
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
@@ -75,7 +76,7 @@ export default function CheckinQRScan({ navigation }: { navigation: any }) {
 
     return (
         <Center flex={1} px={3} safeAreaTop>
-            <VStack space={5}>
+            <VStack space={10}>
                 <Heading textAlign={"center"}>
                     Scan QR Code
                 </Heading>
@@ -87,7 +88,7 @@ export default function CheckinQRScan({ navigation }: { navigation: any }) {
                     />
                 </Box>
                 <Text textAlign={"center"}>Please align the QR code within the frame</Text>
-                <Button onPress={() => navigation.navigate("Example")}>Cancel</Button>
+                <RoundedButton size={"lg"} w="200" h="60" text="Cancel" onPress={() => navigation.navigate("Example")}/>
             </VStack>
         </Center>
     );

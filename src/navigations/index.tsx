@@ -31,7 +31,7 @@ export default function App() {
                     screenOptions={{
                         headerShown: false,
                     }}
-                    initialRouteName={navigators.ws_time.name}
+                    initialRouteName={navigators.checkin_qr_scan.name}
                 >
                     <Stack.Screen
                         key={navigators.ws_time.name}
@@ -102,6 +102,21 @@ export default function App() {
                         key={navigators.checkout_validation.name}
                         name={navigators.checkout_validation.name}
                         component={navigators.checkout_validation.component}
+                    />
+                    <Stack.Screen
+                        key={navigators.employee_invitation.name}
+                        name={navigators.employee_invitation.name}
+                        component={navigators.employee_invitation.component}
+                    />
+                    <Stack.Screen
+                        key={navigators.excel_invitation.name}
+                        name={navigators.excel_invitation.name}
+                        component={navigators.excel_invitation.component}
+                    />
+                    <Stack.Screen
+                        key={navigators.invitation_result.name}
+                        name={navigators.invitation_result.name}
+                        component={navigators.invitation_result.component}
                     />
                 </Stack.Navigator>
             </NavigationContainer>

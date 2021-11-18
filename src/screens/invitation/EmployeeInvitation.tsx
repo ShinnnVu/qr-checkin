@@ -1,11 +1,7 @@
-import * as Location from "expo-location";
-import { Alert, Box, Button, Center, Heading, HStack, Text, VStack, FormControl, Input, WarningOutlineIcon, InputLeftAddon, InputGroup, Icon, Divider, View, useToast } from "native-base";
-import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
-import * as Progress from 'react-native-progress'
+import { Box, Button, Heading, Text, VStack, FormControl, Input, Icon, View, useToast } from "native-base";
+import React, { useState } from "react";
 import { FontAwesome5 } from '@expo/vector-icons';
-import CheckoutSuccessSvg from "../../../assets/checkin/checkout-success.svg";
-import ValidationFailureSvg from "../../../assets/checkin/validation-failure.svg";
+import RoundedButton from "../../components/base/RoundedButton";
 
 const EmployeeInvitation = ({ route, navigation }: { route: any, navigation: any }) => {
     const [username, setUsername] = useState<string | null>(null);
@@ -21,20 +17,35 @@ const EmployeeInvitation = ({ route, navigation }: { route: any, navigation: any
     }
 
     const inviteUser = () => {
-        fetch("invite-link")
-            .then(res => res.json())
-            .then(data => {
-
-            })
-            .catch(err => {
-                toast.show({
-                    title: "Something went wrong",
-                    status: "error",
-                    description: "Cannot connect to server",
-                    duration: 3000,
-                    placement: "top",
-                });
+        fetch("invite-link", {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify([
+                username
+            ]),
+        })
+        .then(res => res.json())
+        .then(data => {
+            toast.show({
+                title: "Completed",
+                status: "success",
+                description: "Invite employee successfully.",
+                duration: 3000,
+                placement: "top",
             });
+        })
+        .catch(err => {
+            toast.show({
+                title: "Something went wrong",
+                status: "error",
+                description: "Cannot connect to server",
+                duration: 3000,
+                placement: "top",
+            });
+        });
     };
 
     return (
@@ -64,7 +75,7 @@ const EmployeeInvitation = ({ route, navigation }: { route: any, navigation: any
                 </FormControl>
             </VStack>
             <VStack space={5}>
-                <Button onPress={() => { if (validate()) inviteUser() }}>Invite</Button>
+                <RoundedButton text="Invite" h="60" onPress={() => { if (validate()) inviteUser() }}/>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <View style={{ flex: 1, height: 1, backgroundColor: "darkgray" }} />
                     <View>
@@ -72,7 +83,7 @@ const EmployeeInvitation = ({ route, navigation }: { route: any, navigation: any
                     </View>
                     <View style={{ flex: 1, height: 1, backgroundColor: "darkgray" }} />
                 </View>
-                <Button onPress={() => navigation.navigate("ExcelInvitation")}>Import From Excel</Button>
+                <RoundedButton variant="lightColorful" h="60" text="Import From Excel" onPress={() => navigation.navigate("ExcelInvitation")} borderColor="lightColorful" borderWidth={1}/>
             </VStack>
         </Box>
     );

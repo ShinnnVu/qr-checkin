@@ -1,10 +1,10 @@
 import * as Location from "expo-location";
 import { Button, Center, Heading, HStack, Text, VStack } from "native-base";
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
 import * as Progress from 'react-native-progress'
 import CheckinSuccessSvg from "../../../assets/checkin/validation-success.svg";
 import CheckinFailureSvg from "../../../assets/checkin/validation-failure.svg";
+import RoundedButton from "../../components/base/RoundedButton";
 
 const CheckinValidation = ({ route, navigation }: { route: any, navigation: any }) => {
     const { type, data } = route.params;
@@ -12,28 +12,42 @@ const CheckinValidation = ({ route, navigation }: { route: any, navigation: any 
     const [failureDetail, setFailureDetail] = useState<string | null>(null);
 
     useEffect(() => {
-        setTimeout(() => {
-            validateCheckinUrl();
-        }, 3000)
+        validateCheckinUrl();
     }, []);
 
     const validateCheckinUrl = () => {
-        fetch(data)
-            .then(res => res.json())
-            .then(data => {
-                setValidationSuccessful(true);
+        Location
+            .getCurrentPositionAsync()
+            .then(res => ({ longitude: res.coords.longitude, latitude: res.coords.latitude }))
+            .then(res => {
+                fetch(data, {
+                    method: "POST",
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        qrCode: data,
+                        location: {
+                            longitude: res.longitude,
+                            latitude: res.latitude,
+                        }
+                    }),
+                })
+                .then(res => res.json())
+                .then(data => {
+                    setValidationSuccessful(true);
+                })
+                .catch(error => {
+                    setValidationSuccessful(false);
+                    setFailureDetail(error.message);
+                });
             })
             .catch(error => {
                 setValidationSuccessful(false);
                 setFailureDetail(error.message);
-            });
-    }
-
-    const validateLocation = () => {
-        Location.getCurrentPositionAsync().then(res => {
-            console.warn("Loc: " + res.coords.latitude + " " + res.coords.longitude);
-        })
-    }
+            })
+    };
 
     if (validationSuccessful == null) {
         return (
@@ -42,7 +56,6 @@ const CheckinValidation = ({ route, navigation }: { route: any, navigation: any 
                     <Heading size="xl">Checkin Verification</Heading>
                     <Progress.CircleSnail size={100} indeterminate={true} thickness={5} direction="counter-clockwise" color={["mediumpurple"]} />
                     <Text>Please wait while we verify you checkin</Text>
-                    <Text>Link: {data}</Text>
                 </VStack>
             </Center>
         );
@@ -57,8 +70,8 @@ const CheckinValidation = ({ route, navigation }: { route: any, navigation: any 
                     <Text>Oops, something wrong has happened. Please try again</Text>
                     {failureDetail ? <Text>Detail: {failureDetail}</Text> : null}
                     <HStack space={5} marginTop={10}>
-                        <Button onPress={() => navigation.navigate("Example")}>Cancel</Button>
-                        <Button onPress={() => navigation.navigate("CheckinQRScan")}>Try Again</Button>
+                        <RoundedButton variant="lightColorful" borderColor="lightColorful" borderWidth={1} w={150} h={55} text="Cancel" onPress={() => navigation.navigate("Example")}/>
+                        <RoundedButton w={150} h={50} text="Try Again" onPress={() => navigation.navigate("CheckinQRScan")}/>
                     </HStack>
                 </VStack>
             </Center>
@@ -67,11 +80,11 @@ const CheckinValidation = ({ route, navigation }: { route: any, navigation: any 
 
     return (
         <Center flex={1} safeAreaTop>
-            <VStack space={5}>
+            <VStack space={5} alignItems={"center"}>
                 <CheckinSuccessSvg />
                 <Heading size={"2xl"}>Checkin Successfully</Heading>
-                <Text>Hooray! You have successfully checked in</Text>
-                <Button marginTop={10}>Continue</Button>
+                <Text mb={10}>Hooray! You have successfully checked in</Text>
+                <RoundedButton w={150} h={50} text="Continue"/>
             </VStack>
         </Center>
     );
