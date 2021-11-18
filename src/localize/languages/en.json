@@ -41,5 +41,19 @@
     "fri": "Friday",
     "sat": "Saturday",
     "sun": "Sunday"
+  },
+  "error": {
+    "min_input" : "{{field}} must have at least {{min}} characters",
+    "max_input" : "{{field}} must have at most {{max}} characters",
+    "required": "{{field}} is required",
+    "invalid": "{{field}} is invalid",
+    "min_num": "{{field}} must be bigger than {{min}}{{unit}}",   
+    "max_num": "{{field}} must be smaller than {{max}}{{unit}}"
+  },
+  "home": {
+    "add_workspace" : "Add Workspace",
+    "reminder": "Reminder!",
+    "c_in_forgot": "You haven't checked in today",
+    "ur_ws": "Your Workspace"
   }
 }

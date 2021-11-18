@@ -18,18 +18,19 @@ import {
     FlatList,
     Divider,
 } from "native-base";
-import color from "../constants/colors";
-import { LEFT_CAVRET, RIGHT_CAVRET } from "../constants/icons";
-import translate from "../localize";
-import size from "../constants/sizes";
-import fonts from "../constants/fonts";
-import { ILLUSTRATION, LOCATION, QR_CODE } from "../constants/images";
-import Icon_Button from "../components/base/icon_button";
-import getLocation from "../services/getLocation";
+import color from "../../constants/colors";
+import { LEFT_CAVRET, RIGHT_CAVRET } from "../../constants/icons";
+import translate from "../../localize";
+import size from "../../constants/sizes";
+import fonts from "../../constants/fonts";
+import { ILLUSTRATION, LOCATION, QR_CODE } from "../../constants/images";
+import Icon_Button from "../../components/base/icon_button";
+import getLocation from "../../services/getLocation";
 import MapView, { Marker, Circle } from "react-native-maps";
 import { debounce } from "lodash";
 import { InteractionManagerStatic } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Screens } from "../../navigations/model";
 
 const initialLocation = {
     title: "Đường Nguyễn Trọng Tuyển",
@@ -107,7 +108,7 @@ const WS_Location = ({ navigation }: { navigation: any }) => {
             <Box px={"10px"} py={"10px"}>
                 <HStack justifyContent="space-between" alignItems="center">
                     <Icon_Button
-                        onPress={() => console.log("hello")}
+                        onPress={() => navigation.goBack()}
                         pColor={color.GRAY_BUTTON_CLICK}
                         upColor={color.GRAY_BUTTON}
                         icon={LEFT_CAVRET}
@@ -116,7 +117,7 @@ const WS_Location = ({ navigation }: { navigation: any }) => {
                         {translate("workspace_creation.location")}
                     </Text>
                     <Icon_Button
-                        onPress={() => console.log("hello")}
+                        onPress={() => navigation.navigate(Screens.WS_TIME)}
                         pColor={color.GRAY_BUTTON_CLICK}
                         upColor={color.GRAY_BUTTON}
                         icon={RIGHT_CAVRET}
