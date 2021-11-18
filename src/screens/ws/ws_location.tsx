@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
     Button,
     Center,
@@ -31,18 +31,17 @@ import { debounce } from "lodash";
 import { InteractionManagerStatic } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Screens } from "../../navigations/model";
-
-const initialLocation = {
-    title: "Đường Nguyễn Trọng Tuyển",
-    highlightedTitle: "Đường <b>Nguyễn</b> <b>Trọng</b> <b>Tuyển</b>",
-    vicinity: "Quận Phú Nhuận, Ho Chi Minh City",
-    highlightedVicinity: "Quận Phú Nhuận, Ho Chi Minh City",
-    position: [10.7981, 106.66983],
-    distance: 17184,
-    icon: "https://firebasestorage.googleapis.com/v0/b/goaway-00.appspot.com/o/street-square.png?alt=media&token=75f330ce-ebba-4a85-a5f9-3f9fbd0d799f",
-};
+import * as yup from "yup";
+import { Formik } from "formik";
+import { Camera } from "react-native-maps";
 
 interface location {
+    name: string;
+    latitude: number;
+    longitude: number;
+    radius: number;
+}
+interface location_api {
     title: string;
     highlightedTitle: string;
     vicinity: string;
@@ -50,9 +49,30 @@ interface location {
     distance: number;
     icon: string;
 }
+const wsLocationSchema = yup.object().shape({
+    location: yup
+        .string()
+        .trim()
+        .min(1, ({ min }) => translate("error.min_input", { field: "Address", min: min }))
+        .max(256, ({ max }) => translate("error.max_input", { field: "Address", max: max }))
+        .required(translate("error.required", { field: "Address" })),
+    radius: yup
+        .number()
+        .min(1, ({ min }) => translate("error.min_num", { field: "Radius", min: min - 1, unit: "m" }))
+        .max(10000, ({ max }) => translate("error.max_num", { field: "Radius", max: max, unit: "m" }))
+        .required(translate("error.required", { field: "Radius" })),
+});
+
+const dummyLocation: location = {
+    name: "Nguyễn Trọng Tuyễn",
+    latitude: 10.7981,
+    longitude: 106.66983,
+    radius: 10,
+};
+
 const Item = ({ item, onSelect }) => {
     return (
-        <Pressable onPress={() => onSelect(item)}>
+        <Pressable onPress={onSelect}>
             <Text
                 fontSize={size.font.text.small}
                 fontFamily={fonts.PoppinsRegular}
@@ -60,49 +80,19 @@ const Item = ({ item, onSelect }) => {
                 numberOfLines={1}
                 px={"10px"}
             >
-                {item.item.title}
+                {item.title}
             </Text>
             <Divider my={2} />
         </Pressable>
     );
 };
-
-const getLatLng = (position) => {
-    const lat = position[0];
-    const long = position[1];
-    return { latitude: lat, longitude: long };
-};
 const WS_Location = ({ navigation }: { navigation: any }) => {
-    const [location, setLocation] = React.useState<string>(initialLocation.title);
-    const [showSuggest, setShowSuggest] = React.useState<boolean>(false);
-    const [searchResults, setSearchResults] = React.useState<Array<location>>([]);
-    const [radius, setRadius] = React.useState<string>("10");
-    const search = React.useRef(null);
-    const map = React.useRef(null);
-    const onSuggestSelect = (item) => {
-        locationChange(item.item.title);
-        search?.current?.blur();
-    };
-    const renderItem = (item) => {
-        return <Item item={item} onSelect={onSuggestSelect} />;
-    };
-    const locationChange = async (location) => {
-        setLocation(location);
-        debounceSubmit(location);
-    };
-    const submit = async (location) => {
-        const locations = await getLocation(location);
-        setSearchResults(locations);
-    };
-
-    React.useEffect(() => {
-        if (!showSuggest) {
-            const location = searchResults.length > 0 ? searchResults[0] : initialLocation;
-            const cordinate = getLatLng(location.position);
-            map?.current?.animateCamera({ center: cordinate });
-        }
-    }, [showSuggest]);
-    const debounceSubmit = React.useCallback(debounce(submit, 400), []);
+    const [result, setResult] = useState(dummyLocation);
+    const map = useRef(null);
+    useEffect(() => {
+        const camera: Camera = { center: { latitude: result.latitude, longitude: result.longitude } };
+        map?.current?.animateCamera(camera);
+    }, [result]);
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <Box px={"10px"} py={"10px"}>
@@ -123,99 +113,188 @@ const WS_Location = ({ navigation }: { navigation: any }) => {
                         icon={RIGHT_CAVRET}
                     />
                 </HStack>
-                <VStack space={3} w={"95%"} alignSelf="center" py={"30px"}>
-                    <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
-                        {translate("workspace_creation.address")}
-                    </Text>
-                    <VStack>
-                        <Input
-                            value={location}
-                            onFocus={() => setShowSuggest(true)}
-                            onBlur={() => setShowSuggest(false)}
-                            onChangeText={locationChange}
-                            ref={search}
-                            placeholder={translate("workspace_creation.enter_add")}
-                            placeholderTextColor={color.GRAY_MEDIUM}
-                            // fontFamily={fonts.PoppinsRegular}
-                            // // fontSize={size.font.text.small}
-                            w={{
-                                base: "100%",
-                                md: "25%",
-                            }}
-                            // InputLeftElement={<Image source={HOUSE} alt="No" ml="2" />}
-                            bg={color.GRAY_BUTTON}
-                            borderWidth={"1px"}
-                            borderColor={color.GRAY_MEDIUM}
-                            borderRadius={"14px"}
-                        />
-                        {showSuggest && (
-                            <Box marginTop={"55px"} position={"absolute"} zIndex={1} bg={color.WHITE} w={"100%"}>
-                                <FlatList
-                                    data={searchResults}
-                                    renderItem={renderItem}
-                                    keyExtractor={(item) => item.title + item.distance.toString()}
-                                    keyboardShouldPersistTaps={"handled"}
+                <Formik
+                    enableReinitialize
+                    validationSchema={wsLocationSchema}
+                    initialValues={{ location: result.name, radius: result.radius }}
+                    onSubmit={() => {}}
+                >
+                    {({
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        values,
+                        errors,
+                        touched,
+                        isValid,
+                        setFieldValue,
+                        setFieldTouched,
+                        setFieldError,
+                    }) => {
+                        const [searchResults, setSearchResults] = useState<Array<location_api>>([]);
+                        const [showSearches, setShowSearches] = useState<boolean>(false);
+                        const searchRef = useRef(null);
+                        const searchBlur = () => {
+                            setFieldTouched("location");
+                            setShowSearches(false);
+                            searchRef?.current?.blur();
+                        };
+                        const searchChange = (search: string) => {
+                            setFieldValue("location", search);
+                            getSearch(search);
+                        };
+                        const getSearch = async (search: string) => {
+                            const locations = await getLocation(search);
+                            setSearchResults(locations);
+                        };
+                        const resultLocationSubmit = (location?: location_api) => {
+                            if (location) {
+                                const newLocation: location = {
+                                    name: location.title,
+                                    latitude: location.position[0],
+                                    longitude: location.position[1],
+                                    radius: result.radius,
+                                };
+                                setResult(newLocation);
+                                searchBlur();
+                                getSearch(location.title);
+                            } else {
+                                if (searchResults.length > 0) {
+                                    const chosenLocation = searchResults[0];
+                                    const newLocation: location = {
+                                        name: chosenLocation.title,
+                                        latitude: chosenLocation.position[0],
+                                        longitude: chosenLocation.position[1],
+                                        radius: result.radius,
+                                    };
+                                    setResult(newLocation);
+                                }
+                            }
+                        };
+                        const resultRadiusSubmit = () => {
+                            if (!errors.radius) {
+                                const newLocation: location = { ...result, radius: parseInt(values.radius, 10) };
+                                setResult(newLocation);
+                            }
+                        };
+                        const renderItem = ({ item }) => {
+                            return <Item item={item} onSelect={() => resultLocationSubmit(item)} />;
+                        };
+                        return (
+                            <VStack space={3} w={"95%"} alignSelf="center" py={"30px"}>
+                                <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
+                                    {translate("workspace_creation.address")}
+                                </Text>
+                                <VStack>
+                                    <Input
+                                        value={values.location}
+                                        onChangeText={searchChange}
+                                        onFocus={() => setShowSearches(true)}
+                                        onSubmitEditing={() => resultLocationSubmit()}
+                                        onBlur={searchBlur}
+                                        ref={searchRef}
+                                        placeholder={translate("workspace_creation.enter_add")}
+                                        placeholderTextColor={color.GRAY_MEDIUM}
+                                        // fontFamily={fonts.PoppinsRegular}
+                                        // // fontSize={size.font.text.small}
+                                        w={{
+                                            base: "100%",
+                                            md: "25%",
+                                        }}
+                                        // InputLeftElement={<Image source={HOUSE} alt="No" ml="2" />}
+                                        bg={color.GRAY_BUTTON}
+                                        borderWidth={"1px"}
+                                        borderColor={color.GRAY_MEDIUM}
+                                        borderRadius={"14px"}
+                                    />
+
+                                    {showSearches && searchResults.length > 0 && (
+                                        <Box
+                                            marginTop={"55px"}
+                                            position={"absolute"}
+                                            zIndex={1}
+                                            bg={color.WHITE}
+                                            w={"100%"}
+                                        >
+                                            <FlatList
+                                                data={searchResults}
+                                                renderItem={renderItem}
+                                                keyExtractor={(item) => item.title + item.distance.toString()}
+                                                keyboardShouldPersistTaps={"handled"}
+                                            />
+                                        </Box>
+                                    )}
+                                    {errors.location && touched.location && (
+                                        <Text
+                                            fontSize={size.font.text.caption}
+                                            fontFamily={fonts.PoppinsMedium}
+                                            color={color.RED_ERROR}
+                                            pl={"10px"}
+                                        >
+                                            {errors.location}
+                                        </Text>
+                                    )}
+                                </VStack>
+                                <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
+                                    {translate("workspace_creation.radius")}
+                                </Text>
+                                <Input
+                                    value={values.radius.toString()}
+                                    onChangeText={handleChange("radius")}
+                                    onBlur={handleBlur("radius")}
+                                    onSubmitEditing={resultRadiusSubmit}
+                                    placeholder={translate("workspace_creation.enter_radius")}
+                                    placeholderTextColor={color.GRAY_MEDIUM}
+                                    type="number"
+                                    // fontFamily={fonts.PoppinsRegular}
+                                    // // fontSize={size.font.text.small}
+                                    w={{
+                                        base: "100%",
+                                        md: "25%",
+                                    }}
+                                    keyboardType={"numeric"}
+                                    // InputLeftElement={<Image source={HOUSE} alt="No" ml="2" />}
+                                    bg={color.GRAY_BUTTON}
+                                    borderWidth={"1px"}
+                                    borderColor={color.GRAY_MEDIUM}
+                                    borderRadius={"14px"}
                                 />
-                            </Box>
-                        )}
-                    </VStack>
-                    <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
-                        {translate("workspace_creation.radius")}
-                    </Text>
-                    <Input
-                        value={radius}
-                        onChangeText={(text) => setRadius(text)}
-                        placeholder={translate("workspace_creation.enter_radius")}
-                        placeholderTextColor={color.GRAY_MEDIUM}
-                        type="number"
-                        // fontFamily={fonts.PoppinsRegular}
-                        // // fontSize={size.font.text.small}
-                        w={{
-                            base: "100%",
-                            md: "25%",
-                        }}
-                        keyboardType={"numeric"}
-                        // InputLeftElement={<Image source={HOUSE} alt="No" ml="2" />}
-                        bg={color.GRAY_BUTTON}
-                        borderWidth={"1px"}
-                        borderColor={color.GRAY_MEDIUM}
-                        borderRadius={"14px"}
-                    />
-                </VStack>
+                                {errors.radius && touched.radius && (
+                                    <Text
+                                        fontSize={size.font.text.caption}
+                                        fontFamily={fonts.PoppinsMedium}
+                                        color={color.RED_ERROR}
+                                        pl={"10px"}
+                                    >
+                                        {errors.radius}
+                                    </Text>
+                                )}
+                            </VStack>
+                        );
+                    }}
+                </Formik>
                 <Box w={"90%"} h={"300px"} alignSelf="center">
                     <MapView
                         ref={map}
                         style={{ flex: 1 }}
                         initialRegion={{
-                            latitude: initialLocation.position[0],
-                            longitude: initialLocation.position[1],
+                            latitude: result.latitude,
+                            longitude: result.longitude,
                             latitudeDelta: 0.004,
                             longitudeDelta: 0.005,
                         }}
                     >
-                        {!showSuggest && (
-                            <>
-                                <Marker
-                                    title={searchResults.length > 0 ? searchResults[0]?.title : initialLocation.title}
-                                    coordinate={
-                                        searchResults.length > 0
-                                            ? getLatLng(searchResults[0]?.position)
-                                            : getLatLng(initialLocation?.position)
-                                    }
-                                    pinColor={"navy"}
-                                />
-                                <Circle
-                                    center={
-                                        searchResults.length > 0
-                                            ? getLatLng(searchResults[0]?.position)
-                                            : getLatLng(initialLocation?.position)
-                                    }
-                                    radius={Number(radius)}
-                                    strokeWidth={2}
-                                    strokeColor="#3399ff"
-                                />
-                            </>
-                        )}
+                        <Marker
+                            title={result.name}
+                            coordinate={{ latitude: result.latitude, longitude: result.longitude }}
+                            pinColor={"navy"}
+                        />
+                        <Circle
+                            center={{ latitude: result.latitude, longitude: result.longitude }}
+                            radius={result.radius}
+                            strokeWidth={2}
+                            strokeColor="#3399ff"
+                        />
                     </MapView>
                 </Box>
             </Box>
