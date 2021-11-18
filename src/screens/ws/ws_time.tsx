@@ -1,13 +1,13 @@
 import React from "react";
 import { Pressable, Box, Flex, Text, ScrollView, HStack, Checkbox } from "native-base";
-import color from "../constants/colors";
-import translate from "../localize";
-import size from "../constants/sizes";
-import fonts from "../constants/fonts";
+import color from "../../constants/colors";
+import translate from "../../localize";
+import size from "../../constants/sizes";
+import fonts from "../../constants/fonts";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatTime } from "../../utils/utils";
 import { cloneDeep } from "lodash";
-import HeaderThree from "../components/header/headerThree";
+import HeaderThree from "../../components/header/headerThree";
 
 interface Days {
     id: number;

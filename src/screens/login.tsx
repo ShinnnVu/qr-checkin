@@ -1,35 +1,36 @@
-import React from "react";
-import {
-    Button,
-    Center,
-    Pressable,
-    Container, Box, View, Flex, Image, Text, ScrollView, Input,
-    Stack,
-    Link,
-    Icon,
-    HStack,
-    VStack
-} from "native-base";
+import React, { useState } from "react";
+import { Button, Center, Box, Flex, Text, ScrollView, Input, Stack, Link, Icon, HStack, VStack } from "native-base";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import color from "../constants/colors";
-import translate from "../localize";
 import size from "../constants/sizes";
 import fonts from "../constants/fonts";
-import { ILLUSTRATION } from "../constants/images";
-import Icon_Button from "../components/base/icon_button";
-import { styles } from "styled-system";
+import { apiService, connector } from "../services";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = ({ navigation }: { navigation: any }) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const login = async () => {
+        try {
+            const res = await apiService.login({
+                username: username,
+                password: password,
+            });
+            const user = res.data.data;
+            connector.setJWT(user.token);
+            await AsyncStorage.setItem("@User", JSON.stringify(user));
+            navigation.navigate("Home");
+        } catch (error: any) {}
+    };
+
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Center py={"60px"}>
                     <Box>
-                        <VStack 
-                            space={9}
-                            alignItems="center"
-                            alignSelf="center">
+                        <VStack space={9} alignItems="center" alignSelf="center">
                             <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsRegular}>
                                 {"Hey there,"}
                             </Text>
@@ -48,46 +49,37 @@ const Login = ({ navigation }: { navigation: any }) => {
                         py={"135px"}
                     >
                         <Input
-                            placeholder="Phone number"
+                            type="text"
+                            placeholder="Username"
                             InputLeftElement={
-                                <Icon
-                                    as={<MaterialIcons name="message" />}
-                                    size={5}
-                                    ml="2"
-                                    color="muted.400"
-                                />
+                                <Icon as={<MaterialIcons name="message" />} size={5} ml="2" color="muted.400" />
                             }
                             borderRadius={"14px"}
+                            value={username}
+                            onChangeText={(e) => setUsername(e)}
                         />
                         <Input
-                            placeholder="Input"
+                            type="text"
+                            placeholder="Password"
                             InputLeftElement={
-                                <Icon
-                                    as={<MaterialIcons name="lock" />}
-                                    size={5}
-                                    ml="2"
-                                    color="muted.400"
-                                />
+                                <Icon as={<MaterialIcons name="lock" />} size={5} ml="2" color="muted.400" />
                             }
                             InputRightElement={
-                                <Icon
-                                    as={<MaterialIcons name="visibility-off" />}
-                                    size={5}
-                                    mr="2"
-                                    color="muted.400"
-                                />
+                                <Icon as={<MaterialIcons name="visibility-off" />} size={5} mr="2" color="muted.400" />
                             }
                             borderRadius={"14px"}
                             mb="15px"
+                            value={password}
+                            onChangeText={(e) => setPassword(e)}
                         />
                         <LinearGradient
                             colors={[color.BLUE_LIGHT, color.BLUE_HEAVY]}
                             start={[0, 0]}
                             end={[1, 0]}
-                            style={{ borderRadius:99 }}
+                            style={{ borderRadius: 99 }}
                         >
                             <Button
-                                onPress={() => console.log("Press")}
+                                onPress={login}
                                 variant={"unstyle"}
                                 startIcon={<Icon as={MaterialIcons} name="login" size="sm" />}
                                 height={"60px"}
@@ -99,24 +91,21 @@ const Login = ({ navigation }: { navigation: any }) => {
                                     color: color.WHITE,
                                 }}
                                 alignSelf="center"
-                            // bg={{
-                            //     linearGradient: {
-                            //         colors: [color.BLUE_LIGHT, color.BLUE_HEAVY],
-                            //         start: [0, 0],
-                            //         end: [1, 0],
-                            //     },
-                            // }}
+                                // bg={{
+                                //     linearGradient: {
+                                //         colors: [color.BLUE_LIGHT, color.BLUE_HEAVY],
+                                //         start: [0, 0],
+                                //         end: [1, 0],
+                                //     },
+                                // }}
                             >
-                                <Text
-                                    fontFamily={fonts.PoppinsRegular}
-                                    style={{color:"white"}}>Login</Text>
+                                <Text fontFamily={fonts.PoppinsRegular} style={{ color: "white" }}>
+                                    Login
+                                </Text>
                             </Button>
                         </LinearGradient>
                         <HStack alignSelf="center" space="2">
-                            <Text
-                                fontFamily={fonts.PoppinsBold}
-                                alignSelf="center"
-                            >
+                            <Text fontFamily={fonts.PoppinsBold} alignSelf="center">
                                 {"Don't have an account yet?"}
                             </Text>
                             <Link
