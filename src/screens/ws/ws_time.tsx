@@ -16,15 +16,15 @@ import {
     Switch,
     Checkbox,
 } from "native-base";
-import color from "../constants/colors";
-import { LEFT_CAVRET, RIGHT_CAVRET } from "../constants/icons";
-import translate from "../localize";
-import size from "../constants/sizes";
-import fonts from "../constants/fonts";
-import { ILLUSTRATION, LOCATION, QR_CODE } from "../constants/images";
-import Icon_Button from "../components/base/icon_button";
+import color from "../../constants/colors";
+import { LEFT_CAVRET, RIGHT_CAVRET } from "../../constants/icons";
+import translate from "../../localize";
+import size from "../../constants/sizes";
+import fonts from "../../constants/fonts";
+import { ILLUSTRATION, LOCATION, QR_CODE } from "../../constants/images";
+import Icon_Button from "../../components/base/icon_button";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { formatTime } from "../utils/utils";
+import { formatTime } from "../../utils/utils";
 import { cloneDeep } from "lodash";
 interface Days {
     id: number;

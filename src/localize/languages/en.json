@@ -41,5 +41,11 @@
     "fri": "Friday",
     "sat": "Saturday",
     "sun": "Sunday"
+  },
+  "error": {
+    "min_input" : "{{field}} must have at least {{min}} characters",
+    "max_input" : "{{field}} must have at most {{max}} characters",
+    "required": "{{field}} is required",
+    "invalid": "{{field}} is invalid"
   }
 }

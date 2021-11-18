@@ -17,6 +17,7 @@ const color = {
     PURPLE_SHADOW: "#C58BF24D",
     WHITE_SHADOW: "#1D161712",
     TRANSPARENT: "transparent",
+    RED_ERROR: "#CC0000",
 };
 
 export default color;
