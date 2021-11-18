@@ -12,6 +12,8 @@ import WS_Time from "../screens/ws/ws_time";
 import CheckinQRScan from "../screens/checkin/CheckinQRScan";
 import CheckinValidation from "../screens/checkin/CheckinValidation";
 import CheckoutValidation from "../screens/checkin/CheckoutValidation";
+import Login from "../screens/login";
+import Signin from "../screens/signin";
 import WS_Home from "../screens/home/ws_home";
 export const navigators = [
     {
@@ -73,5 +75,13 @@ export const navigators = [
     {
         name: "WS_HOME",
         component: WS_Home,
+    },
+    {
+        name: "Signin",
+        component: Signin,
+    },
+    {
+        name: "Login",
+        component: Login,
     },
 ];
