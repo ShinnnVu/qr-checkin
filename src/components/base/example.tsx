@@ -46,6 +46,13 @@ const Example = ({ navigation }: { navigation: any }) => {
                     >
                         Checkout
                     </Button>
+                    <Button
+                        onPress={() => {
+                            navigation.navigate("EmployeeInvitation");
+                        }}
+                    >
+                        Invite Employees
+                    </Button>
                 </>
             </Center>
         </>

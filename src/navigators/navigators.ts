@@ -3,6 +3,8 @@ import Header from "../components/base/header";
 import CheckinQRScan from "../screens/checkin/CheckinQRScan";
 import CheckinValidation from "../screens/checkin/CheckinValidation";
 import CheckoutValidation from "../screens/checkin/CheckoutValidation";
+import EmployeeInvitation from "../screens/invitation/EmployeeInvitation";
+import ExcelInvitation from "../screens/invitation/ExcelInvitation";
 
 export const navigators = [
     {
@@ -24,6 +26,14 @@ export const navigators = [
     {
         name: "CheckoutValidation",
         component: CheckoutValidation,
+    },
+    {
+        name: "EmployeeInvitation",
+        component: EmployeeInvitation,
+    },
+    {
+        name: "ExcelInvitation",
+        component: ExcelInvitation,
     },
 ]
 
