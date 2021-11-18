@@ -88,6 +88,21 @@ export default function App() {
                         name={navigators.header.name}
                         component={navigators.header.component}
                     />
+                    <Stack.Screen
+                        key={navigators.checkin_qr_scan.name}
+                        name={navigators.checkin_qr_scan.name}
+                        component={navigators.checkin_qr_scan.component}
+                    />
+                    <Stack.Screen
+                        key={navigators.checkin_validation.name}
+                        name={navigators.checkin_validation.name}
+                        component={navigators.checkin_validation.component}
+                    />
+                    <Stack.Screen
+                        key={navigators.checkout_validation.name}
+                        name={navigators.checkout_validation.name}
+                        component={navigators.checkout_validation.component}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         </NativeBaseProvider>

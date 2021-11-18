@@ -9,6 +9,9 @@ import WS_Checkin_Form from "../screens/ws_checkin_form";
 import WS_LOCATION from "../screens/ws_location";
 import Home from "../screens/home";
 import WS_Time from "../screens/ws_time";
+import CheckinQRScan from "../screens/checkin/CheckinQRScan";
+import CheckinValidation from "../screens/checkin/CheckinValidation";
+import CheckoutValidation from "../screens/checkin/CheckoutValidation";
 export const navigators = {
     home: {
         name: "Home",
@@ -53,5 +56,17 @@ export const navigators = {
     header: {
         name: "Header",
         component: Header,
+    },
+    checkin_qr_scan: {
+        name: "CheckinQRScan",
+        component: CheckinQRScan,
+    },
+    checkin_validation: {
+        name: "CheckinValidation",
+        component: CheckinValidation,
+    },
+    checkout_validation: {
+        name: "CheckoutValidation",
+        component: CheckoutValidation,
     },
 };
