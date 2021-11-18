@@ -1,31 +1,14 @@
 import React from "react";
-import {
-    Button,
-    Center,
-    Pressable,
-    Container,
-    Box,
-    View,
-    Flex,
-    Image,
-    Text,
-    ScrollView,
-    HStack,
-    Input,
-    VStack,
-    Switch,
-    Checkbox,
-} from "native-base";
+import { Pressable, Box, Flex, Text, ScrollView, HStack, Checkbox } from "native-base";
 import color from "../constants/colors";
-import { LEFT_CAVRET, RIGHT_CAVRET } from "../constants/icons";
 import translate from "../localize";
 import size from "../constants/sizes";
 import fonts from "../constants/fonts";
-import { ILLUSTRATION, LOCATION, QR_CODE } from "../constants/images";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatTime } from "../utils/utils";
 import { cloneDeep } from "lodash";
 import HeaderThree from "../components/header/headerThree";
+
 interface Days {
     id: number;
     label: string;
