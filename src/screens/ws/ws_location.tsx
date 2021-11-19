@@ -34,6 +34,7 @@ import { Screens } from "../../navigations/model";
 import * as yup from "yup";
 import { Formik } from "formik";
 import { Camera } from "react-native-maps";
+import HeaderThree from "../../components/header/headerThree";
 
 interface location {
     name: string;
@@ -86,33 +87,21 @@ const Item = ({ item, onSelect }) => {
         </Pressable>
     );
 };
-const WS_Location = ({ navigation }: { navigation: any }) => {
+const WS_Location = ({ route, navigation }: { route: any; navigation: any }) => {
     const [result, setResult] = useState(dummyLocation);
     const map = useRef(null);
     useEffect(() => {
-        const camera: Camera = { center: { latitude: result.latitude, longitude: result.longitude } };
+        const camera: any = { center: { latitude: result.latitude, longitude: result.longitude } };
         map?.current?.animateCamera(camera);
     }, [result]);
+    const handleSubmit = () => {
+        const data = { ...route.params, location: result };
+        navigation.navigate(Screens.WS_TIME, data);
+    };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <Box px={"10px"} py={"10px"}>
-                <HStack justifyContent="space-between" alignItems="center">
-                    <Icon_Button
-                        onPress={() => navigation.goBack()}
-                        pColor={color.GRAY_BUTTON_CLICK}
-                        upColor={color.GRAY_BUTTON}
-                        icon={LEFT_CAVRET}
-                    />
-                    <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsBold}>
-                        {translate("workspace_creation.location")}
-                    </Text>
-                    <Icon_Button
-                        onPress={() => navigation.navigate(Screens.WS_TIME)}
-                        pColor={color.GRAY_BUTTON_CLICK}
-                        upColor={color.GRAY_BUTTON}
-                        icon={RIGHT_CAVRET}
-                    />
-                </HStack>
+                <HeaderThree title={"workspace_creation.location"} back={() => navigation.goBack()} to={handleSubmit} />
                 <Formik
                     enableReinitialize
                     validationSchema={wsLocationSchema}
