@@ -14,7 +14,7 @@ interface BottomProps {
 
 const BottomTab = (props: BottomProps) => {
     return (
-        <Box px={"40px"} py={"40px"}>
+        <Box px={"40px"}>
             <HStack paddingLeft="30px" paddingRight="30px" justifyContent="space-between" alignItems="center">
                 <Icon_Button
                     onPress={props.left}
