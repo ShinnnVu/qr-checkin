@@ -60,11 +60,10 @@ const dummy: Com_info = {
 };
 const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any }) => {
     const { workspace_id } = route.params;
-    const [info, setInfo] = useState<Com_info>(dummy);
+    const [info] = useState<Com_info>(dummy);
     const submit = (values: any) => {
         const data = { ...values, workspace_id };
-        console.log(data);
-        //navigation.navigate(Screens.WS_CHECKIN_FORM)
+        navigation.navigate(Screens.WS_CHECKIN_FORM, data);
     };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>

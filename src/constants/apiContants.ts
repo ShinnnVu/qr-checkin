@@ -1,4 +1,4 @@
-export const API_URL = "https://qr-checkin-server-ay2qjf71z-minhthienmu.vercel.app";
+export const API_URL = "https://qr-checkin-server.vercel.app";
 export const TIME_OUT = 30000;
 
 export const API = {

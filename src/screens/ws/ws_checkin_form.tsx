@@ -24,6 +24,7 @@ import { ILLUSTRATION, LOCATION, QR_CODE } from "../../constants/images";
 import Icon_Button from "../../components/base/icon_button";
 import { check } from "react-native-permissions";
 import { Screens } from "../../navigations/model";
+import HeaderThree from "../../components/header/headerThree";
 
 interface CheckinMode {
     qrCode: boolean;
@@ -34,41 +35,30 @@ const dummyData: CheckinMode = {
     qrCode: true,
     location: true,
 };
-const Workspace_checkin_form = ({ navigation }: { navigation: any }) => {
+const Workspace_checkin_form = ({ route, navigation }: { route: any; navigation: any }) => {
     const [checkinMode, setCheckinMode] = useState<CheckinMode>(dummyData);
     const locationToggle = () => {
         const newCheckinMode = { ...checkinMode, location: !checkinMode.location };
         setCheckinMode(newCheckinMode);
     };
-    useEffect(() => {
-        const getMode = async () => {
-            const mode = { qrCode: true, location: false };
-            setCheckinMode(mode);
-        };
-        getMode();
-    }, []);
+    const handleSubmit = () => {
+        const data = { ...route.params, checkinMode: checkinMode };
+        if (checkinMode.location) {
+            navigation.navigate(Screens.WS_LOCATION, data);
+        } else {
+            navigation.navigate(Screens.WS_TIME, data);
+        }
+    };
 
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Box px={"10px"} py={"10px"}>
-                    <HStack justifyContent="space-between" alignItems="center">
-                        <Icon_Button
-                            onPress={() => navigation.goBack()}
-                            pColor={color.GRAY_BUTTON_CLICK}
-                            upColor={color.GRAY_BUTTON}
-                            icon={LEFT_CAVRET}
-                        />
-                        <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsBold}>
-                            {translate("workspace_creation.checkin_form")}
-                        </Text>
-                        <Icon_Button
-                            onPress={() => navigation.navigate(Screens.WS_LOCATION)}
-                            pColor={color.GRAY_BUTTON_CLICK}
-                            upColor={color.GRAY_BUTTON}
-                            icon={RIGHT_CAVRET}
-                        />
-                    </HStack>
+                    <HeaderThree
+                        title={"workspace_creation.checkin_form"}
+                        back={() => navigation.goBack()}
+                        to={handleSubmit}
+                    />
                     <VStack alignItems="center" space={"25px"} py={"50px"}>
                         <Box w={"90%"} shadow={"1"} borderRadius={"16px"}>
                             <HStack p={"10px"}>
