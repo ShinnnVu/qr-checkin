@@ -14,6 +14,7 @@ import { Screens } from "../../navigations/model";
 import * as yup from "yup";
 import { Formik } from "formik";
 import translate from "../../localize";
+import { CommonActions } from "@react-navigation/native";
 const wsLoginSchema = yup.object().shape({
     username: yup
         .string()
@@ -30,10 +31,8 @@ const wsLoginSchema = yup.object().shape({
 });
 
 const Login = ({ navigation }: { navigation: any }) => {
-    const [connecting, setConnecting] = useState<boolean>(false);
-    const login = async (username: string, password: string) => {
+    const login = async (username: string, password: string, setSubmitting) => {
         try {
-            setConnecting(true);
             const res = await apiService.login({
                 username: username,
                 password: password,
@@ -41,8 +40,13 @@ const Login = ({ navigation }: { navigation: any }) => {
             const user = res.data.data;
             connector.setJWT(user.token);
             await AsyncStorage.setItem("@User", JSON.stringify(user));
-            setConnecting(false);
-            navigation.navigate("Home");
+            setSubmitting(false);
+            navigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: "Home" }],
+                }),
+            );
         } catch (error: any) {
             Alert.alert("Failed", "Your username or password is not correct!", [
                 { text: "OK", onPress: () => console.log("OK Pressed") },
@@ -65,10 +69,9 @@ const Login = ({ navigation }: { navigation: any }) => {
                         </VStack>
                     </Box>
                     <Formik
-                        enableReinitialize
                         validationSchema={wsLoginSchema}
                         initialValues={{ username: "", password: "", type: "password" }}
-                        onSubmit={(values) => login(values.username, values.password)}
+                        onSubmit={(values, { setSubmitting }) => login(values.username, values.password, setSubmitting)}
                     >
                         {({
                             handleChange,
@@ -78,6 +81,7 @@ const Login = ({ navigation }: { navigation: any }) => {
                             errors,
                             touched,
                             isValid,
+                            isSubmitting,
                             setFieldValue,
                         }) => (
                             <Stack
@@ -155,7 +159,7 @@ const Login = ({ navigation }: { navigation: any }) => {
                                     style={{ borderRadius: 99 }}
                                 >
                                     <Button
-                                        isLoading={connecting}
+                                        isLoading={isSubmitting}
                                         onPress={handleSubmit}
                                         variant={"unstyle"}
                                         startIcon={<Icon as={MaterialIcons} name="login" size="sm" />}

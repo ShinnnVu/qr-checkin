@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
     Button,
     Center,
@@ -20,18 +20,19 @@ import {
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import color from "../../constants/colors";
+import color, { gradient } from "../../constants/colors";
 import translate from "../../localize";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
 import { ILLUSTRATION } from "../../constants/images";
 import Icon_Button from "../../components/base/icon_button";
-import { styles } from "styled-system";
 import GradientText from "../../components/base/purple_text";
 import { Screens } from "../../navigations/model";
 import * as yup from "yup";
 import { Formik, Form, FastField } from "formik";
-
+import { StyleSheet } from "react-native";
+import TextInput from "../../components/base/textinput";
+import { touch } from "react-native-fs";
 const wsSigninSchema = yup.object().shape({
     username: yup
         .string()
@@ -55,14 +56,43 @@ const wsSigninSchema = yup.object().shape({
     policy: yup.boolean().oneOf([true], translate("error.uncheck")),
 });
 
-const Signin = ({ navigation }: { navigation: any }) => {
-    const signUp = async ({ username, password }: { username: string; password: string }) => {
+const startIcon = <Icon as={MaterialIcons} name="login" size="sm" />;
+const userNameIcon = <Icon as={<MaterialIcons name="message" />} size={5} ml="2" color="muted.400" />;
+const passwordIcon = <Icon as={<MaterialIcons name="lock" />} size={5} ml="2" color="muted.400" />;
+const passwordRightIcon = (type: string) =>
+    type === "password" ? <MaterialIcons name="visibility-off" /> : <MaterialIcons name="visibility" />;
+const inputW = {
+    base: "80%",
+};
+const buttonText = {
+    fontSize: size.font.text.large,
+    fontFamily: fonts.PoppinsBold,
+    color: color.WHITE,
+};
+const hitSlop = {
+    top: 10,
+    bottom: 10,
+    left: 10,
+    right: 10,
+};
+function Signin({ navigation }: { navigation: any }) {
+    const signUp = async ({
+        username,
+        password,
+        setSubmitting,
+    }: {
+        username: string;
+        password: string;
+        setSubmitting: any;
+    }) => {
         console.log(username, password);
+        setSubmitting(false);
     };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
                 <Formik
+                    validateOnChange={false}
                     validationSchema={wsSigninSchema}
                     initialValues={{
                         username: "",
@@ -71,10 +101,56 @@ const Signin = ({ navigation }: { navigation: any }) => {
                         policy: false,
                         type: { pw: "password", cpw: "password" },
                     }}
-                    onSubmit={(values) => signUp(values)}
+                    onSubmit={(values, { setSubmitting }) => signUp({ ...values, setSubmitting })}
                 >
-                    {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, setFieldValue }) => {
-                        console.log("a");
+                    {({
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        values,
+                        errors,
+                        touched,
+                        isValid,
+                        setFieldValue,
+                        isSubmitting,
+                    }) => {
+                        const check = (value: boolean) => {
+                            setFieldValue("policy", value);
+                        };
+                        const onTypeChange = (field: string) => {
+                            if (field === "pw") {
+                                setFieldValue(
+                                    "type",
+                                    values.type.pw === "password"
+                                        ? { ...values.type, pw: "none" }
+                                        : { ...values.type, pw: "password" },
+                                );
+                            } else {
+                                setFieldValue(
+                                    "type",
+                                    values.type.cpw === "password"
+                                        ? { ...values.type, cpw: "none" }
+                                        : { ...values.type, cpw: "password" },
+                                );
+                            }
+                        };
+                        // const rightIcon = useCallback(
+                        //     (field) => (
+                        //         <Icon
+                        //             as={
+                        //                 field === "pw"
+                        //                     ? passwordRightIcon(values.type.pw)
+                        //                     : passwordRightIcon(values.type.cpw)
+                        //             }
+                        //             size={5}
+                        //             mr="2"
+                        //             color="muted.400"
+                        //             onPress={() => onTypeChange("pw")}
+                        //             hitSlop={hitSlop}
+                        //         />
+                        //     ),
+                        //     [values.type.pw],
+                        // );
                         return (
                             <VStack mt="40px" alignContent="center" alignSelf="center" alignItems="center">
                                 <VStack space={4} alignItems="center" alignSelf="center">
@@ -86,137 +162,44 @@ const Signin = ({ navigation }: { navigation: any }) => {
                                     </Text>
                                 </VStack>
                                 <VStack my={"45px"} space={3}>
-                                    <Input
+                                    <TextInput
+                                        name={"Username"}
                                         value={values.username}
-                                        onChangeText={handleChange("username")}
-                                        onBlur={handleBlur("username")}
-                                        placeholder="Username"
-                                        InputLeftElement={
-                                            <Icon
-                                                as={<MaterialIcons name="message" />}
-                                                size={5}
-                                                ml="2"
-                                                color="muted.400"
-                                            />
-                                        }
-                                        borderRadius={"14px"}
-                                        w={{
-                                            base: "80%",
-                                        }}
+                                        handleChange={handleChange("username")}
+                                        handleBlur={handleBlur("username")}
+                                        leftIcon={userNameIcon}
+                                        inputW={inputW}
+                                        errors={errors.username}
+                                        touched={touched.username}
                                     />
-                                    {errors.username && touched.username && (
-                                        <Text
-                                            fontSize={size.font.text.caption}
-                                            fontFamily={fonts.PoppinsMedium}
-                                            color={color.RED_ERROR}
-                                            pl={"10px"}
-                                        >
-                                            {errors.username}
-                                        </Text>
-                                    )}
-                                    <Input
+
+                                    <TextInput
                                         type={values.type.pw}
+                                        name={"Password"}
                                         value={values.password}
-                                        onChangeText={handleChange("password")}
-                                        onBlur={handleBlur("password")}
-                                        placeholder="Password"
-                                        InputLeftElement={
-                                            <Icon
-                                                as={<MaterialIcons name="lock" />}
-                                                size={5}
-                                                ml="2"
-                                                color="muted.400"
-                                            />
-                                        }
-                                        InputRightElement={
-                                            <Icon
-                                                as={
-                                                    values.type.pw === "password" ? (
-                                                        <MaterialIcons name="visibility-off" />
-                                                    ) : (
-                                                        <MaterialIcons name="visibility" />
-                                                    )
-                                                }
-                                                size={5}
-                                                mr="2"
-                                                color="muted.400"
-                                                onPress={() =>
-                                                    setFieldValue(
-                                                        "type",
-                                                        values.type.pw === "password"
-                                                            ? { ...values.type, pw: "none" }
-                                                            : { ...values.type, pw: "password" },
-                                                    )
-                                                }
-                                            />
-                                        }
-                                        borderRadius={"14px"}
+                                        handleChange={handleChange("password")}
+                                        handleBlur={handleBlur("password")}
+                                        leftIcon={passwordIcon}
+                                        // rightIcon={() => rightIcon("pw")}
+                                        inputW={inputW}
+                                        errors={errors.password}
+                                        touched={touched.password}
                                     />
-                                    {errors.password && touched.password && (
-                                        <Text
-                                            fontSize={size.font.text.caption}
-                                            fontFamily={fonts.PoppinsMedium}
-                                            color={color.RED_ERROR}
-                                            pl={"10px"}
-                                        >
-                                            {errors.password}
-                                        </Text>
-                                    )}
-                                    <Input
+
+                                    <TextInput
                                         type={values.type.cpw}
+                                        name={"Confirm Password"}
                                         value={values.confirmPassword}
-                                        onChangeText={handleChange("confirmPassword")}
-                                        onBlur={handleBlur("confirmPassword")}
-                                        placeholder="Confirm Password"
-                                        InputLeftElement={
-                                            <Icon
-                                                as={<MaterialIcons name="lock" />}
-                                                size={5}
-                                                ml="2"
-                                                color="muted.400"
-                                            />
-                                        }
-                                        InputRightElement={
-                                            <Icon
-                                                as={
-                                                    values.type.cpw === "password" ? (
-                                                        <MaterialIcons name="visibility-off" />
-                                                    ) : (
-                                                        <MaterialIcons name="visibility" />
-                                                    )
-                                                }
-                                                size={5}
-                                                mr="2"
-                                                color="muted.400"
-                                                onPress={() =>
-                                                    setFieldValue(
-                                                        "type",
-                                                        values.type.cpw === "password"
-                                                            ? { ...values.type, cpw: "none" }
-                                                            : { ...values.type, cpw: "password" },
-                                                    )
-                                                }
-                                            />
-                                        }
-                                        borderRadius={"14px"}
+                                        handleChange={handleChange("confirmPassword")}
+                                        handleBlur={handleBlur("confirmPassword")}
+                                        leftIcon={passwordIcon}
+                                        inputW={inputW}
+                                        errors={errors.confirmPassword}
+                                        touched={touched.confirmPassword}
                                     />
-                                    {errors.confirmPassword && touched.confirmPassword && (
-                                        <Text
-                                            fontSize={size.font.text.caption}
-                                            fontFamily={fonts.PoppinsMedium}
-                                            color={color.RED_ERROR}
-                                            pl={"10px"}
-                                        >
-                                            {errors.confirmPassword}
-                                        </Text>
-                                    )}
-                                    <View style={{ flexDirection: "row" }}>
+                                    <HStack>
                                         <Box w="10%">
-                                            <Checkbox
-                                                value="all"
-                                                onChange={(value) => setFieldValue("policy", value)}
-                                                accessibilityLabel="all"
-                                            />
+                                            <Checkbox value="all" onChange={check} accessibilityLabel="all" />
                                         </Box>
                                         <HStack>
                                             <Text
@@ -224,10 +207,10 @@ const Signin = ({ navigation }: { navigation: any }) => {
                                                 fontFamily={fonts.PoppinsLight}
                                                 color={color.GRAY_MEDIUM}
                                             >
-                                                {"By continuing you accept our Privacy Policy and\nTerm of Use"}
+                                                {translate("sign.term")}
                                             </Text>
                                         </HStack>
-                                    </View>
+                                    </HStack>
                                     {errors.policy && touched.policy && (
                                         <Text
                                             fontSize={size.font.text.caption}
@@ -241,50 +224,52 @@ const Signin = ({ navigation }: { navigation: any }) => {
                                 </VStack>
                                 <VStack space="15px">
                                     <LinearGradient
-                                        colors={[color.BLUE_LIGHT, color.BLUE_HEAVY]}
-                                        start={[0, 0]}
-                                        end={[1, 0]}
-                                        style={{ borderRadius: 99 }}
+                                        colors={gradient.BLUE}
+                                        start={gradient.START_LINEAR}
+                                        end={gradient.END_LINEAR}
+                                        style={styles.button}
                                     >
                                         <Button
+                                            isLoading={isSubmitting}
                                             onPress={handleSubmit}
                                             variant={"unstyle"}
-                                            startIcon={<Icon as={MaterialIcons} name="login" size="sm" />}
+                                            startIcon={startIcon}
                                             height={"60px"}
                                             width={"315px"}
                                             borderRadius={"99"}
-                                            _text={{
-                                                fontSize: size.font.text.large,
-                                                fontFamily: fonts.PoppinsBold,
-                                                color: color.WHITE,
-                                            }}
+                                            _text={buttonText}
                                             alignSelf="center"
                                         >
-                                            <Text fontFamily={fonts.PoppinsRegular} style={{ color: "white" }}>
+                                            <Text fontFamily={fonts.PoppinsRegular} color={color.WHITE}>
                                                 Register
                                             </Text>
                                         </Button>
                                     </LinearGradient>
-                                    <HStack alignSelf="center" space="2">
-                                        <Text fontFamily={fonts.PoppinsBold} alignSelf="center">
-                                            {"Already have an account?"}
-                                        </Text>
-                                        <GradientText
-                                            fontFamily={fonts.PoppinsMedium}
-                                            fontSize={size.font.text.medium}
-                                            onClick={() => navigation.navigate(Screens.LOG_IN)}
-                                        >
-                                            {"Login"}
-                                        </GradientText>
-                                    </HStack>
                                 </VStack>
                             </VStack>
                         );
                     }}
                 </Formik>
+                <HStack alignSelf="center" space="2" pt={"10px"}>
+                    <Text fontFamily={fonts.PoppinsBold} alignSelf="center">
+                        {"Already have an account?"}
+                    </Text>
+                    <GradientText
+                        fontFamily={fonts.PoppinsMedium}
+                        fontSize={size.font.text.medium}
+                        onClick={() => navigation.navigate(Screens.LOG_IN)}
+                    >
+                        {"Login"}
+                    </GradientText>
+                </HStack>
             </ScrollView>
         </Flex>
     );
-};
+}
 
+const styles = StyleSheet.create({
+    button: {
+        borderRadius: 99,
+    },
+});
 export default Signin;
