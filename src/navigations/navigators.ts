@@ -15,8 +15,8 @@ import CheckoutValidation from "../screens/checkin/CheckoutValidation";
 import EmployeeInvitation from "../screens/invitation/EmployeeInvitation";
 import ExcelInvitation from "../screens/invitation/ExcelInvitation";
 import InvitationResult from "../screens/invitation/InvitationResult";
-import Login from "../screens/login";
-import Signin from "../screens/signin";
+import Login from "../screens/signIn_Up/login";
+import Signin from "../screens/signIn_Up/signin";
 import WS_Home from "../screens/home/ws_home";
 export const navigators = [
     {
@@ -31,6 +31,7 @@ export const navigators = [
         name: "WS_CR_SUCCESS",
         component: WS_Success,
     },
+
     {
         name: "WS_CR_FAIL",
         component: WS_Fail,

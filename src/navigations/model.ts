@@ -14,4 +14,7 @@ export enum Screens {
     CHECKINVALIDATION = "CheckinValidation",
     CHECKOUTVALIDATION = "CheckoutValidation",
     WS_HOME = "WS_HOME",
+    WS_CONFIG_SUCCESS = "WS_CONFIG_SUCCESS",
+    LOG_IN = "Login",
+    SIGN_IN = "Signin",
 }
