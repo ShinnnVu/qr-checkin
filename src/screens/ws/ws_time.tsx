@@ -1,15 +1,17 @@
 import React from "react";
-import { Pressable, Box, Flex, Text, ScrollView, HStack, Checkbox } from "native-base";
-import color from "../../constants/colors";
+import { Pressable, Box, Flex, Text, ScrollView, HStack, Checkbox, FlatList, Center } from "native-base";
+import color, { tintColors } from "../../constants/colors";
 import translate from "../../localize";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { formatTime } from "../../utils/utils";
+import { capitalizeFirstLetter, formatTime } from "../../utils/utils";
 import HeaderThree from "../../components/header/headerThree";
 import { apiService } from "../../services";
 import { Screens } from "../../navigations/model";
-
+import { initial } from "lodash.has/node_modules/@types/lodash";
+import { ActivityIndicator } from "react-native";
+import Checkbox2 from "@react-native-community/checkbox";
 interface Days {
     id: number;
     label: string;
@@ -17,6 +19,29 @@ interface Days {
     c_in: Date;
     c_out: Date;
 }
+
+interface Day_API {
+    isActive: boolean;
+    from: Date;
+    to: Date;
+}
+
+interface Days_API {
+    monday: Day_API;
+    tuesday: Day_API;
+    wednesday: Day_API;
+    thursday: Day_API;
+    friday: Day_API;
+    saturday: Day_API;
+    sunday: Day_API;
+}
+interface timePicker {
+    show: boolean;
+    currentId: number | null;
+    check: 0 | 1 | null;
+    time: Date;
+}
+
 const date = new Date();
 const days: Array<Days> = [
     { id: 1, check: true, label: "Monsday", c_in: date, c_out: date },
@@ -27,17 +52,128 @@ const days: Array<Days> = [
     { id: 6, check: true, label: "Saturday", c_in: date, c_out: date },
     { id: 7, check: false, label: "Sunday", c_in: date, c_out: date },
 ];
-interface timePicker {
-    show: boolean;
-    currentId: number | null;
-    check: 0 | 1 | null;
-}
+
+const initialTime = new Date();
+
+const time = {
+    monday: {
+        isActive: false,
+        from: "8:00",
+        to: "17:00",
+    },
+    tuesday: {
+        isActive: false,
+        from: "8:00",
+        to: "17:00",
+    },
+    wednesday: {
+        isActive: false,
+        from: "8:00",
+        to: "17:00",
+    },
+    thursday: {
+        isActive: false,
+        from: "8:00",
+        to: "17:00",
+    },
+    friday: {
+        isActive: false,
+        from: "8:00",
+        to: "17:00",
+    },
+    saturday: {
+        isActive: false,
+        from: "8:00",
+        to: "17:00",
+    },
+    sunday: {
+        isActive: false,
+        from: "8:00",
+        to: "17:00",
+    },
+};
+
+const days_API_to_days = (days: Days_API) => {
+    return Object.keys(days).map((key, index) => {
+        const data: Day_API = days[key];
+        return {
+            label: capitalizeFirstLetter(key),
+            id: index + 1,
+            check: data.isActive,
+            c_in: data.from,
+            c_out: data.to,
+        };
+    });
+};
+
+const days_to_days_API = (days: Array<Days>) => {
+    return days.reduce(
+        (newDays, item) => (
+            (newDays[item.label.toLowerCase()] = { isActive: item.check, from: item.c_in, to: item.c_out }), newDays
+        ),
+        {},
+    );
+};
+
 const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
     const [groupValues, setGroupValues] = React.useState<Array<Days>>(days);
-    const [timePicker, setTimePicker] = React.useState<timePicker>({ show: false, currentId: null, check: null });
+    const [all, setAll] = React.useState<boolean>(false);
+    const [timePicker, setTimePicker] = React.useState<timePicker>({
+        show: false,
+        currentId: null,
+        check: null,
+        time: initialTime,
+    });
+    console.log("render4");
+    const renderItem = ({ item }) => {
+        return (
+            <HStack w={"100%"} py={"10px"} alignItems={"center"}>
+                {/* <Checkbox
+                    isChecked={item.check}
+                    onChange={(value) => checkChange(value, item.id)}
+                    value={item.id}
+                    accessibilityLabel={item.label}
+                    w={"10%"}
+                    _interactionBox={{
+                        value: "ws",
+                        color: color.WHITE,
+                    }}
+                /> */}
+                <Checkbox2
+                    value={item.check}
+                    onValueChange={(value) => checkChange(value, item.id)}
+                    tintColors={tintColors}
+                />
+                <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsRegular} w="35%" textAlign="center">
+                    {item.label}
+                </Text>
+                <Pressable
+                    onPress={() => {
+                        timePickerOn(item, 0);
+                    }}
+                    w={"27.5%"}
+                >
+                    <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsRegular} textAlign="center">
+                        {formatTime(item.c_in)}
+                    </Text>
+                </Pressable>
+                <Pressable
+                    onPress={() => {
+                        timePickerOn(item, 1);
+                    }}
+                    w={"27.5%"}
+                >
+                    <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsRegular} textAlign="center">
+                        {formatTime(item.c_out)}
+                    </Text>
+                </Pressable>
+            </HStack>
+        );
+    };
     const checkChange = (value, id) => {
         if (id === -1) {
             const newGroupValues = groupValues.map((ob) => ({ ...ob, check: value }));
+            setAll(!all);
             setGroupValues(newGroupValues);
         } else {
             const newGroupValues = groupValues;
@@ -57,10 +193,11 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
         }
     };
     const timePickerOn = (day, check) => {
-        setTimePicker({ show: true, currentId: day.id, check: check });
+        const time = check ? day.c_out : day.c_in;
+        setTimePicker({ show: true, currentId: day.id, check: check, time: time });
     };
     const timePickerOff = (value) => {
-        setTimePicker({ show: false, currentId: timePicker.currentId, check: timePicker.check });
+        setTimePicker({ show: false, currentId: timePicker.currentId, check: timePicker.check, time: timePicker.time });
         if (value.type === "set") {
             const newGroupValues = groupValues;
             const _ = newGroupValues.find((o, i) => {
@@ -87,54 +224,19 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
             });
             setGroupValues([...newGroupValues]);
         }
-        setTimePicker({ show: false, currentId: null, check: null });
+        setTimePicker({ show: false, currentId: null, check: null, time: initialTime });
     };
     const handleSubmit = async () => {
-        const time = {
-            monday: {
-                isActive: false,
-                from: "8:00",
-                to: "17:00",
-            },
-            tuesday: {
-                isActive: false,
-                from: "8:00",
-                to: "17:00",
-            },
-            wednesday: {
-                isActive: false,
-                from: "8:00",
-                to: "17:00",
-            },
-            thursday: {
-                isActive: false,
-                from: "8:00",
-                to: "17:00",
-            },
-            friday: {
-                isActive: false,
-                from: "8:00",
-                to: "17:00",
-            },
-            saturday: {
-                isActive: false,
-                from: "8:00",
-                to: "17:00",
-            },
-            sunday: {
-                isActive: false,
-                from: "8:00",
-                to: "17:00",
-            },
-        };
-        const data = { ...route.params, time, id: route.params.workspace_id };
+        const time = days_to_days_API(groupValues);
 
-        try {
-            await apiService.configurateWorkspace(data);
-            navigation.navigate(Screens.WS_HOME, { workspace_id: data.id });
-        } catch (error: any) {
-            navigation.navigate(Screens.WS_CR_FAIL);
-        }
+        // const data = { ...route?.params, time, id: route?.params.workspace_id };
+
+        // try {
+        //     await apiService.configurateWorkspace(data);
+        //     navigation.navigate(Screens.WS_HOME, { workspace_id: data.id });
+        // } catch (error: any) {
+        //     navigation.navigate(Screens.WS_CR_FAIL);
+        // }
     };
 
     return (
@@ -146,96 +248,43 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
                 }}
                 to={handleSubmit}
             />
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <Box w={"90%"} alignSelf="center">
-                    <HStack w={"100%"} py={"10px"}>
-                        <Box w="10%">
-                            <Checkbox
-                                value="all"
-                                onChange={(value) => checkChange(value, -1)}
-                                accessibilityLabel="all"
-                            />
-                        </Box>
-                        <Text
-                            fontSize={size.font.text.medium}
-                            fontFamily={fonts.PoppinsSemiBold}
-                            w="35%"
-                            textAlign="center"
-                        >
-                            {translate("workspace_creation.days")}
-                        </Text>
-                        <Text
-                            fontSize={size.font.text.medium}
-                            fontFamily={fonts.PoppinsSemiBold}
-                            w="27.5%"
-                            textAlign="center"
-                        >
-                            {translate("workspace_creation.c_in")}
-                        </Text>
-                        <Text
-                            fontSize={size.font.text.medium}
-                            fontFamily={fonts.PoppinsSemiBold}
-                            w="27.5%"
-                            textAlign="center"
-                        >
-                            {translate("workspace_creation.c_out")}
-                        </Text>
-                    </HStack>
-                    {groupValues.map((day) => {
-                        return (
-                            <HStack w={"100%"} py={"10px"} key={day.id}>
-                                <Box w="10%">
-                                    <Checkbox
-                                        isChecked={day.check}
-                                        onChange={(value) => checkChange(value, day.id)}
-                                        value={day.id}
-                                        accessibilityLabel={day.label}
-                                    />
-                                </Box>
-                                <Text
-                                    fontSize={size.font.text.medium}
-                                    fontFamily={fonts.PoppinsRegular}
-                                    w="35%"
-                                    textAlign="center"
-                                >
-                                    {day.label}
-                                </Text>
-                                <Pressable
-                                    onPress={() => {
-                                        timePickerOn(day, 0);
-                                    }}
-                                    w={"27.5%"}
-                                >
-                                    <Text
-                                        fontSize={size.font.text.medium}
-                                        fontFamily={fonts.PoppinsRegular}
-                                        textAlign="center"
-                                    >
-                                        {formatTime(day.c_in)}
-                                    </Text>
-                                </Pressable>
-                                <Pressable
-                                    onPress={() => {
-                                        timePickerOn(day, 1);
-                                    }}
-                                    w={"27.5%"}
-                                >
-                                    <Text
-                                        fontSize={size.font.text.medium}
-                                        fontFamily={fonts.PoppinsRegular}
-                                        textAlign="center"
-                                    >
-                                        {formatTime(day.c_out)}
-                                    </Text>
-                                </Pressable>
-                            </HStack>
-                        );
-                    })}
+            <Box w={"100%"} alignSelf="center" px={"20px"}>
+                <HStack py={"10px"} alignItems={"center"}>
+                    <Checkbox2 value={all} onValueChange={(value) => checkChange(value, -1)} tintColors={tintColors} />
+
+                    <Text
+                        fontSize={size.font.text.medium}
+                        fontFamily={fonts.PoppinsSemiBold}
+                        w="35%"
+                        textAlign="center"
+                    >
+                        {translate("workspace_creation.days")}
+                    </Text>
+                    <Text
+                        fontSize={size.font.text.medium}
+                        fontFamily={fonts.PoppinsSemiBold}
+                        w="27.5%"
+                        textAlign="center"
+                    >
+                        {translate("workspace_creation.c_in")}
+                    </Text>
+                    <Text
+                        fontSize={size.font.text.medium}
+                        fontFamily={fonts.PoppinsSemiBold}
+                        w="27.5%"
+                        textAlign="center"
+                    >
+                        {translate("workspace_creation.c_out")}
+                    </Text>
+                </HStack>
+                <Box w={"100%"}>
+                    <FlatList data={groupValues} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
                 </Box>
-            </ScrollView>
+            </Box>
+
             {timePicker.show && (
                 <DateTimePicker
-                    value={new Date()}
+                    value={timePicker.time}
                     testID="dateTimePicker"
                     mode={"time"}
                     is24Hour={true}

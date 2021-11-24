@@ -13,8 +13,10 @@ import {
     HStack,
     Input,
     VStack,
+    Icon,
 } from "native-base";
 import color from "../../constants/colors";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LEFT_CAVRET, RIGHT_CAVRET } from "../../constants/icons";
 import translate from "../../localize";
 import size from "../../constants/sizes";
@@ -24,6 +26,7 @@ import { Screens } from "../../navigations/model";
 import * as yup from "yup";
 import { Formik } from "formik";
 import HeaderThree from "../../components/header/headerThree";
+import TextInput from "../../components/base/textinput";
 
 interface Com_info {
     name: string;
@@ -58,6 +61,9 @@ const dummy: Com_info = {
     email: "",
     address: "",
 };
+const nameIcon = <Icon as={<MaterialCommunityIcons name="home-edit-outline" />} size={5} ml="2" color="muted.400" />;
+const emailIcon = <Icon as={<MaterialCommunityIcons name="email-outline" />} size={5} ml="2" color="muted.400" />;
+const addressIcon = <Icon as={<MaterialCommunityIcons name="map-outline" />} size={5} ml="2" color="muted.400" />;
 const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any }) => {
     const { workspace_id } = route.params;
     const [info] = useState<Com_info>(dummy);
@@ -104,34 +110,16 @@ const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any
                                         >
                                             {translate("workspace_creation.com_name")}
                                         </Text>
-                                        <Input
+
+                                        <TextInput
+                                            name={translate("workspace_creation.enter_com_name")}
                                             value={values.name}
-                                            onChangeText={handleChange("name")}
-                                            onBlur={handleBlur("name")}
-                                            placeholder={translate("workspace_creation.enter_com_name")}
-                                            placeholderTextColor={color.GRAY_MEDIUM}
-                                            // fontFamily={fonts.PoppinsRegular}
-                                            // // fontSize={size.font.text.small}
-                                            w={{
-                                                base: "100%",
-                                                md: "25%",
-                                            }}
-                                            // InputLeftElement={<Image source={HOUSE} alt="No" ml="2" />}
-                                            bg={color.GRAY_BUTTON}
-                                            borderWidth={"1px"}
-                                            borderColor={color.GRAY_MEDIUM}
-                                            borderRadius={"14px"}
+                                            handleChange={handleChange("name")}
+                                            handleBlur={handleBlur("name")}
+                                            leftIcon={nameIcon}
+                                            errors={errors.name}
+                                            touched={touched.name}
                                         />
-                                        {errors.name && touched.name && (
-                                            <Text
-                                                fontSize={size.font.text.caption}
-                                                fontFamily={fonts.PoppinsMedium}
-                                                color={color.RED_ERROR}
-                                                pl={"10px"}
-                                            >
-                                                {errors.name}
-                                            </Text>
-                                        )}
                                     </>
                                     <>
                                         <Text
@@ -141,34 +129,15 @@ const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any
                                         >
                                             {translate("workspace_creation.com_email")}
                                         </Text>
-                                        <Input
+                                        <TextInput
+                                            name={translate("workspace_creation.enter_com_email")}
                                             value={values.email}
-                                            onChangeText={handleChange("email")}
-                                            onBlur={handleBlur("email")}
-                                            placeholder={translate("workspace_creation.enter_com_email")}
-                                            placeholderTextColor={color.GRAY_MEDIUM}
-                                            // fontFamily={fonts.PoppinsRegular}
-                                            // // fontSize={size.font.text.small}
-                                            w={{
-                                                base: "100%",
-                                                md: "25%",
-                                            }}
-                                            // InputLeftElement={<Image source={HOUSE} alt="No" ml="2" />}
-                                            bg={color.GRAY_BUTTON}
-                                            borderWidth={"1px"}
-                                            borderColor={color.GRAY_MEDIUM}
-                                            borderRadius={"14px"}
+                                            handleChange={handleChange("email")}
+                                            handleBlur={handleBlur("email")}
+                                            leftIcon={emailIcon}
+                                            errors={errors.email}
+                                            touched={touched.email}
                                         />
-                                        {errors.email && touched.email && (
-                                            <Text
-                                                fontSize={size.font.text.caption}
-                                                fontFamily={fonts.PoppinsMedium}
-                                                color={color.RED_ERROR}
-                                                pl={"10px"}
-                                            >
-                                                {errors.email}
-                                            </Text>
-                                        )}
                                     </>
                                     <>
                                         <Text
@@ -178,33 +147,15 @@ const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any
                                         >
                                             {translate("workspace_creation.com_address")}
                                         </Text>
-                                        <Input
+                                        <TextInput
+                                            name={translate("workspace_creation.enter_com_address")}
                                             value={values.address}
-                                            onChangeText={handleChange("address")}
-                                            onBlur={handleBlur("address")}
-                                            placeholder={translate("workspace_creation.enter_com_address")}
-                                            placeholderTextColor={color.GRAY_MEDIUM}
-                                            // // fontSize={size.font.text.small}
-                                            w={{
-                                                base: "100%",
-                                                md: "25%",
-                                            }}
-                                            // InputLeftElement={<Image source={HOUSE} alt="No" ml="2" />}
-                                            bg={color.GRAY_BUTTON}
-                                            borderWidth={"1px"}
-                                            borderColor={color.GRAY_MEDIUM}
-                                            borderRadius={"14px"}
+                                            handleChange={handleChange("address")}
+                                            handleBlur={handleBlur("address")}
+                                            leftIcon={addressIcon}
+                                            errors={errors.address}
+                                            touched={touched.address}
                                         />
-                                        {errors.address && touched.address && (
-                                            <Text
-                                                fontSize={size.font.text.caption}
-                                                fontFamily={fonts.PoppinsMedium}
-                                                color={color.RED_ERROR}
-                                                pl={"10px"}
-                                            >
-                                                {errors.address}
-                                            </Text>
-                                        )}
                                     </>
                                 </VStack>
                             </Box>

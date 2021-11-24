@@ -19,13 +19,13 @@ const wsLoginSchema = yup.object().shape({
     username: yup
         .string()
         .trim()
-        .min(8, ({ min }) => translate("error.min_input", { field: "Username", min: min }))
+        .min(1, ({ min }) => translate("error.min_input", { field: "Username", min: min }))
         .max(256, ({ max }) => translate("error.max_input", { field: "Username", max: max }))
         .required(translate("error.required", { field: "Username" })),
     password: yup
         .string()
         .trim()
-        .min(8, ({ min }) => translate("error.min_input", { field: "Password", min: min }))
+        .min(1, ({ min }) => translate("error.min_input", { field: "Password", min: min }))
         .max(256, ({ max }) => translate("error.max_input", { field: "Password", max: max }))
         .required(translate("error.required", { field: "Password" })),
 });

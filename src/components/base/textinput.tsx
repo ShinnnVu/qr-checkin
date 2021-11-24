@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { Text, Input, Box } from "native-base";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
@@ -14,13 +14,12 @@ interface TextInputProps {
     handleBlur: any;
     leftIcon?: JSX.Element;
     rightIcon?: JSX.Element;
-    inputW: { base: string };
+    inputW?: { base: string };
     errors: string | undefined;
     touched: boolean | undefined;
 }
 const TextInput = (props: TextInputProps) => {
     const { type, name, value, handleChange, handleBlur, leftIcon, rightIcon, inputW, errors, touched } = props;
-    console.log("render9");
     return (
         <>
             <Input

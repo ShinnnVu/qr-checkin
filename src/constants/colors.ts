@@ -22,6 +22,8 @@ const color = {
     RED_ERROR: "#CC0000",
     DANGER: "#FF0000",
     DANGER_01: "#FF00001A",
+    BLUE_P: "#0891b2",
+    GRAY_P: "#aaaaaa",
 };
 
 interface Gradient {
@@ -36,5 +38,7 @@ const gradient: Gradient = {
     START_LINEAR: [0, 0],
     END_LINEAR: [1, 0],
 };
+
+const tintColors = { true: color.BLUE_P, false: color.GRAY_P };
 export default color;
-export { gradient };
+export { gradient, tintColors };

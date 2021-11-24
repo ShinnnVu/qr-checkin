@@ -1,38 +1,18 @@
 import React, { useCallback } from "react";
-import {
-    Button,
-    Center,
-    Pressable,
-    Container,
-    Box,
-    View,
-    Flex,
-    Image,
-    Text,
-    ScrollView,
-    Input,
-    Stack,
-    Link,
-    Icon,
-    Checkbox,
-    VStack,
-    HStack,
-} from "native-base";
+import { Button, Box, Flex, Text, ScrollView, Icon, Checkbox, VStack, HStack } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import color, { gradient } from "../../constants/colors";
 import translate from "../../localize";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
-import { ILLUSTRATION } from "../../constants/images";
-import Icon_Button from "../../components/base/icon_button";
 import GradientText from "../../components/base/purple_text";
 import { Screens } from "../../navigations/model";
 import * as yup from "yup";
-import { Formik, Form, FastField } from "formik";
+import { Formik } from "formik";
 import { StyleSheet } from "react-native";
 import TextInput from "../../components/base/textinput";
-import { touch } from "react-native-fs";
+import { memoize } from "lodash";
 const wsSigninSchema = yup.object().shape({
     username: yup
         .string()
@@ -92,7 +72,6 @@ function Signin({ navigation }: { navigation: any }) {
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
                 <Formik
-                    validateOnChange={false}
                     validationSchema={wsSigninSchema}
                     initialValues={{
                         username: "",
@@ -117,40 +96,44 @@ function Signin({ navigation }: { navigation: any }) {
                         const check = (value: boolean) => {
                             setFieldValue("policy", value);
                         };
-                        const onTypeChange = (field: string) => {
-                            if (field === "pw") {
-                                setFieldValue(
-                                    "type",
-                                    values.type.pw === "password"
-                                        ? { ...values.type, pw: "none" }
-                                        : { ...values.type, pw: "password" },
+
+                        const rightIconPassword = useCallback(
+                            memoize((value: string) => {
+                                const change = value === "password" ? "none" : "password";
+                                return (
+                                    <Icon
+                                        as={passwordRightIcon(value)}
+                                        size={5}
+                                        mr="2"
+                                        color="muted.400"
+                                        onPress={() => {
+                                            setFieldValue("type", { ...values.type, pw: change });
+                                        }}
+                                        hitSlop={hitSlop}
+                                    />
                                 );
-                            } else {
-                                setFieldValue(
-                                    "type",
-                                    values.type.cpw === "password"
-                                        ? { ...values.type, cpw: "none" }
-                                        : { ...values.type, cpw: "password" },
+                            }),
+                            [values.type],
+                        );
+                        const rightIconCP = useCallback(
+                            memoize((value: string) => {
+                                const change = value === "password" ? "none" : "password";
+                                return (
+                                    <Icon
+                                        as={passwordRightIcon(value)}
+                                        size={5}
+                                        mr="2"
+                                        color="muted.400"
+                                        onPress={() => {
+                                            setFieldValue("type", { ...values.type, cpw: change });
+                                        }}
+                                        hitSlop={hitSlop}
+                                    />
                                 );
-                            }
-                        };
-                        // const rightIcon = useCallback(
-                        //     (field) => (
-                        //         <Icon
-                        //             as={
-                        //                 field === "pw"
-                        //                     ? passwordRightIcon(values.type.pw)
-                        //                     : passwordRightIcon(values.type.cpw)
-                        //             }
-                        //             size={5}
-                        //             mr="2"
-                        //             color="muted.400"
-                        //             onPress={() => onTypeChange("pw")}
-                        //             hitSlop={hitSlop}
-                        //         />
-                        //     ),
-                        //     [values.type.pw],
-                        // );
+                            }),
+                            [values.type],
+                        );
+
                         return (
                             <VStack mt="40px" alignContent="center" alignSelf="center" alignItems="center">
                                 <VStack space={4} alignItems="center" alignSelf="center">
@@ -180,7 +163,7 @@ function Signin({ navigation }: { navigation: any }) {
                                         handleChange={handleChange("password")}
                                         handleBlur={handleBlur("password")}
                                         leftIcon={passwordIcon}
-                                        // rightIcon={() => rightIcon("pw")}
+                                        rightIcon={rightIconPassword(values.type.pw)}
                                         inputW={inputW}
                                         errors={errors.password}
                                         touched={touched.password}
@@ -193,6 +176,7 @@ function Signin({ navigation }: { navigation: any }) {
                                         handleChange={handleChange("confirmPassword")}
                                         handleBlur={handleBlur("confirmPassword")}
                                         leftIcon={passwordIcon}
+                                        rightIcon={rightIconCP(values.type.cpw)}
                                         inputW={inputW}
                                         errors={errors.confirmPassword}
                                         touched={touched.confirmPassword}
