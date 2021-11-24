@@ -18,6 +18,7 @@ import InvitationResult from "../screens/invitation/InvitationResult";
 import Login from "../screens/login";
 import Signin from "../screens/signin";
 import WS_Home from "../screens/home/ws_home";
+import CheckinHistory from "../screens/checkin/CheckinHistory";
 export const navigators = [
     {
         name: "Home",
@@ -99,4 +100,8 @@ export const navigators = [
         name: "Login",
         component: Login,
     },
+    {
+        name: "CheckinHistory",
+        component: CheckinHistory,
+    }
 ];

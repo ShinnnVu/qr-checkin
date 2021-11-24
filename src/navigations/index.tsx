@@ -32,7 +32,7 @@ export default function App() {
                     screenOptions={{
                         headerShown: false,
                     }}
-                    initialRouteName={"Login"}
+                    initialRouteName={"CheckinHistory"}
                 >
                     {navigators.map((navigator) => {
                         return (

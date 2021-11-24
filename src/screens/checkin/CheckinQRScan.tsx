@@ -50,16 +50,18 @@ export default function CheckinQRScan({ route, navigation }: { route: any; navig
                     <Heading textAlign={"center"}>Requesting Camera Permission</Heading>
                     <Box style={styles.qrCodeScannerBox}></Box>
                     <Text textAlign={"center"}>Please align the QR code within the frame</Text>
-                    <Button
+                    <RoundedButton
+                        size={"lg"}
+                        w="200"
+                        h="60"
+                        text="Cancel"
                         onPress={() =>
                             navigation.navigate("WS_HOME", {
                                 workspace_id: workspace_id,
                                 workspace_name: workspace_name,
                             })
                         }
-                    >
-                        Cancel
-                    </Button>
+                    />
                 </VStack>
             </Center>
         );
@@ -72,7 +74,13 @@ export default function CheckinQRScan({ route, navigation }: { route: any; navig
                     <Heading textAlign={"center"}>No Camera Permission</Heading>
                     <Box style={styles.qrCodeScannerBox}></Box>
                     <Text textAlign={"center"}>Please provide camera permission to use this feature</Text>
-                    <Button onPress={() => askForCameraPermission()}>Allow Camerra Access</Button>
+                    <RoundedButton
+                        size={"lg"}
+                        w="200"
+                        h="60"
+                        text="Allow Camerra Access"
+                        onPress={() => askForCameraPermission()}
+                    />
                 </VStack>
             </Center>
         );
@@ -85,7 +93,13 @@ export default function CheckinQRScan({ route, navigation }: { route: any; navig
                     <Heading textAlign={"center"}>No Location Permission</Heading>
                     <Box style={styles.qrCodeScannerBox}></Box>
                     <Text textAlign={"center"}>Please provide location permission to use this feature</Text>
-                    <Button onPress={() => askForLocationPermission()}>Allow Location Access</Button>
+                    <RoundedButton
+                        size={"lg"}
+                        w="200"
+                        h="60"
+                        text="Allow Location Access"
+                        onPress={() => askForLocationPermission()}
+                    />
                 </VStack>
             </Center>
         );
