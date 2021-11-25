@@ -10,7 +10,7 @@
     "configure": "Configure now",
     "success": "Workspace Created Successfully",
     "error": "An error has happened",
-    "configure_ask": "Do you want to configure \n your Workspace now?",
+    "configure_ask": "Please continue to configure \n your Workspace.",
     "skip": "Skip",
     "cancel": "Cancel",
     "try_again": "Try again",
@@ -40,7 +40,13 @@
     "thu": "Thursday",
     "fri": "Friday",
     "sat": "Saturday",
-    "sun": "Sunday"
+    "sun": "Sunday",
+    "configure_success" : "Configure Workspace \n successfully",
+    "visit_ws": "Visit Workspace",
+    "ur_c_in": "Your checkin page at",
+    "c_in_page" : "Checkin Page",
+    "save": "Save",
+    "clear": "Clear"
   },
   "error": {
     "min_input" : "{{field}} must have at least {{min}} characters",
@@ -48,12 +54,29 @@
     "required": "{{field}} is required",
     "invalid": "{{field}} is invalid",
     "min_num": "{{field}} must be bigger than {{min}}{{unit}}",   
-    "max_num": "{{field}} must be smaller than {{max}}{{unit}}"
+    "max_num": "{{field}} must be smaller than {{max}}{{unit}}",
+    "pass_unmatch" :"{{field}} does not match",
+    "uncheck": "This field must be checked"
   },
   "home": {
     "add_workspace" : "Add Workspace",
     "reminder": "Reminder!",
     "c_in_forgot": "You haven't checked in today",
     "ur_ws": "Your Workspace"
+  },
+  "sign": {
+    "term" : "By continuing you accept our Privacy Policy and\nTerm of Use"
+  },
+  "addition": {
+    "setting": "Settings",
+    "ws_config": "Workspace config",
+    "language": "Language",
+    "pv_policy": "Privacy policy",
+    "logout": "Log out",
+    "ws_info": "Workspace Info",
+    "ws_c_in_form": "Checkin form",
+    "ws_location": "Location",
+    "time": "Time",
+    "c_page":"Checkin page"
   }
 }

@@ -9,4 +9,8 @@ function getDate() {
     const result = format(new Date(), "eeee, MM/dd/yyyy");
     return result;
 }
-export { formatTime, getDate };
+
+function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+export { formatTime, getDate, capitalizeFirstLetter };

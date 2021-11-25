@@ -27,6 +27,8 @@ import * as yup from "yup";
 import { Formik } from "formik";
 import HeaderThree from "../../components/header/headerThree";
 import TextInput from "../../components/base/textinput";
+import HeaderTwo from "../../components/header/headerTwo";
+import Blue_button from "../../components/base/blue_button";
 
 interface Com_info {
     name: string;
@@ -64,12 +66,12 @@ const dummy: Com_info = {
 const nameIcon = <Icon as={<MaterialCommunityIcons name="home-edit-outline" />} size={5} ml="2" color="muted.400" />;
 const emailIcon = <Icon as={<MaterialCommunityIcons name="email-outline" />} size={5} ml="2" color="muted.400" />;
 const addressIcon = <Icon as={<MaterialCommunityIcons name="map-outline" />} size={5} ml="2" color="muted.400" />;
-const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any }) => {
-    const { workspace_id } = route.params;
+const Ws_s_info = ({ route, navigation }: { route: any; navigation: any }) => {
+    // const { workspace_id } = route?.params;
     const [info] = useState<Com_info>(dummy);
     const submit = (values: any) => {
-        const data = { ...values, workspace_id };
-        navigation.navigate(Screens.WS_CHECKIN_FORM, data);
+        // const data = { ...values, workspace_id };
+        // navigation.navigate(Screens.WS_CHECKIN_FORM, data);
     };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
@@ -82,11 +84,7 @@ const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any
                 >
                     {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
                         <Box px={"10px"} py={"10px"}>
-                            <HeaderThree
-                                title={"workspace_creation.info"}
-                                back={() => navigation.goBack()}
-                                to={handleSubmit}
-                            />
+                            <HeaderTwo title={"workspace_creation.info"} back={() => navigation.goBack()} />
                             <Center py={"30px"}>
                                 <Text fontSize={size.font.title.H1} fontFamily={fonts.PoppinsBold}>
                                     {translate("workspace_creation.com_info")}
@@ -100,7 +98,7 @@ const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any
                                     {translate("workspace_creation.com_info_des")}
                                 </Text>
                             </Center>
-                            <Box w={"95%"} alignSelf="center">
+                            <Box w={"95%"} alignSelf="center" paddingBottom={"15px"}>
                                 <VStack w={"100%"} space={3}>
                                     <>
                                         <Text
@@ -159,6 +157,12 @@ const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any
                                     </>
                                 </VStack>
                             </Box>
+
+                            <Blue_button
+                                onPress={() => console.log("test")}
+                                text={translate("workspace_creation.save")}
+                                width={"200px"}
+                            />
                         </Box>
                     )}
                 </Formik>
@@ -167,4 +171,4 @@ const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any
     );
 };
 
-export default Workspace_com_info;
+export default Ws_s_info;

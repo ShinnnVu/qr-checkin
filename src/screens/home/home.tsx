@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Center, Pressable, Box, Flex, Image, Text, HStack, VStack, AddIcon, FlatList } from "native-base";
-import color from "../../constants/colors";
+import { Center, Pressable, Box, Flex, Image, Text, HStack, VStack, AddIcon, FlatList, View } from "native-base";
+import color, { gradient } from "../../constants/colors";
 import translate from "../../localize";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
@@ -10,11 +10,13 @@ import { apiService } from "../../services";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HeaderOne from "../../components/header/headerOne";
 import { useIsFocused } from "@react-navigation/native";
+import { StyleSheet } from "react-native";
 
 const Workspace_naming = ({ navigation }: { navigation: any }) => {
     const [user, setUser] = useState<string>("");
     const [workspace, setWorkspace] = useState([]);
     const isFocused = useIsFocused();
+
     const getWorkspace = async () => {
         try {
             const user = await AsyncStorage.getItem("@User");
@@ -24,6 +26,7 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                 setUser(username);
                 const res = await apiService.getWorkspaces({ id: id });
                 const workspaces: any = [...res.data.data.host_workspace, ...res.data.data.par_workspace];
+
                 setWorkspace(workspaces);
             }
         } catch (error: any) {}
@@ -33,6 +36,7 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
             await getWorkspace();
         })();
     }, [isFocused]);
+
     const renderItem = ({ item }: { item: any }) => {
         return (
             <Pressable
@@ -43,7 +47,7 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                     });
                 }}
             >
-                <Box bg={color.WHITE} w={"100%"} h={"80px"} borderRadius={"16px"} my={"10px"} shadow={4}>
+                <View style={styles.workspace}>
                     <HStack alignItems="center" flex={1} m={"10px"} justifyContent={"space-between"}>
                         <HStack alignItems="center">
                             <Image source={AVATAR} alt="Error" />
@@ -53,7 +57,7 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                         </HStack>
                         <MaterialCommunityIcons name="chevron-right" size={24} color={color.PURLE_LIGHT} solid />
                     </HStack>
-                </Box>
+                </View>
             </Pressable>
         );
     };
@@ -71,9 +75,9 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                             <Center
                                 bg={{
                                     linearGradient: {
-                                        colors: [color.PURLE_LIGHT, color.PURPLE_HEAVY],
-                                        start: [0, 0],
-                                        end: [1, 0],
+                                        colors: gradient.PURPLE,
+                                        start: gradient.START_LINEAR,
+                                        end: gradient.END_LINEAR,
                                     },
                                 }}
                                 w={"60px"}
@@ -94,4 +98,16 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
     );
 };
 
+const styles = StyleSheet.create({
+    workspace: {
+        backgroundColor: color.WHITE,
+        width: "100%",
+        height: 80,
+        borderRadius: 16,
+        marginVertical: 10,
+        borderWidth: 0.5,
+        borderColor: color.DARK,
+        elevation: 1,
+    },
+});
 export default Workspace_naming;
