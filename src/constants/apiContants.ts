@@ -13,5 +13,7 @@ export const API = {
         addParticipant: "add-participant",
         getWorkspace: "get-workspaces",
         validateCheckin: "validate-checkin",
+        getEmployees: "get-employees",
+        getHistory: "get-history",
     }
 }

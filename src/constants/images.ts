@@ -7,4 +7,5 @@ import USER_PHOTO from "../assets/images/user_photo.png";
 import AVATAR from "../assets/images/avatar.png";
 import CLOCK from "../assets/images/clock.png";
 import BARCODE from "../assets/images/barCode.png";
-export { ILLUSTRATION, ILLUSTRATION_2, ILLUSTRATION_3, LOCATION, QR_CODE, USER_PHOTO, AVATAR, CLOCK, BARCODE };
+import USER_AVATAR  from "../assets/images/user-avatar.svg";
+export { ILLUSTRATION, ILLUSTRATION_2, ILLUSTRATION_3, LOCATION, QR_CODE, USER_PHOTO, AVATAR, CLOCK, BARCODE, USER_AVATAR};

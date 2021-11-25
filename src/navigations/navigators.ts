@@ -19,6 +19,7 @@ import Login from "../screens/login";
 import Signin from "../screens/signin";
 import WS_Home from "../screens/home/ws_home";
 import CheckinHistory from "../screens/checkin/CheckinHistory";
+import EmployeeList from "../screens/employee/EmployeeList";
 export const navigators = [
     {
         name: "Home",
@@ -103,5 +104,9 @@ export const navigators = [
     {
         name: "CheckinHistory",
         component: CheckinHistory,
+    },
+    {
+        name: "EmployeeList",
+        component: EmployeeList,
     }
 ];

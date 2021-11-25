@@ -62,6 +62,22 @@ class APIServices {
         })
         return result;
     }
+    getEmployees = async (data: any) => {
+        const result = await this.connector.request({
+            method: Method.post,
+            url:  `/${API.ServiceName.api}/${API.MethodName.getEmployees}`,
+            data,
+        });
+        return result;
+    }
+    getHistory = async (data: any) => {
+        const result = await this.connector.request({
+            method: Method.post,
+            url:  `/${API.ServiceName.api}/${API.MethodName.getHistory}`,
+            data,
+        });
+        return result;
+    }
 }
 
 export default APIServices;

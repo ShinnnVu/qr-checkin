@@ -6619,6 +6619,13 @@ react-native-geolocation-service@^5.3.0-beta.3:
   resolved "https://registry.yarnpkg.com/react-native-geolocation-service/-/react-native-geolocation-service-5.3.0-beta.3.tgz#6afd291e886ecb5fdf8c096ea0a694ccb0975330"
   integrity sha512-TRIrkD1CV6yAOUNAqFsHiYuTyzBXJ8bttk84r4dCSKLJbYzKkvGyKoqtIIydAVlHRyZhU6u6U4Uz1bkdXPlT3g==
 
+react-native-iconly@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/react-native-iconly/-/react-native-iconly-1.0.12.tgz#44e06d45ea52933055b3e16b22ed7f354e618e83"
+  integrity sha512-HwjgSXyJrSk/TcCCbSNCNySWSst4uLInxxjG7vpCKG/zT4I4tYetiLdaFNp/uPcMEb3ZuaQWXJe9H+fMfaKhtA==
+  dependencies:
+    react-native-svg "^12.1.0"
+
 react-native-maps@0.28.0:
   version "0.28.0"
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.28.0.tgz#1913dd4977652ddfc317d39c7cb7d78a8e513784"
@@ -6679,7 +6686,7 @@ react-native-svg-transformer@^0.14.3:
     path-dirname "^1.0.2"
     semver "^5.6.0"
 
-react-native-svg@12.1.1:
+react-native-svg@12.1.1, react-native-svg@^12.1.0:
   version "12.1.1"
   resolved "https://registry.npmjs.org/react-native-svg/-/react-native-svg-12.1.1.tgz"
   integrity sha512-NIAJ8jCnXGCqGWXkkJ1GTzO4a3Md5at5sagYV8Vh4MXYnL4z5Rh428Wahjhh+LIjx40EE5xM5YtwyJBqOIba2Q==
