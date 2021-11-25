@@ -21,7 +21,7 @@ const CheckinHistory = ({ route, navigation }: { route: any; navigation: any }) 
     const [data, setData] = useState<{ date: Date, checkin: Date, checkout: Date }[]>([]);
     const [history, setHistory] = useState<any>(null);
     const [currentPage, setCurrentPage] = useState(0);
-    const pager = React.useRef(null);
+    const pager = React.useRef<PagerView>(null);
 
     // Fetch data from server
     useEffect(() => {
