@@ -81,18 +81,19 @@ const Addition = ({ navigation }: { navigation: any }) => {
                         </VStack>
                     </View>
                 </View>
-                <BottomTab
-                    homeActive={true}
-                    left={() => {}}
-                    right={() => {}}
-                    checkin={() => {
-                        // navigation.navigate("CheckinQRScan", {
-                        //     workspace_id: workspace_id,
-                        //     workspace_name: workspace_name,
-                        // });
-                    }}
-                />
             </Box>
+            <BottomTab
+                homeActive={true}
+                left={() => {}}
+                right={() => {}}
+                checkin={() => {
+                    // navigation.navigate("CheckinQRScan", {
+                    //     workspace_id: workspace_id,
+                    //     workspace_name: workspace_name,
+                    // });
+                    console.log("clicked");
+                }}
+            />
         </Flex>
     );
 };
