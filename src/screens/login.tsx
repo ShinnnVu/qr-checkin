@@ -59,7 +59,7 @@ const Login = ({ navigation }: { navigation: any }) => {
                             onChangeText={(e) => setUsername(e)}
                         />
                         <Input
-                            type="text"
+                            type={"password"}
                             placeholder="Password"
                             InputLeftElement={
                                 <Icon as={<MaterialIcons name="lock" />} size={5} ml="2" color="muted.400" />

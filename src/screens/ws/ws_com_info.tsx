@@ -23,6 +23,7 @@ import Icon_Button from "../../components/base/icon_button";
 import { Screens } from "../../navigations/model";
 import * as yup from "yup";
 import { Formik } from "formik";
+import HeaderThree from "../../components/header/headerThree";
 
 interface Com_info {
     name: string;
@@ -57,57 +58,43 @@ const dummy: Com_info = {
     email: "",
     address: "",
 };
-const Workspace_com_info = ({ navigation }: { navigation: any }) => {
-    const [info, setInfo] = useState<Com_info>(dummy);
-    useEffect(() => {
-        const getInfo = async () => {
-            const newInfo = { name: "A", email: "B", address: "C" };
-            setInfo(newInfo);
-        };
-        getInfo();
-    }, []);
+const Workspace_com_info = ({ route, navigation }: { route: any; navigation: any }) => {
+    const { workspace_id } = route.params;
+    const [info] = useState<Com_info>(dummy);
+    const submit = (values: any) => {
+        const data = { ...values, workspace_id };
+        navigation.navigate(Screens.WS_CHECKIN_FORM, data);
+    };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <Box px={"10px"} py={"10px"}>
-                    <HStack justifyContent="space-between" alignItems="center">
-                        <Icon_Button
-                            onPress={() => navigation.goBack()}
-                            pColor={color.GRAY_BUTTON_CLICK}
-                            upColor={color.GRAY_BUTTON}
-                            icon={LEFT_CAVRET}
-                        />
-                        <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsBold}>
-                            {translate("workspace_creation.info")}
-                        </Text>
-                        <Icon_Button
-                            onPress={() => navigation.navigate(Screens.WS_CHECKIN_FORM)}
-                            pColor={color.GRAY_BUTTON_CLICK}
-                            upColor={color.GRAY_BUTTON}
-                            icon={RIGHT_CAVRET}
-                        />
-                    </HStack>
-                    <Center py={"30px"}>
-                        <Text fontSize={size.font.title.H1} fontFamily={fonts.PoppinsBold}>
-                            {translate("workspace_creation.com_info")}
-                        </Text>
-                        <Text
-                            fontSize={size.font.text.medium}
-                            fontFamily={fonts.PoppinsRegular}
-                            textAlign="center"
-                            paddingTop={"15px"}
-                        >
-                            {translate("workspace_creation.com_info_des")}
-                        </Text>
-                    </Center>
-                    <Box w={"95%"} alignSelf="center">
-                        <Formik
-                            enableReinitialize
-                            validationSchema={wsInfoValidationSchema}
-                            initialValues={info}
-                            onSubmit={(values) => console.log(values)}
-                        >
-                            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
+                <Formik
+                    enableReinitialize
+                    validationSchema={wsInfoValidationSchema}
+                    initialValues={info}
+                    onSubmit={submit}
+                >
+                    {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
+                        <Box px={"10px"} py={"10px"}>
+                            <HeaderThree
+                                title={"workspace_creation.info"}
+                                back={() => navigation.goBack()}
+                                to={handleSubmit}
+                            />
+                            <Center py={"30px"}>
+                                <Text fontSize={size.font.title.H1} fontFamily={fonts.PoppinsBold}>
+                                    {translate("workspace_creation.com_info")}
+                                </Text>
+                                <Text
+                                    fontSize={size.font.text.medium}
+                                    fontFamily={fonts.PoppinsRegular}
+                                    textAlign="center"
+                                    paddingTop={"15px"}
+                                >
+                                    {translate("workspace_creation.com_info_des")}
+                                </Text>
+                            </Center>
+                            <Box w={"95%"} alignSelf="center">
                                 <VStack w={"100%"} space={3}>
                                     <>
                                         <Text
@@ -220,10 +207,10 @@ const Workspace_com_info = ({ navigation }: { navigation: any }) => {
                                         )}
                                     </>
                                 </VStack>
-                            )}
-                        </Formik>
-                    </Box>
-                </Box>
+                            </Box>
+                        </Box>
+                    )}
+                </Formik>
             </ScrollView>
         </Flex>
     );

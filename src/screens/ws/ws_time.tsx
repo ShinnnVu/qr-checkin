@@ -6,8 +6,9 @@ import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatTime } from "../../utils/utils";
-import { cloneDeep } from "lodash";
 import HeaderThree from "../../components/header/headerThree";
+import { apiService } from "../../services";
+import { Screens } from "../../navigations/model";
 
 interface Days {
     id: number;
@@ -31,7 +32,7 @@ interface timePicker {
     currentId: number | null;
     check: 0 | 1 | null;
 }
-const WS_Time = ({ navigation }: { navigation: any }) => {
+const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
     const [groupValues, setGroupValues] = React.useState<Array<Days>>(days);
     const [timePicker, setTimePicker] = React.useState<timePicker>({ show: false, currentId: null, check: null });
     const checkChange = (value, id) => {
@@ -88,17 +89,62 @@ const WS_Time = ({ navigation }: { navigation: any }) => {
         }
         setTimePicker({ show: false, currentId: null, check: null });
     };
+    const handleSubmit = async () => {
+        const time = {
+            monday: {
+                isActive: false,
+                from: "8:00",
+                to: "17:00",
+            },
+            tuesday: {
+                isActive: false,
+                from: "8:00",
+                to: "17:00",
+            },
+            wednesday: {
+                isActive: false,
+                from: "8:00",
+                to: "17:00",
+            },
+            thursday: {
+                isActive: false,
+                from: "8:00",
+                to: "17:00",
+            },
+            friday: {
+                isActive: false,
+                from: "8:00",
+                to: "17:00",
+            },
+            saturday: {
+                isActive: false,
+                from: "8:00",
+                to: "17:00",
+            },
+            sunday: {
+                isActive: false,
+                from: "8:00",
+                to: "17:00",
+            },
+        };
+        const data = { ...route.params, time, id: route.params.workspace_id };
+
+        try {
+            await apiService.configurateWorkspace(data);
+            navigation.navigate(Screens.WS_HOME, { workspace_id: data.id });
+        } catch (error: any) {
+            navigation.navigate(Screens.WS_CR_FAIL);
+        }
+    };
 
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <HeaderThree
                 title={"workspace_creation.time"}
                 back={() => {
-                    navigation.navigate("WS_CHECKIN_FORM");
+                    navigation.goBack();
                 }}
-                to={() => {
-                    console.log("Configurate Workspace");
-                }}
+                to={handleSubmit}
             />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Box w={"90%"} alignSelf="center">

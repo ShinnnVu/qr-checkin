@@ -9,9 +9,10 @@ import { ILLUSTRATION, ILLUSTRATION_2 } from "../../constants/images";
 import Icon_Button from "../../components/base/icon_button";
 import Blue_button from "../../components/base/blue_button";
 import { Screens } from "../../navigations/model";
-const Workspace_creation_success = ({ navigation }: { navigation: any }) => {
+const Workspace_creation_success = ({ route, navigation }: { route: any; navigation: any }) => {
+    const { workspace_id } = route.params;
     const configure = () => {
-        navigation.navigate(Screens.WS_COM_INFO);
+        navigation.navigate(Screens.WS_COM_INFO, { workspace_id: workspace_id });
     };
     const skip = () => {
         navigation.navigate(Screens.HOME);
@@ -41,7 +42,7 @@ const Workspace_creation_success = ({ navigation }: { navigation: any }) => {
                         text={translate("workspace_creation.configure")}
                         width={"156px"}
                     />
-                    <Pressable onPress={() => skip()}>
+                    {/* <Pressable onPress={() => skip()}>
                         <Center py={"16px"}>
                             <Text
                                 fontSize={size.font.text.large}
@@ -52,7 +53,7 @@ const Workspace_creation_success = ({ navigation }: { navigation: any }) => {
                             </Text>
                         </Center>
                         <Center py={"16px"}></Center>
-                    </Pressable>
+                    </Pressable> */}
                 </Box>
             </ScrollView>
         </Flex>
