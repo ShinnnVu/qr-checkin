@@ -15,27 +15,35 @@ interface BottomProps {
 const BottomTab = (props: BottomProps) => {
     return (
         <Box mx={"40px"}>
-            <HStack marginLeft="30px" marginRight="30px" justifyContent="space-between" alignItems="center">
+            <HStack
+                marginLeft="30px"
+                marginRight="30px"
+                paddingBottom="8px"
+                justifyContent="space-between"
+                alignItems="center"
+            >
                 <Icon_Button
                     onPress={props.left}
                     pColor={color.WHITE}
                     upColor={color.WHITE}
                     icon={props.homeActive ? HOME_ACTIVE : HOUSE}
                 />
-                <Center
-                    h={"60px"}
-                    w={"60px"}
-                    borderRadius={"30px"}
-                    bg={{
-                        linearGradient: {
-                            colors: gradient.BLUE,
-                            start: gradient.START_LINEAR,
-                            end: gradient.END_LINEAR,
-                        },
-                    }}
-                >
-                    <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={8} color={color.BLACK} />
-                </Center>
+                <Pressable onPress={props.checkin}>
+                    <Center
+                        h={"60px"}
+                        w={"60px"}
+                        borderRadius={"30px"}
+                        bg={{
+                            linearGradient: {
+                                colors: gradient.BLUE,
+                                start: gradient.START_LINEAR,
+                                end: gradient.END_LINEAR,
+                            },
+                        }}
+                    >
+                        <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={8} color={color.BLACK} />
+                    </Center>
+                </Pressable>
                 <Icon_Button
                     onPress={props.right}
                     pColor={color.WHITE}
