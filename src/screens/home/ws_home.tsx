@@ -8,6 +8,7 @@ import { CLOCK, USER_PHOTO } from "../../constants/images";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HeaderOne from "../../components/header/headerOne";
 import BottomTab from "../../components/bottom/bottom";
+import { StyleSheet } from "react-native";
 const dummyEmployee = [
     { id: 1, name: "Personal", description: "Your information" },
     { id: 2, name: "Calendar", description: "Working shifts" },
@@ -34,7 +35,7 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
     const renderItem = ({ item }: { item: any }) => {
         return (
             <Box w={"50%"} h={"100px"}>
-                <Pressable onPress={() => {}} w={"90%"} h={"80%"} borderRadius={"16px"} shadow={1} alignSelf="center">
+                <Pressable onPress={() => {}} style={styles.pressable}>
                     <HStack alignSelf={"center"} flex={1} alignItems="center">
                         <MaterialCommunityIcons name="account" size={24} color={color.PURLE_LIGHT} solid />
                         <VStack>
@@ -120,4 +121,13 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
     );
 };
 
+const styles = StyleSheet.create({
+    pressable: {
+        width: "90%",
+        height: "80%",
+        borderRadius: 16,
+        elevation: 2,
+        alignSelf: "center",
+    },
+});
 export default WS_Home;

@@ -12,6 +12,9 @@ import { Screens } from "../../navigations/model";
 import { initial } from "lodash.has/node_modules/@types/lodash";
 import { ActivityIndicator } from "react-native";
 import Checkbox2 from "@react-native-community/checkbox";
+import HeaderTwo from "../../components/header/headerTwo";
+import Blue_button from "../../components/base/blue_button";
+import Purple_button from "../../components/base/purple_button";
 interface Days {
     id: number;
     label: string;
@@ -115,7 +118,7 @@ const days_to_days_API = (days: Array<Days>) => {
     );
 };
 
-const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
+const Ws_s_time = ({ route, navigation }: { route: any; navigation: any }) => {
     const [groupValues, setGroupValues] = React.useState<Array<Days>>(days);
     const [all, setAll] = React.useState<boolean>(false);
     const [timePicker, setTimePicker] = React.useState<timePicker>({
@@ -124,7 +127,6 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
         check: null,
         time: initialTime,
     });
-    console.log("render4");
     const renderItem = ({ item }) => {
         return (
             <HStack w={"100%"} py={"10px"} alignItems={"center"}>
@@ -241,12 +243,11 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
 
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
-            <HeaderThree
+            <HeaderTwo
                 title={"workspace_creation.time"}
                 back={() => {
                     navigation.goBack();
                 }}
-                to={handleSubmit}
             />
             <Box w={"100%"} alignSelf="center" px={"20px"}>
                 <HStack py={"10px"} alignItems={"center"}>
@@ -280,6 +281,18 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
                 <Box w={"100%"}>
                     <FlatList data={groupValues} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
                 </Box>
+                <HStack justifyContent={"space-evenly"} paddingTop={"10px"}>
+                    <Purple_button
+                        onPress={() => console.log("test")}
+                        text={translate("workspace_creation.clear")}
+                        width={"125px"}
+                    />
+                    <Blue_button
+                        onPress={() => console.log("test")}
+                        text={translate("workspace_creation.save")}
+                        width={"125px"}
+                    />
+                </HStack>
             </Box>
 
             {timePicker.show && (
@@ -298,4 +311,4 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
     );
 };
 
-export default WS_Time;
+export default Ws_s_time;
