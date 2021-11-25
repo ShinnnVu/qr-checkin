@@ -64,6 +64,10 @@
     "c_in_forgot": "You haven't checked in today",
     "ur_ws": "Your Workspace"
   },
+  "employees": {
+    "employees": "Employees",
+    "add_employee": "Add Employee"
+  },
   "sign": {
     "term" : "By continuing you accept our Privacy Policy and\nTerm of Use"
   },

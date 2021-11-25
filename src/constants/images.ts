@@ -7,6 +7,7 @@ import USER_PHOTO from "../assets/images/user_photo.png";
 import AVATAR from "../assets/images/avatar.png";
 import CLOCK from "../assets/images/clock.png";
 import BARCODE from "../assets/images/barCode.png";
+import USER_AVATAR  from "../assets/images/user-avatar.svg";
 import USER_PHOTO_BIG from "../assets/images/user_photo_big.png";
 export {
     ILLUSTRATION,
@@ -19,4 +20,5 @@ export {
     CLOCK,
     BARCODE,
     USER_PHOTO_BIG,
+    USER_AVATAR
 };
