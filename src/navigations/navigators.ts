@@ -18,6 +18,14 @@ import InvitationResult from "../screens/invitation/InvitationResult";
 import Login from "../screens/signIn_Up/login";
 import Signin from "../screens/signIn_Up/signin";
 import WS_Home from "../screens/home/ws_home";
+import Ws_config_success from "../screens/ws/ws_config_success";
+import Ws_s_checkin_form from "../screens/ws_setting/checkin_form";
+import Ws_s_checkin_page from "../screens/ws_setting/checkin_page";
+import Ws_s_info from "../screens/ws_setting/info";
+import Ws_s_location from "../screens/ws_setting/location";
+import Ws_s_time from "../screens/ws_setting/time";
+import Addition from "../screens/addition/addition";
+import Ws_addition from "../screens/addition/ws_addition";
 export const navigators = [
     {
         name: "Home",
@@ -99,5 +107,37 @@ export const navigators = [
     {
         name: "Login",
         component: Login,
+    },
+    {
+        name: "WS_CONFIG_SUCCESS",
+        component: Ws_config_success,
+    },
+    {
+        name: "WS_S_CHECKIN_FORM",
+        component: Ws_s_checkin_form,
+    },
+    {
+        name: "WS_S_LOCATION",
+        component: Ws_s_location,
+    },
+    {
+        name: "WS_S_TIME",
+        component: Ws_s_time,
+    },
+    {
+        name: "WS_S_CHECKIN_PAGE",
+        component: Ws_s_checkin_page,
+    },
+    {
+        name: "WS_S_INFO",
+        component: Ws_s_info,
+    },
+    {
+        name: "ADDITION",
+        component: Addition,
+    },
+    {
+        name: "WORKSPACE_ADDITION",
+        component: Ws_addition,
     },
 ];

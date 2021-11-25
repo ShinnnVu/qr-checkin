@@ -22,6 +22,7 @@ const color = {
     RED_ERROR: "#CC0000",
     DANGER: "#FF0000",
     DANGER_01: "#FF00001A",
+    SUCCESS: "#42D742",
     BLUE_P: "#0891b2",
     GRAY_P: "#aaaaaa",
 };

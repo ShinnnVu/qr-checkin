@@ -33,7 +33,7 @@ export default function App() {
                     screenOptions={{
                         headerShown: false,
                     }}
-                    initialRouteName={Screens.WS_LOCATION}
+                    initialRouteName={Screens.ADDITION}
                 >
                     {navigators.map((navigator) => {
                         return (

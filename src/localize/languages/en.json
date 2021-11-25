@@ -40,7 +40,13 @@
     "thu": "Thursday",
     "fri": "Friday",
     "sat": "Saturday",
-    "sun": "Sunday"
+    "sun": "Sunday",
+    "configure_success" : "Configure Workspace \n successfully",
+    "visit_ws": "Visit Workspace",
+    "ur_c_in": "Your checkin page at",
+    "c_in_page" : "Checkin Page",
+    "save": "Save",
+    "clear": "Clear"
   },
   "error": {
     "min_input" : "{{field}} must have at least {{min}} characters",
@@ -60,5 +66,17 @@
   },
   "sign": {
     "term" : "By continuing you accept our Privacy Policy and\nTerm of Use"
+  },
+  "addition": {
+    "setting": "Settings",
+    "ws_config": "Workspace config",
+    "language": "Language",
+    "pv_policy": "Privacy policy",
+    "logout": "Log out",
+    "ws_info": "Workspace Info",
+    "ws_c_in_form": "Checkin form",
+    "ws_location": "Location",
+    "time": "Time",
+    "c_page":"Checkin page"
   }
 }
