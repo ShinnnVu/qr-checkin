@@ -1,3 +1,5 @@
+import { LinearGradientPoint } from "expo-linear-gradient";
+
 const color = {
     BLACK: "#000",
     DARK: "#1D1617",
@@ -20,6 +22,24 @@ const color = {
     RED_ERROR: "#CC0000",
     DANGER: "#FF0000",
     DANGER_01: "#FF00001A",
+    SUCCESS: "#42D742",
+    BLUE_P: "#0891b2",
+    GRAY_P: "#aaaaaa",
 };
 
+interface Gradient {
+    BLUE: Array<string>;
+    PURPLE: Array<string>;
+    START_LINEAR: LinearGradientPoint;
+    END_LINEAR: LinearGradientPoint;
+}
+const gradient: Gradient = {
+    BLUE: [color.BLUE_LIGHT, color.BLUE_HEAVY],
+    PURPLE: [color.PURLE_LIGHT, color.PURPLE_HEAVY],
+    START_LINEAR: [0, 0],
+    END_LINEAR: [1, 0],
+};
+
+const tintColors = { true: color.BLUE_P, false: color.GRAY_P };
 export default color;
+export { gradient, tintColors };

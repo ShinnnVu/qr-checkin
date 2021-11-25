@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { navigators } from "../navigations/navigators";
 import AppLoading from "expo-app-loading";
 import useFonts from "../hooks/useFonts";
+import { Screens } from "./model";
 
 const config = {
     dependencies: {
@@ -32,7 +33,7 @@ export default function App() {
                     screenOptions={{
                         headerShown: false,
                     }}
-                    initialRouteName={"EmployeeList"}
+                    initialRouteName={Screens.LOG_IN}
                 >
                     {navigators.map((navigator) => {
                         return (
