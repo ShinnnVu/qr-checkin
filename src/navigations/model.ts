@@ -24,4 +24,9 @@ export enum Screens {
     WS_S_CHECKIN_PAGE = "WS_S_CHECKIN_PAGE",
     ADDITION = "ADDITION",
     WORKSPACE_ADDITION = "WORKSPACE_ADDITION",
+    CHECKIN_HISTORY = "CheckinHistory",
+    EMPLOYEE_LIST = "EmployeeList",
+    EMPLOYEE_INVITATION = "EmployeeInvitation",
+    INVITATION_RESULT = "InvitationResult",
+    EXCEL_INVITATION = "ExcelInvitation"
 }

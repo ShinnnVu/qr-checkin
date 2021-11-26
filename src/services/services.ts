@@ -78,6 +78,54 @@ class APIServices {
         });
         return result;
     }
+    checkHost = async (data: any) => {
+        const result = await this.connector.request({
+            method: Method.post,
+            url:  `/${API.ServiceName.api}/${API.MethodName.checkHost}`,
+            data,
+        });
+        return result;
+    }
+    getWorkspaceTime = async (data: any) => {
+        const result = await this.connector.request({
+            method: Method.post,
+            url:  `/${API.ServiceName.api}/${API.MethodName.getWorkspaceTime}`,
+            data,
+        });
+        return result;
+    }
+    getWorkspaceLocation = async (data: any) => {
+        const result = await this.connector.request({
+            method: Method.post,
+            url:  `/${API.ServiceName.api}/${API.MethodName.getWorkspaceLocation}`,
+            data,
+        });
+        return result;
+    }
+    updateWorkspaceInfo = async (data: any) => {
+        const result = await this.connector.request({
+            method: Method.post,
+            url:  `/${API.ServiceName.api}/${API.MethodName.updateWorkspaceInfo}`,
+            data,
+        });
+        return result;
+    }
+    getWorkspaceMode = async (data: any) => {
+        const result = await this.connector.request({
+            method: Method.post,
+            url:  `/${API.ServiceName.api}/${API.MethodName.getWorkspaceMode}`,
+            data,
+        });
+        return result;
+    }
+    updateWorkspaceConfig = async (data: any) => {
+        const result = await this.connector.request({
+            method: Method.post,
+            url:  `/${API.ServiceName.api}/${API.MethodName.updateWorkspaceConfig}`,
+            data,
+        });
+        return result;
+    }
 }
 
 export default APIServices;

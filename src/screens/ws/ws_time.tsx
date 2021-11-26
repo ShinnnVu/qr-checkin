@@ -232,7 +232,7 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
 
         try {
             await apiService.configurateWorkspace(data);
-            navigation.navigate(Screens.WS_HOME, { workspace_id: data.id });
+            navigation.navigate(Screens.WS_HOME, { workspace_id: data.id, workspace_name: data.name });
         } catch (error: any) {
             navigation.navigate(Screens.WS_CR_FAIL);
         }

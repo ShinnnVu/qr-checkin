@@ -25,6 +25,8 @@ import HeaderOne from "../../components/header/headerOne";
 import { useIsFocused } from "@react-navigation/native";
 import { SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
 import { getNumOfLetters, getRandomColor, stringToColour } from "../../utils/utils";
+import BottomTab from "../../components/bottom/bottom";
+import { Screens } from "../../navigations/model";
 
 const Workspace_naming = ({ navigation }: { navigation: any }) => {
     const [user, setUser] = useState<string>("");
@@ -39,7 +41,13 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                 const id = JSON.parse(user).id;
                 setUser(username);
                 const res = await apiService.getWorkspaces({ id: id });
-                const workspaces: any = [...res.data.data.host_workspace, ...res.data.data.par_workspace];
+                const host_workspace = res.data.data.host_workspace.map((item: any) => {
+                    return { ...item, type: "Host" };
+                });
+                const par_workspace = res.data.data.par_workspace.map((item: any) => {
+                    return { ...item, type: "Participant" };
+                });
+                const workspaces: any = [...host_workspace, ...par_workspace];
 
                 setWorkspace(workspaces);
             }
@@ -119,17 +127,28 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                                         end: gradient.END_LINEAR,
                                     },
                                 }}
-                                w={"60px"}
-                                h={"60px"}
-                                borderRadius={"30px"}
                             >
-                                <AddIcon color={color.WHITE} size={"16px"} />
-                            </Center>
-                        </Pressable>
-                        <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
-                            {translate("home.add_workspace")}
-                        </Text>
-                    </HStack>
+                                <Center
+                                    bg={{
+                                        linearGradient: {
+                                            colors: gradient.PURPLE,
+                                            start: gradient.START_LINEAR,
+                                            end: gradient.END_LINEAR,
+                                        },
+                                    }}
+                                    w={"60px"}
+                                    h={"60px"}
+                                    borderRadius={"30px"}
+                                >
+                                    <AddIcon color={color.WHITE} size={"16px"} />
+                                </Center>
+                            </Pressable>
+                            <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
+                                {translate("home.add_workspace")}
+                            </Text>
+                        </HStack>
+                    </Box>
+                    <FlatList data={workspace} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
                 </Box>
                 <SafeAreaView>
                     <FlatList
