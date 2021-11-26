@@ -101,7 +101,7 @@ const Addition = ({ navigation }: { navigation: any }) => {
                     </View>
                 </View>
             </Box>
-            {!languageModal && !policyModal && (
+            {!policyModal && (
                 <BottomTab
                     homeActive={false}
                     left={() => {
