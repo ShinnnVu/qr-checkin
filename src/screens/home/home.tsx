@@ -157,6 +157,14 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                         contentContainerStyle={styles.flatlist}
                     />
                 </SafeAreaView>
+                <BottomTab
+                    homeActive={true}
+                    left={() => {}}
+                    right={() => {
+                        navigation.navigate(Screens.ADDITION);
+                    }}
+                    checkin={() => {}}
+                />
             </Box>
         </Flex>
     );

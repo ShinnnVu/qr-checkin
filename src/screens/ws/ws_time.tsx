@@ -42,15 +42,16 @@ interface timePicker {
     time: Date;
 }
 
-const date = new Date();
+const date_start = new Date(2021, 11, 24, 8, 0);
+const date_end = new Date(2021, 11, 24, 17, 0);
 const days: Array<Days> = [
-    { id: 1, check: true, label: "Monsday", c_in: date, c_out: date },
-    { id: 2, check: false, label: "Tuesday", c_in: date, c_out: date },
-    { id: 3, check: true, label: "Wednesday", c_in: date, c_out: date },
-    { id: 4, check: false, label: "Thursday", c_in: date, c_out: date },
-    { id: 5, check: true, label: "Friday", c_in: date, c_out: date },
-    { id: 6, check: true, label: "Saturday", c_in: date, c_out: date },
-    { id: 7, check: false, label: "Sunday", c_in: date, c_out: date },
+    { id: 1, check: true, label: "Monsday", c_in: date_start, c_out: date_end },
+    { id: 2, check: false, label: "Tuesday", c_in: date_start, c_out: date_end },
+    { id: 3, check: true, label: "Wednesday", c_in: date_start, c_out: date_end },
+    { id: 4, check: false, label: "Thursday", c_in: date_start, c_out: date_end },
+    { id: 5, check: true, label: "Friday", c_in: date_start, c_out: date_end },
+    { id: 6, check: true, label: "Saturday", c_in: date_start, c_out: date_end },
+    { id: 7, check: false, label: "Sunday", c_in: date_start, c_out: date_end },
 ];
 
 const initialTime = new Date();

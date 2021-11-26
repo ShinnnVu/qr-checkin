@@ -59,7 +59,16 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
     const renderItem = ({ item }: { item: any }) => {
         return (
             <Box w={"50%"} h={"100px"} alignItems={"center"} paddingTop={"10px"}>
-                <Pressable onPress={() => {}} w={"90%"} h={"90%"} alignItems={"center"}>
+                <Pressable
+                    onPress={() => {
+                        navigation.navigate(item.link, {
+                            workspace_id: workspace_id,
+                        });
+                    }}
+                    w={"90%"}
+                    h={"90%"}
+                    alignItems={"center"}
+                >
                     <HStack
                         h={"100%"}
                         w={"100%"}
