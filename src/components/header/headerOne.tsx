@@ -46,8 +46,8 @@ const HeaderOne = (props: HeaderProps) => {
             ) : (
                 <Image source={props.source} alt={"Error"} />
             )}
-            <VStack>
-                <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsBold} pl={"10px"}>
+            <VStack flex={1}>
+                <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsBold} pl={"10px"} numberOfLines={1}>
                     {props.title}
                 </Text>
                 <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsMedium} pl={"10px"}>

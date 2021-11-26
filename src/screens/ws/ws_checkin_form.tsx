@@ -79,7 +79,7 @@ const Workspace_checkin_form = ({ route, navigation }: { route: any; navigation:
                                     </HStack>
                                     <Box width={"90%"}>
                                         <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsRegular}>
-                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            A quick response (QR) code is a type of barcode that stores information.
                                         </Text>
                                     </Box>
                                 </VStack>
@@ -110,7 +110,7 @@ const Workspace_checkin_form = ({ route, navigation }: { route: any; navigation:
                                     </HStack>
                                     <Box width={"90%"}>
                                         <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsRegular}>
-                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Check-in is a way to indicate your location at a particular place.
                                         </Text>
                                     </Box>
                                 </VStack>

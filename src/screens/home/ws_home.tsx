@@ -8,15 +8,13 @@ import { AVATAR, CLOCK } from "../../constants/images";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HeaderOne from "../../components/header/headerOne";
 import BottomTab from "../../components/bottom/bottom";
-import { StyleSheet, SafeAreaView } from "react-native";
+import { StyleSheet, SafeAreaView, ActivityIndicator } from "react-native";
 import { apiService } from "../../services";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 import { Screens } from "../../navigations/model";
 
-const dummyEmployee = [
-    { id: 1, name: "History", description: "History Checkin/Checkout", link: Screens.CHECKIN_HISTORY },
-];
+const dummyEmployee = [{ id: 1, name: "History", description: "Checkin/Checkout", link: Screens.CHECKIN_HISTORY }];
 
 const dummyAdmin = [{ id: 1, name: "Employee", description: "Employee List", link: Screens.EMPLOYEE_LIST }];
 
@@ -28,9 +26,19 @@ const getIcon = (string: string) => {
             return "calendar-check";
         case "Employee":
             return "domain";
+        case "History":
+            return "history";
         default:
             return "chevron-right";
     }
+};
+
+const listEmpty = () => {
+    return (
+        <Center flex={1}>
+            <ActivityIndicator animating color={color.BLUE_HEAVY} />
+        </Center>
+    );
 };
 const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
     const { workspace_id, workspace_name } = route.params;
@@ -149,6 +157,7 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
                         renderItem={renderItem}
                         keyExtractor={(item) => item.id.toString()}
                         numColumns={2}
+                        ListEmptyComponent={listEmpty()}
                     />
                 </SafeAreaView>
             </Flex>

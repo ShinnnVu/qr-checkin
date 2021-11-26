@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Flex, Image, Text, VStack, View } from "native-base";
 import { Modal } from "react-native";
 import { StyleSheet } from "react-native";
@@ -10,14 +10,26 @@ import { USER_PHOTO_BIG } from "../../constants/images";
 import AdditionElement from "../../components/base/addition";
 import BottomTab from "../../components/bottom/bottom";
 import { Screens } from "../../navigations/model";
-
+import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { apiService } from "../../services";
 const leftIconStyle = { color: color.BLUE_LIGHT, size: 6 };
 const rightIconStyle = { size: 6 };
 const Addition = ({ navigation }: { navigation: any }) => {
     const [user, setUser] = useState<string>("");
     const [languageModal, setlanguageModal] = useState<boolean>(false);
     const [policyModal, setPolicyModal] = useState<boolean>(false);
-
+    const isFocused = useIsFocused();
+    const checkHost = async () => {
+        const user = await AsyncStorage.getItem("@User");
+        if (user) {
+            const user_id = JSON.parse(user).id;
+            setUser(JSON.parse(user).username);
+        }
+    };
+    useEffect(() => {
+        checkHost();
+    }, [isFocused]);
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <Box mx={"10px"} my={"20px"} alignItems={"center"} flex={1}>
