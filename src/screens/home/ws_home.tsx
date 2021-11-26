@@ -8,7 +8,7 @@ import { CLOCK, USER_PHOTO } from "../../constants/images";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HeaderOne from "../../components/header/headerOne";
 import BottomTab from "../../components/bottom/bottom";
-import { StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 const dummyEmployee = [
     { id: 1, name: "Personal", description: "Your information" },
     { id: 2, name: "Calendar", description: "Working shifts" },
@@ -34,9 +34,19 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
     }, []);
     const renderItem = ({ item }: { item: any }) => {
         return (
-            <Box w={"50%"} h={"100px"}>
-                <Pressable onPress={() => {}} style={styles.pressable}>
-                    <HStack alignSelf={"center"} flex={1} alignItems="center">
+            <Box w={"50%"} h={"100px"} alignItems={"center"}>
+                <Pressable onPress={() => {}} w={"90%"} h={"90%"} alignItems={"center"}>
+                    <HStack
+                        h={"100%"}
+                        w={"100%"}
+                        justifyContent={"center"}
+                        alignItems="center"
+                        borderRadius={"16px"}
+                        // borderWidth={"0.5px"}
+                        // borderColor={color.DARK}
+                        shadow={5}
+                        bg={color.WHITE}
+                    >
                         <MaterialCommunityIcons name="account" size={24} color={color.PURLE_LIGHT} solid />
                         <VStack>
                             <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsSemiBold} pl={"10px"}>
@@ -97,14 +107,14 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
                 <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsSemiBold} my={"20px"}>
                     {translate("home.ur_ws")}
                 </Text>
-                <View style={{ flex: 1 }}>
+                <SafeAreaView style={{ flex: 1 }}>
                     <FlatList
                         data={yourWorkspace}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.id.toString()}
                         numColumns={2}
                     />
-                </View>
+                </SafeAreaView>
             </Flex>
             <BottomTab
                 homeActive={true}
@@ -126,8 +136,9 @@ const styles = StyleSheet.create({
         width: "90%",
         height: "80%",
         borderRadius: 16,
-        elevation: 2,
+        elevation: 10,
         alignSelf: "center",
+        backgroundColor: color.WHITE,
     },
 });
 export default WS_Home;

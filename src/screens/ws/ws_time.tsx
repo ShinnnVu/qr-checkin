@@ -124,7 +124,6 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
         check: null,
         time: initialTime,
     });
-    console.log("render4");
     const renderItem = ({ item }) => {
         return (
             <HStack w={"100%"} py={"10px"} alignItems={"center"}>
@@ -229,14 +228,14 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
     const handleSubmit = async () => {
         const time = days_to_days_API(groupValues);
 
-        // const data = { ...route?.params, time, id: route?.params.workspace_id };
+        const data = { ...route?.params, time, id: route?.params.workspace_id };
 
-        // try {
-        //     await apiService.configurateWorkspace(data);
-        //     navigation.navigate(Screens.WS_HOME, { workspace_id: data.id });
-        // } catch (error: any) {
-        //     navigation.navigate(Screens.WS_CR_FAIL);
-        // }
+        try {
+            await apiService.configurateWorkspace(data);
+            navigation.navigate(Screens.WS_HOME, { workspace_id: data.id });
+        } catch (error: any) {
+            navigation.navigate(Screens.WS_CR_FAIL);
+        }
     };
 
     return (
