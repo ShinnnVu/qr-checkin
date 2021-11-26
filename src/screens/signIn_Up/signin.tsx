@@ -13,6 +13,7 @@ import { Formik } from "formik";
 import { StyleSheet } from "react-native";
 import TextInput from "../../components/base/textinput";
 import { memoize } from "lodash";
+import { apiService } from "../../services";
 const wsSigninSchema = yup.object().shape({
     username: yup
         .string()
@@ -65,8 +66,12 @@ function Signin({ navigation }: { navigation: any }) {
         password: string;
         setSubmitting: any;
     }) => {
-        console.log(username, password);
+        await apiService.register({
+            username: username,
+            password: password,
+        });
         setSubmitting(false);
+        navigation.navigate(Screens.LOG_IN);
     };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
