@@ -1,41 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Center, Pressable, Box, Flex, Image, Text, HStack, VStack, AddIcon, FlatList, View } from "native-base";
+import React, { useState } from "react";
+import { Box, Flex, Image, Text, VStack, View } from "native-base";
 import { StyleSheet } from "react-native";
 import color from "../../constants/colors";
 import translate from "../../localize";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
-import { AVATAR, USER_PHOTO, USER_PHOTO_BIG } from "../../constants/images";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { apiService } from "../../services";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import HeaderOne from "../../components/header/headerOne";
-import { useIsFocused } from "@react-navigation/native";
+import { USER_PHOTO_BIG } from "../../constants/images";
 import AdditionElement from "../../components/base/addition";
-import { left } from "styled-system";
 import BottomTab from "../../components/bottom/bottom";
+import { Screens } from "../../navigations/model";
 
 const leftIconStyle = { color: color.BLUE_LIGHT, size: 6 };
 const rightIconStyle = { size: 6 };
 const Addition = ({ navigation }: { navigation: any }) => {
     const [user, setUser] = useState<string>("");
-    const [workspace, setWorkspace] = useState([]);
-    const isFocused = useIsFocused();
-    const getWorkspace = async () => {
-        try {
-            const user = await AsyncStorage.getItem("@User");
-            if (user) {
-                const username = JSON.parse(user).username;
-                const id = JSON.parse(user).id;
-                setUser(username);
-            }
-        } catch (error: any) {}
-    };
-    useEffect(() => {
-        (async () => {
-            await getWorkspace();
-        })();
-    }, [isFocused]);
+
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <Box mx={"10px"} my={"20px"} alignItems={"center"} flex={1}>
@@ -76,23 +55,19 @@ const Addition = ({ navigation }: { navigation: any }) => {
                                 rightIconStyle={rightIconStyle}
                                 text={translate("addition.logout")}
                                 rightIcon="chevron-right"
-                                press={() => console.log("hello")}
+                                press={() => navigation.navigate(Screens.LOG_IN)}
                             />
                         </VStack>
                     </View>
                 </View>
             </Box>
             <BottomTab
-                homeActive={true}
-                left={() => {}}
-                right={() => {}}
-                checkin={() => {
-                    // navigation.navigate("CheckinQRScan", {
-                    //     workspace_id: workspace_id,
-                    //     workspace_name: workspace_name,
-                    // });
-                    console.log("clicked");
+                homeActive={false}
+                left={() => {
+                    navigation.navigate(Screens.HOME);
                 }}
+                right={() => {}}
+                checkin={() => {}}
             />
         </Flex>
     );

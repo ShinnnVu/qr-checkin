@@ -6,7 +6,7 @@ function formatTime(date: Date) {
 }
 
 function getDate() {
-    const result = format(new Date(), "eeee, MM/dd/yyyy");
+    const result = format(new Date(), "eeee, dd/MM/yyyy");
     return result;
 }
 

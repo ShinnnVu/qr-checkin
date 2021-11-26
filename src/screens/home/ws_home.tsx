@@ -1,41 +1,60 @@
 import React, { useEffect, useState } from "react";
-import { Button, Center, Pressable, Box, View, Flex, Image, Text, HStack, VStack, FlatList } from "native-base";
+import { Center, Pressable, Box, View, Flex, Image, Text, HStack, VStack, FlatList } from "native-base";
 import color from "../../constants/colors";
 import translate from "../../localize";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
-import { CLOCK, USER_PHOTO } from "../../constants/images";
+import { AVATAR, CLOCK } from "../../constants/images";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HeaderOne from "../../components/header/headerOne";
 import BottomTab from "../../components/bottom/bottom";
 import { StyleSheet } from "react-native";
+import { apiService } from "../../services";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
+import { Screens } from "../../navigations/model";
+
 const dummyEmployee = [
-    { id: 1, name: "Personal", description: "Your information" },
-    { id: 2, name: "Calendar", description: "Working shifts" },
+    { id: 1, name: "History", description: "History Checkin/Checkout", link: Screens.CHECKIN_HISTORY },
 ];
 
-const dummyAdmin = [
-    { id: 1, name: "Personal", description: "Your information" },
-    { id: 2, name: "Calendar", description: "Working shifts" },
-    { id: 3, name: "Employee", description: "Employees" },
-];
+const dummyAdmin = [{ id: 1, name: "Employee", description: "Employee List", link: Screens.EMPLOYEE_LIST }];
 
 const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
     const { workspace_id, workspace_name } = route.params;
     const [yourWorkspace, setYourWorkspace] = useState([]);
     const [showReminder, setReminder] = useState(false);
-    useEffect(() => {
-        const getWorkspace = async () => {
-            const host = true;
+    const isFocused = useIsFocused();
+
+    const getWorkspace = async () => {
+        const user = await AsyncStorage.getItem("@User");
+        if (user) {
+            const user_id = JSON.parse(user).id;
+            const res = await apiService.checkHost({
+                user_id: user_id,
+                workspace_id: workspace_id,
+            });
+            const host = res.data.data.isHost;
             const myWorkspace: any = host ? dummyAdmin : dummyEmployee;
             setYourWorkspace(myWorkspace);
-        };
+        }
+    };
+
+    useEffect(() => {
         getWorkspace();
-    }, []);
+    }, [isFocused]);
+
     const renderItem = ({ item }: { item: any }) => {
         return (
             <Box w={"50%"} h={"100px"}>
-                <Pressable onPress={() => {}} style={styles.pressable}>
+                <Pressable
+                    onPress={() => {
+                        navigation.navigate(item.link, {
+                            workspace_id: workspace_id,
+                        });
+                    }}
+                    style={styles.pressable}
+                >
                     <HStack alignSelf={"center"} flex={1} alignItems="center">
                         <MaterialCommunityIcons name="account" size={24} color={color.PURLE_LIGHT} solid />
                         <VStack>
@@ -60,7 +79,7 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
                         navigation.navigate("Home");
                     }}
                     title={workspace_name}
-                    source={USER_PHOTO}
+                    source={AVATAR}
                 />
                 {showReminder && (
                     <Box bg={color.DANGER_01} w={"100%"} h={"86px"} marginTop={"10px"} borderRadius={"20px"}>
@@ -109,7 +128,12 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
             <BottomTab
                 homeActive={true}
                 left={() => {}}
-                right={() => {}}
+                right={() => {
+                    navigation.navigate(Screens.WORKSPACE_ADDITION, {
+                        workspace_id: workspace_id,
+                        workspace_name: workspace_name,
+                    });
+                }}
                 checkin={() => {
                     navigation.navigate("CheckinQRScan", {
                         workspace_id: workspace_id,

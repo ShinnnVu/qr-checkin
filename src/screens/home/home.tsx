@@ -11,6 +11,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import HeaderOne from "../../components/header/headerOne";
 import { useIsFocused } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
+import BottomTab from "../../components/bottom/bottom";
+import { Screens } from "../../navigations/model";
 
 const Workspace_naming = ({ navigation }: { navigation: any }) => {
     const [user, setUser] = useState<string>("");
@@ -25,7 +27,13 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                 const id = JSON.parse(user).id;
                 setUser(username);
                 const res = await apiService.getWorkspaces({ id: id });
-                const workspaces: any = [...res.data.data.host_workspace, ...res.data.data.par_workspace];
+                const host_workspace = res.data.data.host_workspace.map((item: any) => {
+                    return { ...item, type: "Host" };
+                });
+                const par_workspace = res.data.data.par_workspace.map((item: any) => {
+                    return { ...item, type: "Participant" };
+                });
+                const workspaces: any = [...host_workspace, ...par_workspace];
 
                 setWorkspace(workspaces);
             }
@@ -51,9 +59,14 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                     <HStack alignItems="center" flex={1} m={"10px"} justifyContent={"space-between"}>
                         <HStack alignItems="center">
                             <Image source={AVATAR} alt="Error" />
-                            <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsSemiBold} pl={"10px"}>
-                                {item.name}
-                            </Text>
+                            <VStack>
+                                <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsSemiBold} pl={"10px"}>
+                                    {item.name}
+                                </Text>
+                                <Text fontSize={size.font.text.caption} fontFamily={fonts.PoppinsRegular} pl={"10px"}>
+                                    {item.type}
+                                </Text>
+                            </VStack>
                         </HStack>
                         <MaterialCommunityIcons name="chevron-right" size={24} color={color.PURLE_LIGHT} solid />
                     </HStack>
@@ -63,37 +76,47 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
     };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
-            <Box px={"10px"} py={"10px"}>
-                <HeaderOne title={user} source={USER_PHOTO} />
-                <Box bg={color.DANGER_01} w={"100%"} h={"86px"} my={"20px"} borderRadius={"20px"}>
-                    <HStack alignItems="center" flex={1} m={"10px"}>
-                        <Pressable
-                            onPress={() => {
-                                navigation.navigate("WS_CR_INT");
-                            }}
-                        >
-                            <Center
-                                bg={{
-                                    linearGradient: {
-                                        colors: gradient.PURPLE,
-                                        start: gradient.START_LINEAR,
-                                        end: gradient.END_LINEAR,
-                                    },
+            <Flex px={"10px"} py={"10px"} flex={1}>
+                <Box px={"10px"} py={"10px"}>
+                    <HeaderOne title={user} source={USER_PHOTO} />
+                    <Box bg={color.DANGER_01} w={"100%"} h={"86px"} my={"20px"} borderRadius={"20px"}>
+                        <HStack alignItems="center" flex={1} m={"10px"}>
+                            <Pressable
+                                onPress={() => {
+                                    navigation.navigate("WS_CR_INT");
                                 }}
-                                w={"60px"}
-                                h={"60px"}
-                                borderRadius={"30px"}
                             >
-                                <AddIcon color={color.WHITE} size={"16px"} />
-                            </Center>
-                        </Pressable>
-                        <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
-                            {translate("home.add_workspace")}
-                        </Text>
-                    </HStack>
+                                <Center
+                                    bg={{
+                                        linearGradient: {
+                                            colors: gradient.PURPLE,
+                                            start: gradient.START_LINEAR,
+                                            end: gradient.END_LINEAR,
+                                        },
+                                    }}
+                                    w={"60px"}
+                                    h={"60px"}
+                                    borderRadius={"30px"}
+                                >
+                                    <AddIcon color={color.WHITE} size={"16px"} />
+                                </Center>
+                            </Pressable>
+                            <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
+                                {translate("home.add_workspace")}
+                            </Text>
+                        </HStack>
+                    </Box>
+                    <FlatList data={workspace} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
                 </Box>
-                <FlatList data={workspace} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
-            </Box>
+            </Flex>
+            <BottomTab
+                homeActive={true}
+                left={() => {}}
+                right={() => {
+                    navigation.navigate(Screens.ADDITION);
+                }}
+                checkin={() => {}}
+            />
         </Flex>
     );
 };

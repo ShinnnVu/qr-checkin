@@ -150,4 +150,16 @@ export const navigators = [
         name: "WORKSPACE_ADDITION",
         component: Ws_addition,
     },
+    {
+        name: "EMPLOYEE_INVITATION",
+        component: EmployeeInvitation,
+    },
+    {
+        name: "INVITATION_RESULT",
+        component: InvitationResult,
+    },
+    {
+        name: "EXCEL_INVITATION",
+        component: ExcelInvitation,
+    },
 ];
