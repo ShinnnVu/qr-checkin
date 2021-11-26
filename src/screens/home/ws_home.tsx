@@ -97,7 +97,7 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
                         navigation.navigate("Home");
                     }}
                     title={workspace_name}
-                    source={AVATAR}
+                    showAvatar
                 />
                 {showReminder && (
                     <Box bg={color.DANGER_01} w={"100%"} h={"86px"} marginTop={"10px"} borderRadius={"20px"}>

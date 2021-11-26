@@ -1,16 +1,16 @@
 import React from "react";
-import { Image, HStack, Text, VStack, Box } from "native-base";
+import { Image, HStack, Text, VStack, Box, Avatar } from "native-base";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
 import color from "../../constants/colors";
 import Icon_Button from "../base/icon_button";
 import { LEFT_CAVRET } from "../../constants/icons";
-import { getDate } from "../../utils/utils";
-
+import { getDate, stringToColour, getNumOfLetters } from "../../utils/utils";
 interface HeaderProps {
     title: string;
-    source: any;
+    source?: any;
     showBack?: boolean;
+    showAvatar?: boolean;
     back?: () => void;
 }
 
@@ -26,9 +26,23 @@ const HeaderOne = (props: HeaderProps) => {
                         icon={LEFT_CAVRET}
                     />
                     <Box paddingLeft={"10px"}>
-                        <Image source={props.source} alt={"Error"} />
+                        {props.showAvatar ? (
+                            <Avatar bg={stringToColour(props.title)} size={"md"}>
+                                <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsBold} color={color.WHITE}>
+                                    {getNumOfLetters(props.title, 1)}
+                                </Text>
+                            </Avatar>
+                        ) : (
+                            <Image source={props.source} alt={"Error"} />
+                        )}
                     </Box>
                 </>
+            ) : props.showAvatar ? (
+                <Avatar bg={stringToColour(props.title)} size={"md"}>
+                    <Text fontSize={size.font.title.H4} fontFamily={fonts.PoppinsBold} color={color.WHITE}>
+                        {getNumOfLetters(props.title, 1)}
+                    </Text>
+                </Avatar>
             ) : (
                 <Image source={props.source} alt={"Error"} />
             )}

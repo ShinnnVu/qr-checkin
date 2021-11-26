@@ -57,7 +57,7 @@ const Ws_s_checkin_form = ({ route, navigation }: { route: any; navigation: any 
                 <Box px={"10px"} py={"10px"} flex={1}>
                     <HeaderTwo title={"workspace_creation.checkin_form"} back={() => navigation.goBack()} />
                     <VStack alignItems="center" space={"25px"} py={"50px"}>
-                        <Box w={"90%"} shadow={"1"} borderRadius={"16px"}>
+                        <Box w={"90%"} shadow={"1"} borderRadius={"16px"} bg={color.WHITE}>
                             <HStack p={"10px"}>
                                 <Center width={"60px"}>
                                     <Image source={QR_CODE} alt="Image Error" alignSelf="center" />
@@ -82,7 +82,7 @@ const Ws_s_checkin_form = ({ route, navigation }: { route: any; navigation: any 
                                 </VStack>
                             </HStack>
                         </Box>
-                        <Box w={"90%"} shadow={"1"} borderRadius={"16px"}>
+                        <Box w={"90%"} shadow={"1"} borderRadius={"16px"} bg={color.WHITE}>
                             <HStack p={"10px"}>
                                 <Center width={"60px"}>
                                     <Image

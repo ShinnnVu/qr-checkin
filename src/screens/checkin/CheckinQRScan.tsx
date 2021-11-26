@@ -78,7 +78,7 @@ export default function CheckinQRScan({ route, navigation }: { route: any; navig
                         size={"lg"}
                         w="200"
                         h="60"
-                        text="Allow Camerra Access"
+                        text="Allow Camera Access"
                         onPress={() => askForCameraPermission()}
                     />
                 </VStack>

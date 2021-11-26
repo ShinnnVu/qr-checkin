@@ -4,13 +4,7 @@ import color from "../../constants/colors";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
-
-const languageIcon = (
-    <Icon as={<MaterialCommunityIcons name="home-edit-outline" />} size={5} ml="2" color="muted.400" />
-);
-const privacyIcon = <Icon as={<MaterialCommunityIcons name="email-outline" />} size={5} ml="2" color="muted.400" />;
-const addressIcon = <Icon as={<MaterialCommunityIcons name="map-outline" />} size={5} ml="2" color="muted.400" />;
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 interface AProps {
     text: string;
@@ -23,41 +17,39 @@ interface AProps {
 }
 export default function Addition_element(props: AProps) {
     return (
-        <Pressable onPress={props.press}>
-            <View style={[styles.holder, props.holderStyle]}>
-                <HStack space={"10px"}>
-                    <Icon
-                        as={<MaterialCommunityIcons name={props.leftIcon} />}
-                        size={5}
-                        ml="2"
-                        color="muted.400"
-                        {...props.leftIconStyle}
-                    />
-                    <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsRegular} color={color.GRAY_HEAVY}>
-                        {props.text}
-                    </Text>
-                </HStack>
+        <TouchableOpacity onPress={props.press} style={[styles.holder, props.holderStyle]}>
+            <HStack space={"10px"}>
                 <Icon
-                    as={<MaterialCommunityIcons name={props.rightIcon} />}
+                    as={<MaterialCommunityIcons name={props.leftIcon} />}
                     size={5}
                     ml="2"
                     color="muted.400"
-                    {...props.rightIconStyle}
+                    {...props.leftIconStyle}
                 />
-            </View>
-        </Pressable>
+                <Text fontSize={size.font.text.large} fontFamily={fonts.PoppinsRegular} color={color.GRAY_HEAVY}>
+                    {props.text}
+                </Text>
+            </HStack>
+            <Icon
+                as={<MaterialCommunityIcons name={props.rightIcon} />}
+                size={5}
+                ml="2"
+                color="muted.400"
+                {...props.rightIconStyle}
+            />
+        </TouchableOpacity>
     );
 }
 
 const styles = StyleSheet.create({
     holder: {
-        elevation: 1,
+        elevation: 5,
         justifyContent: "space-between",
         flexDirection: "row",
         height: 50,
         alignItems: "center",
-
         borderRadius: 16,
         padding: 5,
+        backgroundColor: color.WHITE,
     },
 });

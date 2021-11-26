@@ -31,6 +31,7 @@ import { Screens } from "../../navigations/model";
 const Workspace_naming = ({ navigation }: { navigation: any }) => {
     const [user, setUser] = useState<string>("");
     const [workspace, setWorkspace] = useState([]);
+    const [empty, setEmpty] = useState(false);
     const isFocused = useIsFocused();
 
     const getWorkspace = async () => {
@@ -48,7 +49,7 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                     return { ...item, type: "Participant" };
                 });
                 const workspaces: any = [...host_workspace, ...par_workspace];
-
+                if (workspace.length === 0) setEmpty(true);
                 setWorkspace(workspaces);
             }
         } catch (error: any) {}
@@ -100,57 +101,54 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                 fontFamily={fonts.PoppinsRegular}
                 pl={"10px"}
                 textAlign={"center"}
-                w={"90%"}
+                w={"100%"}
             >
-                {"Your workspace list is being loaded.  \n Please wait a second!"}
+                {empty
+                    ? "There is no workspace yet!"
+                    : "Your workspace list is being loaded.  \n Please wait a second!"}
             </Text>
+        );
+    };
+    const listHeader = () => {
+        return (
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate("WS_CR_INT");
+                }}
+            >
+                <Box bg={color.DANGER_01} h={"86px"} my={"20px"} borderRadius={"20px"} w={"95%"} alignSelf={"center"}>
+                    <HStack alignItems="center" flex={1} m={"10px"}>
+                        <Center
+                            bg={{
+                                linearGradient: {
+                                    colors: gradient.PURPLE,
+                                    start: gradient.START_LINEAR,
+                                    end: gradient.END_LINEAR,
+                                },
+                            }}
+                            w={"60px"}
+                            h={"60px"}
+                            borderRadius={"30px"}
+                        >
+                            <AddIcon color={color.WHITE} size={"16px"} />
+                        </Center>
+
+                        <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
+                            {translate("home.add_workspace")}
+                        </Text>
+                    </HStack>
+                </Box>
+            </TouchableOpacity>
         );
     };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
-            <Box my={"10px"}>
+            <Box my={"10px"} flex={1}>
                 <Box alignSelf={"center"} w={"95%"}>
                     <HeaderOne title={user} source={USER_PHOTO} />
                 </Box>
-                <Box bg={color.DANGER_01} h={"86px"} my={"20px"} borderRadius={"20px"} w={"95%"} alignSelf={"center"}>
-                    <HStack alignItems="center" flex={1} m={"10px"}>
-                        <Pressable
-                            onPress={() => {
-                                navigation.navigate("WS_CR_INT");
-                            }}
-                        >
-                            <Center
-                                bg={{
-                                    linearGradient: {
-                                        colors: gradient.PURPLE,
-                                        start: gradient.START_LINEAR,
-                                        end: gradient.END_LINEAR,
-                                    },
-                                }}
-                            >
-                                <Center
-                                    bg={{
-                                        linearGradient: {
-                                            colors: gradient.PURPLE,
-                                            start: gradient.START_LINEAR,
-                                            end: gradient.END_LINEAR,
-                                        },
-                                    }}
-                                    w={"60px"}
-                                    h={"60px"}
-                                    borderRadius={"30px"}
-                                >
-                                    <AddIcon color={color.WHITE} size={"16px"} />
-                                </Center>
-                            </Pressable>
-                            <Text fontSize={size.font.text.small} fontFamily={fonts.PoppinsMedium} pl={"10px"}>
-                                {translate("home.add_workspace")}
-                            </Text>
-                        </HStack>
-                    </Box>
-                    <FlatList data={workspace} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
-                </Box>
-                <SafeAreaView>
+                {listHeader()}
+                <SafeAreaView style={styles.flex1}>
                     <FlatList
                         data={workspace}
                         renderItem={renderItem}
@@ -188,6 +186,9 @@ const styles = StyleSheet.create({
     flatlist: {
         backgroundColor: color.WHITE,
         paddingVertical: 10,
+    },
+    flex1: {
+        flex: 1,
     },
 });
 export default Workspace_naming;
