@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Center, Pressable, Box, View, Flex, Image, Text, HStack, VStack, FlatList } from "native-base";
+import { Button, Center, Pressable, Box, View, Flex, Image, Text, HStack, VStack, FlatList, Icon } from "native-base";
 import color from "../../constants/colors";
 import translate from "../../localize";
 import size from "../../constants/sizes";
@@ -20,6 +20,18 @@ const dummyAdmin = [
     { id: 3, name: "Employee", description: "Employees" },
 ];
 
+const getIcon = (string: string) => {
+    switch (string) {
+        case "Personal":
+            return "account";
+        case "Calendar":
+            return "calendar-check";
+        case "Employee":
+            return "domain";
+        default:
+            return "chevron-right";
+    }
+};
 const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
     const { workspace_id, workspace_name } = route.params;
     const [yourWorkspace, setYourWorkspace] = useState([]);
@@ -34,7 +46,7 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
     }, []);
     const renderItem = ({ item }: { item: any }) => {
         return (
-            <Box w={"50%"} h={"100px"} alignItems={"center"}>
+            <Box w={"50%"} h={"100px"} alignItems={"center"} paddingTop={"10px"}>
                 <Pressable onPress={() => {}} w={"90%"} h={"90%"} alignItems={"center"}>
                     <HStack
                         h={"100%"}
@@ -42,12 +54,15 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
                         justifyContent={"center"}
                         alignItems="center"
                         borderRadius={"16px"}
-                        // borderWidth={"0.5px"}
-                        // borderColor={color.DARK}
                         shadow={5}
                         bg={color.WHITE}
                     >
-                        <MaterialCommunityIcons name="account" size={24} color={color.PURLE_LIGHT} solid />
+                        <Icon
+                            as={<MaterialCommunityIcons name={getIcon(item.name)} />}
+                            size={8}
+                            ml="2"
+                            color={color.PURLE_LIGHT}
+                        />
                         <VStack>
                             <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsSemiBold} pl={"10px"}>
                                 {item.name}
