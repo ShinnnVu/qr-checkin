@@ -1,12 +1,15 @@
-import { Box, Button, Heading, Text, VStack, FormControl, Input, Icon, View, useToast } from "native-base";
+import { Box, Heading, Text, VStack, FormControl, Input, Icon, View } from "native-base";
 import React, { useState } from "react";
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from "@expo/vector-icons";
 import RoundedButton from "../../components/base/RoundedButton";
+import { apiService } from "../../services";
+import { Screens } from "../../navigations/model";
+import HeaderTwo from "../../components/header/headerTwo";
 
-const EmployeeInvitation = ({ route, navigation }: { route: any, navigation: any }) => {
+const EmployeeInvitation = ({ route, navigation }: { route: any; navigation: any }) => {
+    const { workspace_id } = route.params;
     const [username, setUsername] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const toast = useToast();
 
     const validate = () => {
         if (username === null || username.length === 0) {
@@ -14,68 +17,55 @@ const EmployeeInvitation = ({ route, navigation }: { route: any, navigation: any
             return false;
         }
         return true;
-    }
+    };
 
-    const inviteUser = () => {
-        fetch("invite-link", {
-            method: "POST",
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify([
-                username
-            ]),
-        })
-        .then(res => res.json())
-        .then(data => {
-            toast.show({
-                title: "Completed",
-                status: "success",
-                description: "Invite employee successfully.",
-                duration: 3000,
-                placement: "top",
+    const inviteUser = async () => {
+        try {
+            const res = await apiService.addParticipant({
+                id: workspace_id,
+                participants: [username],
             });
-        })
-        .catch(err => {
-            toast.show({
-                title: "Something went wrong",
-                status: "error",
-                description: "Cannot connect to server",
-                duration: 3000,
-                placement: "top",
+            navigation.navigate(Screens.INVITATION_RESULT, {
+                workspace_id: workspace_id,
+                result: res.data.data,
             });
-        });
+        } catch (error) {}
     };
 
     return (
-        <Box flex={1} m={8} my={10} safeArea>
-            <VStack flex={1} space={5}>
-                <Heading size={"md"}>Employee Info</Heading>
+        <Box flex={1} py={3} safeArea bgColor={"white"}>
+            <HeaderTwo title="employees.add_employee" back={() => navigation.goBack()} />
+            <VStack flex={1} mx={8} space={5}>
                 <FormControl isRequired isInvalid={error !== null}>
                     <FormControl.Label>Username</FormControl.Label>
                     <Input
                         variant={"rounded"}
                         placeholder="Username"
                         InputLeftElement={
-                            <Icon
-                                as={<FontAwesome5 name="user" />}
-                                size={4}
-                                ml={5}
-                                mr={3}
-                                color="muted.400"
-                            />
+                            <Icon as={<FontAwesome5 name="user" />} size={4} ml={5} mr={3} color="muted.400" />
                         }
-                        onChangeText={text => { setUsername(text); setError(null) }}
+                        onChangeText={(text) => {
+                            setUsername(text);
+                            setError(null);
+                        }}
                     />
-                    {error
-                        ? <FormControl.ErrorMessage>{error}</FormControl.ErrorMessage>
-                        : <FormControl.HelperText>The account with this username will be invited to the workspace.</FormControl.HelperText>
-                    }
+                    {error ? (
+                        <FormControl.ErrorMessage>{error}</FormControl.ErrorMessage>
+                    ) : (
+                        <FormControl.HelperText>
+                            The account with this username will be invited to the workspace.
+                        </FormControl.HelperText>
+                    )}
                 </FormControl>
             </VStack>
             <VStack space={5}>
-                <RoundedButton text="Invite" h="60" onPress={() => { if (validate()) inviteUser() }}/>
+                <RoundedButton
+                    text="Invite"
+                    h="60"
+                    onPress={() => {
+                        if (validate()) inviteUser();
+                    }}
+                />
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <View style={{ flex: 1, height: 1, backgroundColor: "darkgray" }} />
                     <View>
@@ -83,7 +73,14 @@ const EmployeeInvitation = ({ route, navigation }: { route: any, navigation: any
                     </View>
                     <View style={{ flex: 1, height: 1, backgroundColor: "darkgray" }} />
                 </View>
-                <RoundedButton variant="lightColorful" h="60" text="Import From Excel" onPress={() => navigation.navigate("ExcelInvitation")} borderColor="lightColorful" borderWidth={1}/>
+                <RoundedButton
+                    variant="lightColorful"
+                    h="60"
+                    text="Import From Excel"
+                    onPress={() => navigation.navigate("ExcelInvitation", { workspace_id: workspace_id })}
+                    borderColor="lightColorful"
+                    borderWidth={1}
+                />
             </VStack>
         </Box>
     );

@@ -56,7 +56,7 @@ const Login = ({ navigation }: { navigation: any }) => {
 
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={"handled"}>
                 <Center py={"20px"}>
                     <Box>
                         <VStack space={2} alignItems="center" alignSelf="center">

@@ -42,15 +42,16 @@ interface timePicker {
     time: Date;
 }
 
-const date = new Date();
+const date_start = new Date(2021, 11, 24, 8, 0);
+const date_end = new Date(2021, 11, 24, 17, 0);
 const days: Array<Days> = [
-    { id: 1, check: true, label: "Monsday", c_in: date, c_out: date },
-    { id: 2, check: false, label: "Tuesday", c_in: date, c_out: date },
-    { id: 3, check: true, label: "Wednesday", c_in: date, c_out: date },
-    { id: 4, check: false, label: "Thursday", c_in: date, c_out: date },
-    { id: 5, check: true, label: "Friday", c_in: date, c_out: date },
-    { id: 6, check: true, label: "Saturday", c_in: date, c_out: date },
-    { id: 7, check: false, label: "Sunday", c_in: date, c_out: date },
+    { id: 1, check: true, label: "Monsday", c_in: date_start, c_out: date_end },
+    { id: 2, check: false, label: "Tuesday", c_in: date_start, c_out: date_end },
+    { id: 3, check: true, label: "Wednesday", c_in: date_start, c_out: date_end },
+    { id: 4, check: false, label: "Thursday", c_in: date_start, c_out: date_end },
+    { id: 5, check: true, label: "Friday", c_in: date_start, c_out: date_end },
+    { id: 6, check: true, label: "Saturday", c_in: date_start, c_out: date_end },
+    { id: 7, check: false, label: "Sunday", c_in: date_start, c_out: date_end },
 ];
 
 const initialTime = new Date();
@@ -124,7 +125,6 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
         check: null,
         time: initialTime,
     });
-    console.log("render4");
     const renderItem = ({ item }) => {
         return (
             <HStack w={"100%"} py={"10px"} alignItems={"center"}>
@@ -229,14 +229,14 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
     const handleSubmit = async () => {
         const time = days_to_days_API(groupValues);
 
-        // const data = { ...route?.params, time, id: route?.params.workspace_id };
+        const data = { ...route?.params, time, id: route?.params.workspace_id };
 
-        // try {
-        //     await apiService.configurateWorkspace(data);
-        //     navigation.navigate(Screens.WS_HOME, { workspace_id: data.id });
-        // } catch (error: any) {
-        //     navigation.navigate(Screens.WS_CR_FAIL);
-        // }
+        try {
+            await apiService.configurateWorkspace(data);
+            navigation.navigate(Screens.WS_HOME, { workspace_id: data.id, workspace_name: data.name });
+        } catch (error: any) {
+            navigation.navigate(Screens.WS_CR_FAIL);
+        }
     };
 
     return (

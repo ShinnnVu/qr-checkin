@@ -65,7 +65,7 @@ const wsLocationSchema = yup.object().shape({
 });
 
 const dummyLocation: location = {
-    name: "Nguyễn Trọng Tuyễn",
+    name: "",
     latitude: 10.7981,
     longitude: 106.66983,
     radius: 10,

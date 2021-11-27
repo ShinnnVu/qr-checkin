@@ -18,6 +18,8 @@ import InvitationResult from "../screens/invitation/InvitationResult";
 import Login from "../screens/signIn_Up/login";
 import Signin from "../screens/signIn_Up/signin";
 import WS_Home from "../screens/home/ws_home";
+import CheckinHistory from "../screens/checkin/CheckinHistory";
+import EmployeeList from "../screens/employee/EmployeeList";
 import Ws_config_success from "../screens/ws/ws_config_success";
 import Ws_s_checkin_form from "../screens/ws_setting/checkin_form";
 import Ws_s_checkin_page from "../screens/ws_setting/checkin_page";
@@ -109,6 +111,14 @@ export const navigators = [
         component: Login,
     },
     {
+        name: "CheckinHistory",
+        component: CheckinHistory,
+    },
+    {
+        name: "EmployeeList",
+        component: EmployeeList,
+    },
+    {
         name: "WS_CONFIG_SUCCESS",
         component: Ws_config_success,
     },
@@ -139,5 +149,17 @@ export const navigators = [
     {
         name: "WORKSPACE_ADDITION",
         component: Ws_addition,
+    },
+    {
+        name: "EMPLOYEE_INVITATION",
+        component: EmployeeInvitation,
+    },
+    {
+        name: "INVITATION_RESULT",
+        component: InvitationResult,
+    },
+    {
+        name: "EXCEL_INVITATION",
+        component: ExcelInvitation,
     },
 ];

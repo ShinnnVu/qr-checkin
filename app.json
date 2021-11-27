@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "qr-checkin",
+    "name": "CheckinApp",
     "slug": "qr-checkin",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,10 +20,17 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "tothepointcode.checkinapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDXSuVuRpQJZYY9L8XaQtLjbIM1gAaWDhk"
+        }
+      },
+      "package": "qr.checkin.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"

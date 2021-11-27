@@ -13,5 +13,13 @@ export const API = {
         addParticipant: "add-participant",
         getWorkspace: "get-workspaces",
         validateCheckin: "validate-checkin",
+        getEmployees: "get-employees",
+        getHistory: "get-history",
+        checkHost: "check-host",
+        getWorkspaceTime: "get-workspace-time",
+        getWorkspaceLocation: "get-workspace-location",
+        updateWorkspaceInfo: "update-workspace-info",
+        getWorkspaceMode: "get-workspace-mode",
+        updateWorkspaceConfig: "update-workspace-config",
     }
 }

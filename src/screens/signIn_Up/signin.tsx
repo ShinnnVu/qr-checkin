@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Button, Box, Flex, Text, ScrollView, Icon, Checkbox, VStack, HStack } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import color, { gradient } from "../../constants/colors";
+import color, { gradient, tintColors } from "../../constants/colors";
 import translate from "../../localize";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
@@ -13,6 +13,8 @@ import { Formik } from "formik";
 import { StyleSheet } from "react-native";
 import TextInput from "../../components/base/textinput";
 import { memoize } from "lodash";
+import { apiService } from "../../services";
+import Checkbox2 from "@react-native-community/checkbox";
 const wsSigninSchema = yup.object().shape({
     username: yup
         .string()
@@ -65,8 +67,12 @@ function Signin({ navigation }: { navigation: any }) {
         password: string;
         setSubmitting: any;
     }) => {
-        console.log(username, password);
+        await apiService.register({
+            username: username,
+            password: password,
+        });
         setSubmitting(false);
+        navigation.navigate(Screens.LOG_IN);
     };
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
@@ -181,19 +187,22 @@ function Signin({ navigation }: { navigation: any }) {
                                         errors={errors.confirmPassword}
                                         touched={touched.confirmPassword}
                                     />
-                                    <HStack>
+                                    <HStack alignItems={"center"} space={2}>
                                         <Box w="10%">
-                                            <Checkbox value="all" onChange={check} accessibilityLabel="all" />
+                                            <Checkbox2
+                                                value={values.policy}
+                                                onValueChange={check}
+                                                tintColors={tintColors}
+                                            />
                                         </Box>
-                                        <HStack>
-                                            <Text
-                                                fontSize={"10px"}
-                                                fontFamily={fonts.PoppinsLight}
-                                                color={color.GRAY_MEDIUM}
-                                            >
-                                                {translate("sign.term")}
-                                            </Text>
-                                        </HStack>
+
+                                        <Text
+                                            fontSize={"10px"}
+                                            fontFamily={fonts.PoppinsLight}
+                                            color={color.GRAY_MEDIUM}
+                                        >
+                                            {translate("sign.term")}
+                                        </Text>
                                     </HStack>
                                     {errors.policy && touched.policy && (
                                         <Text

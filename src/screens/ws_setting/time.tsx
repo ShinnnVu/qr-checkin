@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Pressable, Box, Flex, Text, ScrollView, HStack, Checkbox, FlatList, Center } from "native-base";
 import color, { tintColors } from "../../constants/colors";
 import translate from "../../localize";
 import size from "../../constants/sizes";
 import fonts from "../../constants/fonts";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { capitalizeFirstLetter, formatTime } from "../../utils/utils";
+import { capitalizeFirstLetter, formatTime, sleep } from "../../utils/utils";
 import HeaderThree from "../../components/header/headerThree";
 import { apiService } from "../../services";
 import { Screens } from "../../navigations/model";
@@ -15,6 +15,7 @@ import Checkbox2 from "@react-native-community/checkbox";
 import HeaderTwo from "../../components/header/headerTwo";
 import Blue_button from "../../components/base/blue_button";
 import Purple_button from "../../components/base/purple_button";
+import loadingIndicator from "../../components/base/loading_indicator";
 interface Days {
     id: number;
     label: string;
@@ -45,15 +46,16 @@ interface timePicker {
     time: Date;
 }
 
-const date = new Date();
+const date_start = new Date(2021, 11, 24, 8, 0);
+const date_end = new Date(2021, 11, 24, 17, 0);
 const days: Array<Days> = [
-    { id: 1, check: true, label: "Monsday", c_in: date, c_out: date },
-    { id: 2, check: false, label: "Tuesday", c_in: date, c_out: date },
-    { id: 3, check: true, label: "Wednesday", c_in: date, c_out: date },
-    { id: 4, check: false, label: "Thursday", c_in: date, c_out: date },
-    { id: 5, check: true, label: "Friday", c_in: date, c_out: date },
-    { id: 6, check: true, label: "Saturday", c_in: date, c_out: date },
-    { id: 7, check: false, label: "Sunday", c_in: date, c_out: date },
+    { id: 1, check: true, label: "Monsday", c_in: date_start, c_out: date_end },
+    { id: 2, check: false, label: "Tuesday", c_in: date_start, c_out: date_end },
+    { id: 3, check: true, label: "Wednesday", c_in: date_start, c_out: date_end },
+    { id: 4, check: false, label: "Thursday", c_in: date_start, c_out: date_end },
+    { id: 5, check: true, label: "Friday", c_in: date_start, c_out: date_end },
+    { id: 6, check: true, label: "Saturday", c_in: date_start, c_out: date_end },
+    { id: 7, check: false, label: "Sunday", c_in: date_start, c_out: date_end },
 ];
 
 const initialTime = new Date();
@@ -118,19 +120,10 @@ const days_to_days_API = (days: Array<Days>) => {
     );
 };
 
-const Ws_s_time = ({ route, navigation }: { route: any; navigation: any }) => {
-    const [groupValues, setGroupValues] = React.useState<Array<Days>>(days);
-    const [all, setAll] = React.useState<boolean>(false);
-    const [timePicker, setTimePicker] = React.useState<timePicker>({
-        show: false,
-        currentId: null,
-        check: null,
-        time: initialTime,
-    });
-    const renderItem = ({ item }) => {
-        return (
-            <HStack w={"100%"} py={"10px"} alignItems={"center"}>
-                {/* <Checkbox
+const Item = ({ item, timePickerOn, timePickerOff, checkChange }) => {
+    return (
+        <HStack w={"100%"} py={"10px"} alignItems={"center"}>
+            {/* <Checkbox
                     isChecked={item.check}
                     onChange={(value) => checkChange(value, item.id)}
                     value={item.id}
@@ -141,36 +134,66 @@ const Ws_s_time = ({ route, navigation }: { route: any; navigation: any }) => {
                         color: color.WHITE,
                     }}
                 /> */}
-                <Checkbox2
-                    value={item.check}
-                    onValueChange={(value) => checkChange(value, item.id)}
-                    tintColors={tintColors}
-                />
-                <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsRegular} w="35%" textAlign="center">
-                    {item.label}
+            <Checkbox2
+                value={item.check}
+                onValueChange={(value) => checkChange(value, item.id)}
+                tintColors={tintColors}
+            />
+            <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsRegular} w="35%" textAlign="center">
+                {item.label}
+            </Text>
+            <Pressable
+                onPress={() => {
+                    timePickerOn(item, 0);
+                }}
+                w={"27.5%"}
+            >
+                <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsRegular} textAlign="center">
+                    {formatTime(item.c_in)}
                 </Text>
-                <Pressable
-                    onPress={() => {
-                        timePickerOn(item, 0);
-                    }}
-                    w={"27.5%"}
-                >
-                    <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsRegular} textAlign="center">
-                        {formatTime(item.c_in)}
-                    </Text>
-                </Pressable>
-                <Pressable
-                    onPress={() => {
-                        timePickerOn(item, 1);
-                    }}
-                    w={"27.5%"}
-                >
-                    <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsRegular} textAlign="center">
-                        {formatTime(item.c_out)}
-                    </Text>
-                </Pressable>
-            </HStack>
-        );
+            </Pressable>
+            <Pressable
+                onPress={() => {
+                    timePickerOn(item, 1);
+                }}
+                w={"27.5%"}
+            >
+                <Text fontSize={size.font.text.medium} fontFamily={fonts.PoppinsRegular} textAlign="center">
+                    {formatTime(item.c_out)}
+                </Text>
+            </Pressable>
+        </HStack>
+    );
+};
+const Ws_s_time = ({ route, navigation }: { route: any; navigation: any }) => {
+    const [groupValues, setGroupValues] = React.useState<Array<Days>>(days);
+    const [all, setAll] = React.useState<boolean>(false);
+    const [loading, setLoading] = React.useState<boolean>(true);
+    const [timePicker, setTimePicker] = React.useState<timePicker>({
+        show: false,
+        currentId: null,
+        check: null,
+        time: initialTime,
+    });
+    useEffect(() => {
+        let isActive = true;
+        const getInfo = async () => {
+            setLoading(true);
+            await sleep(2000);
+            // API for getting ws Info here
+            const ws_time: Array<Days> = days;
+            if (isActive) {
+                setGroupValues(ws_time);
+                setLoading(false);
+            }
+        };
+        getInfo();
+        return () => {
+            isActive = false;
+        };
+    }, []);
+    const renderItem = ({ item }) => {
+        return <Item item={item} timePickerOn={timePickerOn} timePickerOff={timePickerOff} checkChange={checkChange} />;
     };
     const checkChange = (value, id) => {
         if (id === -1) {
@@ -279,7 +302,17 @@ const Ws_s_time = ({ route, navigation }: { route: any; navigation: any }) => {
                     </Text>
                 </HStack>
                 <Box w={"100%"}>
-                    <FlatList data={groupValues} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
+                    {loading ? (
+                        <Box h={"100px"} w={"100%"}>
+                            {loadingIndicator}
+                        </Box>
+                    ) : (
+                        <FlatList
+                            data={groupValues}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item.id.toString()}
+                        />
+                    )}
                 </Box>
                 <HStack justifyContent={"space-evenly"} paddingTop={"10px"}>
                     <Purple_button

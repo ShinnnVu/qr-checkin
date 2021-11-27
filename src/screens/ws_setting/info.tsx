@@ -29,7 +29,11 @@ import HeaderThree from "../../components/header/headerThree";
 import TextInput from "../../components/base/textinput";
 import HeaderTwo from "../../components/header/headerTwo";
 import Blue_button from "../../components/base/blue_button";
-
+import { apiService } from "../../services";
+import { getIn } from "yup/lib/util/reach";
+import { sleep } from "../../utils/utils";
+import { ActivityIndicator } from "react-native";
+import loadingIndicator from "../../components/base/loading_indicator";
 interface Com_info {
     name: string;
     email: string;
@@ -63,16 +67,40 @@ const dummy: Com_info = {
     email: "",
     address: "",
 };
+const dummy_api: Com_info = {
+    name: "Dat",
+    email: "ewqeqw",
+    address: "eqwewq",
+};
+
 const nameIcon = <Icon as={<MaterialCommunityIcons name="home-edit-outline" />} size={5} ml="2" color="muted.400" />;
 const emailIcon = <Icon as={<MaterialCommunityIcons name="email-outline" />} size={5} ml="2" color="muted.400" />;
 const addressIcon = <Icon as={<MaterialCommunityIcons name="map-outline" />} size={5} ml="2" color="muted.400" />;
 const Ws_s_info = ({ route, navigation }: { route: any; navigation: any }) => {
-    // const { workspace_id } = route?.params;
-    const [info] = useState<Com_info>(dummy);
+    const { workspace_id, workspace_name } = route?.params;
+    const [info, setInfo] = useState<Com_info>(dummy);
+    const [loading, setLoading] = useState<boolean>(true);
     const submit = (values: any) => {
-        // const data = { ...values, workspace_id };
-        // navigation.navigate(Screens.WS_CHECKIN_FORM, data);
+        // API for updating here
     };
+
+    useEffect(() => {
+        let isActive = true;
+        const getInfo = async () => {
+            setLoading(true);
+            await sleep(2000);
+            // API for getting ws Info here
+            const ws_info = dummy_api;
+            if (isActive) {
+                setInfo(ws_info);
+                setLoading(false);
+            }
+        };
+        getInfo();
+        return () => {
+            isActive = false;
+        };
+    }, []);
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -99,67 +127,71 @@ const Ws_s_info = ({ route, navigation }: { route: any; navigation: any }) => {
                                 </Text>
                             </Center>
                             <Box w={"95%"} alignSelf="center" paddingBottom={"15px"}>
-                                <VStack w={"100%"} space={3}>
-                                    <>
-                                        <Text
-                                            fontSize={size.font.text.large}
-                                            fontFamily={fonts.PoppinsMedium}
-                                            pl={"10px"}
-                                        >
-                                            {translate("workspace_creation.com_name")}
-                                        </Text>
+                                {loading ? (
+                                    loadingIndicator
+                                ) : (
+                                    <VStack w={"100%"} space={3}>
+                                        <>
+                                            <Text
+                                                fontSize={size.font.text.large}
+                                                fontFamily={fonts.PoppinsMedium}
+                                                pl={"10px"}
+                                            >
+                                                {translate("workspace_creation.com_name")}
+                                            </Text>
 
-                                        <TextInput
-                                            name={translate("workspace_creation.enter_com_name")}
-                                            value={values.name}
-                                            handleChange={handleChange("name")}
-                                            handleBlur={handleBlur("name")}
-                                            leftIcon={nameIcon}
-                                            errors={errors.name}
-                                            touched={touched.name}
-                                        />
-                                    </>
-                                    <>
-                                        <Text
-                                            fontSize={size.font.text.large}
-                                            fontFamily={fonts.PoppinsMedium}
-                                            pl={"10px"}
-                                        >
-                                            {translate("workspace_creation.com_email")}
-                                        </Text>
-                                        <TextInput
-                                            name={translate("workspace_creation.enter_com_email")}
-                                            value={values.email}
-                                            handleChange={handleChange("email")}
-                                            handleBlur={handleBlur("email")}
-                                            leftIcon={emailIcon}
-                                            errors={errors.email}
-                                            touched={touched.email}
-                                        />
-                                    </>
-                                    <>
-                                        <Text
-                                            fontSize={size.font.text.large}
-                                            fontFamily={fonts.PoppinsMedium}
-                                            pl={"10px"}
-                                        >
-                                            {translate("workspace_creation.com_address")}
-                                        </Text>
-                                        <TextInput
-                                            name={translate("workspace_creation.enter_com_address")}
-                                            value={values.address}
-                                            handleChange={handleChange("address")}
-                                            handleBlur={handleBlur("address")}
-                                            leftIcon={addressIcon}
-                                            errors={errors.address}
-                                            touched={touched.address}
-                                        />
-                                    </>
-                                </VStack>
+                                            <TextInput
+                                                name={translate("workspace_creation.enter_com_name")}
+                                                value={values.name}
+                                                handleChange={handleChange("name")}
+                                                handleBlur={handleBlur("name")}
+                                                leftIcon={nameIcon}
+                                                errors={errors.name}
+                                                touched={touched.name}
+                                            />
+                                        </>
+                                        <>
+                                            <Text
+                                                fontSize={size.font.text.large}
+                                                fontFamily={fonts.PoppinsMedium}
+                                                pl={"10px"}
+                                            >
+                                                {translate("workspace_creation.com_email")}
+                                            </Text>
+                                            <TextInput
+                                                name={translate("workspace_creation.enter_com_email")}
+                                                value={values.email}
+                                                handleChange={handleChange("email")}
+                                                handleBlur={handleBlur("email")}
+                                                leftIcon={emailIcon}
+                                                errors={errors.email}
+                                                touched={touched.email}
+                                            />
+                                        </>
+                                        <>
+                                            <Text
+                                                fontSize={size.font.text.large}
+                                                fontFamily={fonts.PoppinsMedium}
+                                                pl={"10px"}
+                                            >
+                                                {translate("workspace_creation.com_address")}
+                                            </Text>
+                                            <TextInput
+                                                name={translate("workspace_creation.enter_com_address")}
+                                                value={values.address}
+                                                handleChange={handleChange("address")}
+                                                handleBlur={handleBlur("address")}
+                                                leftIcon={addressIcon}
+                                                errors={errors.address}
+                                                touched={touched.address}
+                                            />
+                                        </>
+                                    </VStack>
+                                )}
                             </Box>
 
                             <Blue_button
-                                onPress={() => console.log("test")}
+                                onPress={handleSubmit}
                                 text={translate("workspace_creation.save")}
                                 width={"200px"}
                             />
