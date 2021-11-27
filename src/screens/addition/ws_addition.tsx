@@ -60,6 +60,7 @@ const Addition = ({ route, navigation }: { route: any; navigation: any }) => {
                                         press={() => {
                                             navigation.navigate(Screens.WS_S_INFO, {
                                                 workspace_id: workspace_id,
+                                                workspace_name: workspace_name,
                                             });
                                         }}
                                     />
@@ -70,6 +71,7 @@ const Addition = ({ route, navigation }: { route: any; navigation: any }) => {
                                         press={() => {
                                             navigation.navigate(Screens.WS_S_CHECKIN_FORM, {
                                                 workspace_id: workspace_id,
+                                                workspace_name: workspace_name,
                                             });
                                         }}
                                     />
@@ -80,6 +82,7 @@ const Addition = ({ route, navigation }: { route: any; navigation: any }) => {
                                         press={() => {
                                             navigation.navigate(Screens.WS_S_LOCATION, {
                                                 workspace_id: workspace_id,
+                                                workspace_name: workspace_name,
                                             });
                                         }}
                                     />
@@ -90,6 +93,7 @@ const Addition = ({ route, navigation }: { route: any; navigation: any }) => {
                                         press={() => {
                                             navigation.navigate(Screens.WS_S_TIME, {
                                                 workspace_id: workspace_id,
+                                                workspace_name: workspace_name,
                                             });
                                         }}
                                     />

@@ -45,4 +45,9 @@ function stringToColour(str: string) {
     }
     return colour;
 }
-export { formatTime, getDate, capitalizeFirstLetter, getNumOfLetters, getRandomColor, stringToColour };
+
+function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export { formatTime, getDate, capitalizeFirstLetter, getNumOfLetters, getRandomColor, stringToColour, sleep };
