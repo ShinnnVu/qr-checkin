@@ -46,22 +46,26 @@ const WS_Home = ({ route, navigation }: { route: any; navigation: any }) => {
     const [showReminder, setReminder] = useState(false);
     const isFocused = useIsFocused();
 
-    const getWorkspace = async () => {
-        const user = await AsyncStorage.getItem("@User");
-        if (user) {
-            const user_id = JSON.parse(user).id;
-            const res = await apiService.checkHost({
-                user_id: user_id,
-                workspace_id: workspace_id,
-            });
-            const host = res.data.data.isHost;
-            const myWorkspace: any = host ? dummyAdmin : dummyEmployee;
-            setYourWorkspace(myWorkspace);
-        }
-    };
-
     useEffect(() => {
+        let isActive = true;
+        const getWorkspace = async () => {
+            const user = await AsyncStorage.getItem("@User");
+            if (user) {
+                const user_id = JSON.parse(user).id;
+                const res = await apiService.checkHost({
+                    user_id: user_id,
+                    workspace_id: workspace_id,
+                });
+                const host = res.data.data.isHost;
+                const myWorkspace: any = host ? dummyAdmin : dummyEmployee;
+                if (isActive) setYourWorkspace(myWorkspace);
+            }
+        };
+
         getWorkspace();
+        return () => {
+            isActive = false;
+        };
     }, [isFocused]);
 
     const renderItem = ({ item }: { item: any }) => {

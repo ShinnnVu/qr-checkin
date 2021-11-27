@@ -21,20 +21,25 @@ const Addition = ({ route, navigation }: { route: any; navigation: any }) => {
     const [host, setHost] = useState(false);
     const [user, setUser] = useState("");
     const isFocused = useIsFocused();
-    const checkHost = async () => {
-        const user = await AsyncStorage.getItem("@User");
-        if (user) {
-            const user_id = JSON.parse(user).id;
-            setUser(JSON.parse(user).username);
-            const res = await apiService.checkHost({
-                user_id: user_id,
-                workspace_id: workspace_id,
-            });
-            setHost(res.data.data.isHost);
-        }
-    };
+
     useEffect(() => {
+        let isActive = true;
+        const checkHost = async () => {
+            const user = await AsyncStorage.getItem("@User");
+            if (user) {
+                const user_id = JSON.parse(user).id;
+                setUser(JSON.parse(user).username);
+                const res = await apiService.checkHost({
+                    user_id: user_id,
+                    workspace_id: workspace_id,
+                });
+                if (isActive) setHost(res.data.data.isHost);
+            }
+        };
         checkHost();
+        return () => {
+            isActive = false;
+        };
     }, [isFocused]);
     return (
         <Flex flex={1} bg={color.WHITE} safeArea>
