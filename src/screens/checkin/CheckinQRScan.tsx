@@ -108,7 +108,7 @@ export default function CheckinQRScan({ route, navigation }: { route: any; navig
     return (
         <Center flex={1} px={3} safeAreaTop>
             <VStack space={10}>
-                <Heading textAlign={"center"}>Scan QR Code</Heading>
+                <Heading textAlign={"center"}>{"Scan QR Code\n"}</Heading>
                 <Box style={styles.qrCodeScannerBox}>
                     <BarCodeScanner
                         style={{ width: Dimensions.get("window").width, height: Dimensions.get("window").height }}
@@ -143,5 +143,6 @@ const styles: StyleSheet.NamedStyles<any> = StyleSheet.create({
         aspectRatio: 1,
         borderRadius: 30,
         overflow: "hidden",
+        alignSelf: "center",
     },
 });
