@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, HStack, Input, Pressable, Text, View, VStack } from "native-base";
+import { Box, Divider, Flex, HStack, Input, Pressable, ScrollView, Text, View, VStack } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import CheckinSuccessSvg from "../../../assets/checkin/validation-success.svg";
 import CheckinFailureSvg from "../../../assets/checkin/validation-failure.svg";
@@ -72,7 +72,7 @@ const CheckinHistory = ({ route, navigation }: { route: any; navigation: any }) 
                     </Text>
                 </Flex>
             ));
-            return <View key={i + 1}>{p}</View>;
+            return <ScrollView key={i + 1}>{p}</ScrollView>;
         });
         setHistory(pages);
         setCurrentPage(0);
