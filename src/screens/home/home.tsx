@@ -78,15 +78,20 @@ const Workspace_naming = ({ navigation }: { navigation: any }) => {
                                 {getNumOfLetters(item.name, 1)}
                             </Text>
                         </Avatar>
-                        <Text
-                            fontSize={size.font.text.large}
-                            fontFamily={fonts.PoppinsSemiBold}
-                            pl={"10px"}
-                            maxWidth={"80%"}
-                            numberOfLines={1}
-                        >
-                            {item.name}
-                        </Text>
+                        <VStack>
+                            <Text
+                                fontSize={size.font.text.large}
+                                fontFamily={fonts.PoppinsSemiBold}
+                                pl={"10px"}
+                                maxWidth={"100%"}
+                                numberOfLines={1}
+                            >
+                                {item.name}
+                            </Text>
+                            <Text fontSize={size.font.text.caption} fontFamily={fonts.PoppinsRegular} pl={"10px"}>
+                                {item.type}
+                            </Text>
+                        </VStack>
                     </View>
                     <MaterialCommunityIcons name="chevron-right" size={24} color={color.PURLE_LIGHT} solid />
                 </View>
