@@ -21,6 +21,7 @@ interface ExcelFile {
 }
 
 const ExcelInvitation = ({ route, navigation }: { route: any, navigation: any }) => {
+    const {workspace_id} = route.params;
     const [fileName, setFileName] = useState<string | null>(null);
     const [fileContent, setFileContent] = useState<any[] | null>(null);
     const [file, setFile] = useState<ExcelFile | null>(null);
@@ -38,7 +39,7 @@ const ExcelInvitation = ({ route, navigation }: { route: any, navigation: any })
         if (res.type === "cancel") {
             setIsReadingFile(false);
             return;
-        }
+        }        
         // Success
         FileSystem
             .readAsStringAsync(res.uri, { encoding: FileSystem.EncodingType.Base64 })
@@ -70,7 +71,7 @@ const ExcelInvitation = ({ route, navigation }: { route: any, navigation: any })
                 toast.show({
                     title: "Something went wrong",
                     status: "error",
-                    description: "Cannot import excel file. Please try again.",
+                    description: "Cannot import excel file",
                     duration: 3000,
                     placement: "top",
                 });
@@ -167,7 +168,7 @@ const ExcelInvitation = ({ route, navigation }: { route: any, navigation: any })
                 </Heading>
             ));
     }
-
+    
     return (
         <Box flex={1} m={8} my={10} safeArea>
             <VStack flex={1} space={5}>
@@ -216,7 +217,7 @@ const ExcelInvitation = ({ route, navigation }: { route: any, navigation: any })
                 <RoundedButton
                     h="50"
                     variant={"lightColorful"}
-                    onPress={() => navigation.navigate("EmployeeInvitation")}
+                    onPress={() => navigation.navigate("EmployeeInvitation", {workspace_id: workspace_id})}
                     text="Invite By Username"
                     borderColor="lightColorful"
                     borderWidth={1}

@@ -1,5 +1,5 @@
 import { AddIcon, Box, Center, Flex, HStack, Icon, Input, Pressable, Text, View, VStack } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { apiService } from "../../services";
 import HeaderTwo from "../../components/header/headerTwo";
 import PagerView from "react-native-pager-view";
@@ -15,6 +15,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { Screens } from "../../navigations/model";
 
 const EmployeeList = ({ route, navigation }: { route: any; navigation: any }) => {
+    const _mounted_ = useRef(true);
     const { workspace_id } = route.params;
     const [employees, setEmployees] = useState([]);
     const [keyword, setKeyWord] = useState<string>("");
@@ -23,12 +24,16 @@ const EmployeeList = ({ route, navigation }: { route: any; navigation: any }) =>
     const [pages, setPages] = useState<any>(null);
     const isFocused = useIsFocused();
 
+    // Cleanup
+    useEffect(() => () => { 
+        _mounted_.current = false;
+    }, [])
+
     // Fetch data from server
     useEffect(() => {
         setKeyWord("");
         (async () => {
             await getEmployees();
-            filter();
         })();
     }, [isFocused]);
 
@@ -36,8 +41,15 @@ const EmployeeList = ({ route, navigation }: { route: any; navigation: any }) =>
         filter();
     }, [keyword]);
 
+    useEffect(() => {
+        filter();
+    }, [employees]);
+
     const getEmployees = async () => {
         const res: any = await apiService.getEmployees({ workspace_id: workspace_id });
+        if (!_mounted_.current) {
+            return;
+        }
         setEmployees(res.data.data);
     };
 
@@ -81,8 +93,14 @@ const EmployeeList = ({ route, navigation }: { route: any; navigation: any }) =>
 
             return <View key={index + 1}>{p}</View>;
         });
+
+        if (!_mounted_.current) {
+            return;
+        }
+
         setPages(pages);
         setCurrentPage(0);
+        pager?.current?.setPage(0);
     };
 
     return (

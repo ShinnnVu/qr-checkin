@@ -77,7 +77,7 @@ const EmployeeInvitation = ({ route, navigation }: { route: any; navigation: any
                     variant="lightColorful"
                     h="60"
                     text="Import From Excel"
-                    onPress={() => navigation.navigate("ExcelInvitation")}
+                    onPress={() => navigation.navigate("ExcelInvitation", { workspace_id: workspace_id })}
                     borderColor="lightColorful"
                     borderWidth={1}
                 />

@@ -1,5 +1,5 @@
 import { Box, Divider, Flex, HStack, Input, Pressable, Text, View, VStack } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CheckinSuccessSvg from "../../../assets/checkin/validation-success.svg";
 import CheckinFailureSvg from "../../../assets/checkin/validation-failure.svg";
 import RoundedButton from "../../components/base/RoundedButton";
@@ -12,8 +12,12 @@ import PagerView from "react-native-pager-view";
 import { LEFT_CAVRET, RIGHT_CAVRET } from "../../constants/icons";
 import Icon_Button from "../../components/base/icon_button";
 import color from "../../constants/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { uniqueId } from "lodash";
 
 const CheckinHistory = ({ route, navigation }: { route: any; navigation: any }) => {
+    const _mounted_ = useRef(true);
+    const {workspace_id} = route.params;
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
     const [data, setData] = useState<{ date: Date; checkin: Date; checkout: Date }[]>([]);
@@ -21,28 +25,42 @@ const CheckinHistory = ({ route, navigation }: { route: any; navigation: any }) 
     const [currentPage, setCurrentPage] = useState(0);
     const pager = React.useRef<PagerView>(null);
 
+    // Cleanup
+    useEffect(() => () => { 
+        _mounted_.current = false;
+    }, [])
+
     // Fetch data from server
     useEffect(() => {
-        const dummy = [];
-        for (let i = 0; i < 19; i++) {
-            const d = new Date();
-            d.setDate(d.getDate() + i);
-            dummy.push({
-                date: d,
-                checkin: d,
-                checkout: d,
-            });
-        }
-        setData(dummy.sort((a, b) => b.date.getTime() - a.date.getTime()));
+       getHistories();
     }, []);
 
-    const filter = (month: number) => {
+    useEffect(() => {
+        filter();
+    }, [data]);
+
+    const getHistories = async () => {
+        try {
+            const user = await AsyncStorage.getItem("@User");
+            if (user) {
+                const id = JSON.parse(user).id;
+                const d = await apiService.getHistory({user_id: id, workspace_id: workspace_id, month: date.getMonth() + 1, year: date.getFullYear()});
+                const map = d.data.data.map((checkinPoint: any) => ({ date: new Date(checkinPoint.date), checkin: new Date(checkinPoint.checkin), checkout: new Date(checkinPoint.checkout) }));
+                if (!_mounted_.current) {
+                    return;
+                }
+                setData(map);
+            }
+        } catch (error: any) { console.log(error); }
+    };
+
+    const filter = () => {
         const pages = chunk(
-            data.filter((d) => d.date.getMonth() === month),
+            data,
             7,
         ).map((page, i) => {
             const p = page.map((h, j) => (
-                <Flex key={h.date.toDateString() + j} direction="row" justify={"center"} my={5}>
+                <Flex key={uniqueId()} direction="row" justify={"center"} my={5}>
                     <Text flex={1} textAlign={"center"}>
                         {getDateFormat(h.date)}
                     </Text>
@@ -56,15 +74,9 @@ const CheckinHistory = ({ route, navigation }: { route: any; navigation: any }) 
             ));
             return <View key={i + 1}>{p}</View>;
         });
-        if (pages.length === 0) {
-            pages.push(
-                <View flex={1} key={1} justifyContent={"center"}>
-                    <Text>No Data</Text>
-                </View>,
-            );
-        }
         setHistory(pages);
         setCurrentPage(0);
+        pager?.current?.setPage(0);
     };
 
     const getDateFormat = (date: Date): string => {
@@ -79,7 +91,7 @@ const CheckinHistory = ({ route, navigation }: { route: any; navigation: any }) 
         const currentDate = selectedDate || date;
         setShow(false);
         setDate(currentDate);
-        filter(currentDate.getMonth());
+        getHistories();
     };
 
     const chunk = (array: any[], chunkSize: number): any[][] => {
