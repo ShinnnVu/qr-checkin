@@ -21,5 +21,6 @@ export const API = {
         updateWorkspaceInfo: "update-workspace-info",
         getWorkspaceMode: "get-workspace-mode",
         updateWorkspaceConfig: "update-workspace-config",
+        getWorkspaceInfo: "get-workspace-info"
     }
 }

@@ -36,6 +36,7 @@ import HeaderTwo from "../../components/header/headerTwo";
 import Blue_button from "../../components/base/blue_button";
 import { sleep } from "../../utils/utils";
 import loadingIndicator from "../../components/base/loading_indicator";
+import { apiService } from "../../services";
 interface location {
     name: string;
     latitude: number;
@@ -102,12 +103,25 @@ const Ws_s_Location = ({ route, navigation }: { route: any; navigation: any }) =
             setLoading(true);
             await sleep(2000);
             // API for getting ws Info here
-            const ws_location: location = {
+            const res = await apiService.getWorkspaceLocation({
+                workspace_id: workspace_id,
+            });
+
+            let ws_location: location = {
                 name: "Nguyễn Trọng Tuyễn",
                 latitude: 10.7981,
                 longitude: 106.66983,
                 radius: 10,
             };
+            if (res.data.data?.latitude) {
+                ws_location = {
+                    name: res.data.data?.name ? res.data.data.name : "",
+                    latitude: Number(res.data.data?.latitude),
+                    longitude: Number(res.data.data?.longitude),
+                    radius: Number(res.data.data?.radius),
+                };
+            }
+
             if (isActive) {
                 setResult(ws_location);
                 setLoading(false);
@@ -118,9 +132,13 @@ const Ws_s_Location = ({ route, navigation }: { route: any; navigation: any }) =
             isActive = false;
         };
     }, []);
-    const handleSubmit = () => {
-        const data = { ...route.params, location: result };
-        navigation.navigate(Screens.WS_TIME, data);
+    const handleSubmit = async () => {
+        const data = { ...route.params, config: { location: result } };
+        await apiService.updateWorkspaceConfig(data);
+        navigation.navigate(Screens.WORKSPACE_ADDITION, {
+            workspace_id: workspace_id,
+            workspace_name: workspace_name,
+        });
     };
 
     return (

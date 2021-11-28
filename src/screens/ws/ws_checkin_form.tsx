@@ -33,7 +33,7 @@ interface CheckinMode {
 
 const dummyData: CheckinMode = {
     qrCode: true,
-    location: true,
+    location: false,
 };
 const Workspace_checkin_form = ({ route, navigation }: { route: any; navigation: any }) => {
     const [checkinMode, setCheckinMode] = useState<CheckinMode>(dummyData);

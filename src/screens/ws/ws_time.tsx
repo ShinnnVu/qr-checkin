@@ -22,8 +22,8 @@ interface Days {
 
 interface Day_API {
     isActive: boolean;
-    from: Date;
-    to: Date;
+    from: string;
+    to: string;
 }
 
 interface Days_API {
@@ -56,66 +56,51 @@ const days: Array<Days> = [
 
 const initialTime = new Date();
 
-const time = {
-    monday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    tuesday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    wednesday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    thursday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    friday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    saturday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    sunday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-};
-
 const days_API_to_days = (days: Days_API) => {
     return Object.keys(days).map((key, index) => {
-        const data: Day_API = days[key];
+        let data: Day_API = days[key];
+        let c_in = data?.from ? new Date(data.from) : new Date();
+        let c_out = data?.to ? new Date(data.to) : new Date();
         return {
             label: capitalizeFirstLetter(key),
             id: index + 1,
-            check: data.isActive,
-            c_in: data.from,
-            c_out: data.to,
+            check: data?.isActive ? data.isActive : false,
+            c_in: c_in,
+            c_out: c_out,
         };
     });
+};
+
+const dateToSystemString = (date: Date) => {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let str_month = month < 10 ? "0" + month : "" + month;
+    let str_day = day < 10 ? "0" + day : "" + day;
+    return year + "-" + str_month + "-" + str_day;
+};
+
+const dateTimeToSystemString = (date: Date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let str_hours = hours < 10 ? "0" + hours : "" + hours;
+    let str_minutes = minutes < 10 ? "0" + minutes : "" + minutes;
+    return dateToSystemString(date) + "T" + str_hours + ":" + str_minutes + ":00Z";
 };
 
 const days_to_days_API = (days: Array<Days>) => {
     return days.reduce(
         (newDays, item) => (
-            (newDays[item.label.toLowerCase()] = { isActive: item.check, from: item.c_in, to: item.c_out }), newDays
+            (newDays[item.label.toLowerCase()] = {
+                isActive: item.check,
+                from: dateTimeToSystemString(item.c_in),
+                to: dateTimeToSystemString(item.c_out),
+            }),
+            newDays
         ),
         {},
     );
 };
-
 const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
     const [groupValues, setGroupValues] = React.useState<Array<Days>>(days);
     const [all, setAll] = React.useState<boolean>(false);
@@ -230,10 +215,12 @@ const WS_Time = ({ route, navigation }: { route: any; navigation: any }) => {
         const time = days_to_days_API(groupValues);
 
         const data = { ...route?.params, time, id: route?.params.workspace_id };
+        data.company_name = data.name;
+        delete data.name;
 
         try {
-            await apiService.configurateWorkspace(data);
-            navigation.navigate(Screens.WS_HOME, { workspace_id: data.id, workspace_name: data.name });
+            const res = await apiService.configurateWorkspace(data);
+            navigation.navigate(Screens.WS_HOME, { workspace_id: data.id, workspace_name: res.data.data });
         } catch (error: any) {
             navigation.navigate(Screens.WS_CR_FAIL);
         }

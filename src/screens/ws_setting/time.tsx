@@ -26,8 +26,8 @@ interface Days {
 
 interface Day_API {
     isActive: boolean;
-    from: Date;
-    to: Date;
+    from: string;
+    to: string;
 }
 
 interface Days_API {
@@ -60,61 +60,47 @@ const days: Array<Days> = [
 
 const initialTime = new Date();
 
-const time = {
-    monday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    tuesday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    wednesday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    thursday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    friday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    saturday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-    sunday: {
-        isActive: false,
-        from: "8:00",
-        to: "17:00",
-    },
-};
-
 const days_API_to_days = (days: Days_API) => {
     return Object.keys(days).map((key, index) => {
-        const data: Day_API = days[key];
+        let data: Day_API = days[key];
+        let c_in = data?.from ? new Date(data.from) : new Date();
+        let c_out = data?.to ? new Date(data.to) : new Date();
         return {
             label: capitalizeFirstLetter(key),
             id: index + 1,
-            check: data.isActive,
-            c_in: data.from,
-            c_out: data.to,
+            check: data?.isActive ? data.isActive : false,
+            c_in: c_in,
+            c_out: c_out,
         };
     });
+};
+
+const dateToSystemString = (date: Date) => {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let str_month = month < 10 ? "0" + month : "" + month;
+    let str_day = day < 10 ? "0" + day : "" + day;
+    return year + "-" + str_month + "-" + str_day;
+};
+
+const dateTimeToSystemString = (date: Date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let str_hours = hours < 10 ? "0" + hours : "" + hours;
+    let str_minutes = minutes < 10 ? "0" + minutes : "" + minutes;
+    return dateToSystemString(date) + "T" + str_hours + ":" + str_minutes + ":00Z";
 };
 
 const days_to_days_API = (days: Array<Days>) => {
     return days.reduce(
         (newDays, item) => (
-            (newDays[item.label.toLowerCase()] = { isActive: item.check, from: item.c_in, to: item.c_out }), newDays
+            (newDays[item.label.toLowerCase()] = {
+                isActive: item.check,
+                from: dateTimeToSystemString(item.c_in),
+                to: dateTimeToSystemString(item.c_out),
+            }),
+            newDays
         ),
         {},
     );
@@ -166,6 +152,7 @@ const Item = ({ item, timePickerOn, timePickerOff, checkChange }) => {
     );
 };
 const Ws_s_time = ({ route, navigation }: { route: any; navigation: any }) => {
+    const { workspace_id, workspace_name } = route.params;
     const [groupValues, setGroupValues] = React.useState<Array<Days>>(days);
     const [all, setAll] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(true);
@@ -179,9 +166,11 @@ const Ws_s_time = ({ route, navigation }: { route: any; navigation: any }) => {
         let isActive = true;
         const getInfo = async () => {
             setLoading(true);
-            await sleep(2000);
             // API for getting ws Info here
-            const ws_time: Array<Days> = days;
+            const res = await apiService.getWorkspaceTime({
+                workspace_id: workspace_id,
+            });
+            const ws_time: Array<Days> = days_API_to_days(res.data.data);
             if (isActive) {
                 setGroupValues(ws_time);
                 setLoading(false);
@@ -254,14 +243,21 @@ const Ws_s_time = ({ route, navigation }: { route: any; navigation: any }) => {
     const handleSubmit = async () => {
         const time = days_to_days_API(groupValues);
 
-        // const data = { ...route?.params, time, id: route?.params.workspace_id };
-
-        // try {
-        //     await apiService.configurateWorkspace(data);
-        //     navigation.navigate(Screens.WS_HOME, { workspace_id: data.id });
-        // } catch (error: any) {
-        //     navigation.navigate(Screens.WS_CR_FAIL);
-        // }
+        const data = {
+            workspace_id: workspace_id,
+            config: {
+                time: time,
+            },
+        };
+        try {
+            const res = await apiService.updateWorkspaceConfig(data);
+            navigation.navigate(Screens.WORKSPACE_ADDITION, {
+                workspace_id: workspace_id,
+                workspace_name: workspace_name,
+            });
+        } catch (error: any) {
+            console.log(error);
+        }
     };
 
     return (
@@ -320,11 +316,7 @@ const Ws_s_time = ({ route, navigation }: { route: any; navigation: any }) => {
                         text={translate("workspace_creation.clear")}
                         width={"125px"}
                     />
-                    <Blue_button
-                        onPress={() => console.log("test")}
-                        text={translate("workspace_creation.save")}
-                        width={"125px"}
-                    />
+                    <Blue_button onPress={handleSubmit} text={translate("workspace_creation.save")} width={"125px"} />
                 </HStack>
             </Box>
 

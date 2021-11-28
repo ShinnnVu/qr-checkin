@@ -29,6 +29,7 @@ import HeaderTwo from "../../components/header/headerTwo";
 import Blue_button from "../../components/base/blue_button";
 import { sleep } from "../../utils/utils";
 import loadingIndicator from "../../components/base/loading_indicator";
+import { apiService } from "../../services";
 interface CheckinMode {
     qrCode: boolean;
     location: boolean;
@@ -46,12 +47,16 @@ const Ws_s_checkin_form = ({ route, navigation }: { route: any; navigation: any 
         const newCheckinMode = { ...checkinMode, location: !checkinMode.location };
         setCheckinMode(newCheckinMode);
     };
-    const handleSubmit = () => {
-        const data = { ...route.params, checkinMode: checkinMode };
+    const handleSubmit = async () => {
+        const data = { ...route.params, config: { checkinMode: checkinMode } };
+        await apiService.updateWorkspaceConfig(data);
         if (checkinMode.location) {
-            navigation.navigate(Screens.WS_LOCATION, data);
+            navigation.navigate(Screens.WS_LOCATION, route.params);
         } else {
-            navigation.navigate(Screens.WS_TIME, data);
+            navigation.navigate(Screens.WORKSPACE_ADDITION, {
+                workspace_id: workspace_id,
+                workspace_name: workspace_name,
+            });
         }
     };
     useEffect(() => {
@@ -60,7 +65,13 @@ const Ws_s_checkin_form = ({ route, navigation }: { route: any; navigation: any 
             setLoading(true);
             await sleep(2000);
             // API for getting ws Info here
-            const ws_mode: CheckinMode = { location: false, qrCode: true };
+            let ws_mode: CheckinMode = { location: false, qrCode: true };
+            const res = await apiService.getWorkspaceMode({
+                workspace_id: workspace_id,
+            });
+            if (res.data.data) {
+                ws_mode = res.data.data;
+            }
             if (isActive) {
                 setCheckinMode(ws_mode);
                 setLoading(false);
@@ -143,7 +154,7 @@ const Ws_s_checkin_form = ({ route, navigation }: { route: any; navigation: any 
 
                     <Box flex={1} justifyContent={"flex-end"} marginBottom={"50px"}>
                         <Blue_button
-                            onPress={() => console.log("test")}
+                            onPress={handleSubmit}
                             text={translate("workspace_creation.save")}
                             width={"200px"}
                         />

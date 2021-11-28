@@ -126,6 +126,14 @@ class APIServices {
         });
         return result;
     }
+    getWorkspaceInfo = async (data: any) => {
+        const result = await this.connector.request({
+            method: Method.post,
+            url:  `/${API.ServiceName.api}/${API.MethodName.getWorkspaceInfo}`,
+            data,
+        });
+        return result;
+    }
 }
 
 export default APIServices;

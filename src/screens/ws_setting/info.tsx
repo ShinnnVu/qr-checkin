@@ -67,11 +67,6 @@ const dummy: Com_info = {
     email: "",
     address: "",
 };
-const dummy_api: Com_info = {
-    name: "Dat",
-    email: "ewqeqw",
-    address: "eqwewq",
-};
 
 const nameIcon = <Icon as={<MaterialCommunityIcons name="home-edit-outline" />} size={5} ml="2" color="muted.400" />;
 const emailIcon = <Icon as={<MaterialCommunityIcons name="email-outline" />} size={5} ml="2" color="muted.400" />;
@@ -80,17 +75,36 @@ const Ws_s_info = ({ route, navigation }: { route: any; navigation: any }) => {
     const { workspace_id, workspace_name } = route?.params;
     const [info, setInfo] = useState<Com_info>(dummy);
     const [loading, setLoading] = useState<boolean>(true);
-    const submit = (values: any) => {
+    const submit = async (values: any) => {
         // API for updating here
+        const data = {
+            workspace_id: workspace_id,
+            company_name: values.name,
+            address: values.address,
+            email: values.email,
+        };
+        await apiService.updateWorkspaceInfo(data);
+        navigation.navigate(Screens.WORKSPACE_ADDITION, {
+            workspace_id: workspace_id,
+            workspace_name: workspace_name,
+        });
     };
 
     useEffect(() => {
         let isActive = true;
         const getInfo = async () => {
             setLoading(true);
-            await sleep(2000);
+            let ws_info = dummy;
+            const res = await apiService.getWorkspaceInfo({ workspace_id: workspace_id });
             // API for getting ws Info here
-            const ws_info = dummy_api;
+            if (res.data.data) {
+                ws_info = {
+                    name: res.data.data?.company_name,
+                    email: res.data.data?.email,
+                    address: res.data.data?.address,
+                };
+            }
+
             if (isActive) {
                 setInfo(ws_info);
                 setLoading(false);
