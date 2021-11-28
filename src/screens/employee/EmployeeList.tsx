@@ -1,4 +1,4 @@
-import { AddIcon, Box, Center, Flex, HStack, Icon, Input, Pressable, Text, View, VStack } from "native-base";
+import { AddIcon, Box, Center, Flex, Heading, HStack, Icon, Input, Pressable, ScrollView, Text, View, VStack } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import { apiService } from "../../services";
 import HeaderTwo from "../../components/header/headerTwo";
@@ -25,7 +25,7 @@ const EmployeeList = ({ route, navigation }: { route: any; navigation: any }) =>
     const isFocused = useIsFocused();
 
     // Cleanup
-    useEffect(() => () => { 
+    useEffect(() => () => {
         _mounted_.current = false;
     }, [])
 
@@ -91,7 +91,7 @@ const EmployeeList = ({ route, navigation }: { route: any; navigation: any }) =>
                 </Box>
             ));
 
-            return <View key={index + 1}>{p}</View>;
+            return <ScrollView flex={1} key={index + 1}>{p}</ScrollView>;
         });
 
         if (!_mounted_.current) {
@@ -104,7 +104,7 @@ const EmployeeList = ({ route, navigation }: { route: any; navigation: any }) =>
     };
 
     return (
-        <Box flex={1} py={3} safeArea bgColor={"white"}>
+        <Box py={3} safeArea bgColor={"white"} h="900px">
             <VStack flex={1}>
                 <HeaderTwo title="employees.employees" back={() => navigation.goBack()} />
                 <VStack flex={1} mx={8} justifyContent={"center"}>
@@ -147,7 +147,6 @@ const EmployeeList = ({ route, navigation }: { route: any; navigation: any }) =>
                             </Text>
                         </HStack>
                     </Box>
-
                     <PagerView style={{ flex: 1 }} initialPage={0} scrollEnabled={false} ref={pager}>
                         {pages}
                     </PagerView>
